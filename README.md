@@ -1,4 +1,4 @@
-# Jiya Gandhi — Portfolio (v4, editorial)
+# Jiya Gandhi — Portfolio
 
 An editorial, scroll-driven personal portfolio + owner-only dashboard.
 **Vite + React + Tailwind + framer-motion + Supabase**, deployable to Vercel/Netlify.
