@@ -18,8 +18,15 @@ export default function CodingWorld({ projects = [] }) {
         {row.map((p, i) => (
           <Link key={i} to={`/project/${p.id}`}
             className="group w-[280px] shrink-0 rounded-lg border border-line bg-graphite p-5 transition-colors hover:border-accent/50">
-            <div className="mb-4 grid h-32 place-items-center rounded-md tech-grid">
-              <span className="display text-4xl font-700 text-line">{p.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}</span>
+            <div className="mb-4 h-32 overflow-hidden rounded-md">
+              {p.image_url ? (
+                <img src={p.image_url} alt={p.title} loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+              ) : (
+                <div className="grid h-full w-full place-items-center rounded-md tech-grid">
+                  <span className="display text-4xl font-700 text-line">{p.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}</span>
+                </div>
+              )}
             </div>
             <div className="flex items-start justify-between gap-2">
               <h3 className="display text-xl font-600 leading-tight text-ink transition-colors group-hover:text-accent">{p.title}</h3>
