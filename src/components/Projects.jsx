@@ -25,7 +25,7 @@ function ProjectRow({ project, index }) {
 
         <Reveal variant="up">
           <Link to={`/project/${project.id}`} className="group mt-3 block">
-            <h3 className="display text-4xl font-700 leading-[0.98] text-ink transition-colors group-hover:text-accent sm:text-6xl">
+            <h3 className="display text-3xl font-600 leading-[1.02] text-ink transition-colors group-hover:text-accent sm:text-4xl">
               {project.title}
             </h3>
           </Link>
@@ -56,7 +56,7 @@ function ProjectRow({ project, index }) {
               <img src={project.image_url} alt={project.title} className="h-full w-full object-cover" loading="lazy" />
             ) : (
               <div className="grid h-full w-full place-items-center tech-grid">
-                <span className="display text-7xl font-900 text-line sm:text-8xl">
+                <span className="display text-6xl font-700 text-line sm:text-7xl">
                   {project.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}
                 </span>
               </div>
@@ -71,12 +71,14 @@ function ProjectRow({ project, index }) {
   )
 }
 
-export default function Projects({ projects }) {
+export default function Projects({ projects = [] }) {
+  // Only featured projects reach this section; if none are ticked, render nothing.
+  if (!projects.length) return null
   return (
     <section id="work" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
       <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-muted">selected work</p></Reveal>
       <Reveal variant="up" delay={0.05}>
-        <h2 className="display text-5xl font-700 leading-none text-ink sm:text-7xl">
+        <h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">
           Things I&apos;ve <span className="italic star">shipped</span>
         </h2>
       </Reveal>

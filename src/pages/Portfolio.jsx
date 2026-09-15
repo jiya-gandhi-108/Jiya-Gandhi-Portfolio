@@ -13,8 +13,6 @@ import Freelance from '../components/Freelance'
 import Contact from '../components/Contact'
 import { fetchProfile, fetchProjects, defaultProfile, defaultProjects } from '../lib/data'
 
-const MAIN_COUNT = 5 // top projects in "Work"; the rest go to "My Coding World"
-
 export default function Portfolio() {
   const [profile, setProfile] = useState(defaultProfile)
   const [projects, setProjects] = useState(defaultProjects)
@@ -30,8 +28,10 @@ export default function Portfolio() {
     return () => { alive = false }
   }, [])
 
-  const main = useMemo(() => projects.slice(0, MAIN_COUNT), [projects])
-  const rest = useMemo(() => projects.slice(MAIN_COUNT), [projects])
+  // "Things I've shipped" = only projects with the Featured box ticked.
+  // "My Coding World" = every project.
+  const main = useMemo(() => projects.filter((p) => p.featured), [projects])
+  const rest = useMemo(() => projects, [projects])
 
   return (
     <div className="grain">

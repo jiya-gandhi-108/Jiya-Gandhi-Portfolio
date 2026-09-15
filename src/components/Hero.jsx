@@ -73,7 +73,7 @@ export default function Hero({ profile, started }) {
 
         {/* RIGHT — big serif headline (right-aligned on desktop) */}
         <motion.div {...show(0.25)} className="order-2 lg:order-3 lg:text-right">
-          <h1 className="display text-[15vw] font-900 leading-[0.92] tracking-[-0.02em] text-ink sm:text-7xl lg:text-[5.4rem]">
+          <h1 className="display text-[12vw] font-700 leading-[0.98] tracking-[-0.015em] text-ink sm:text-6xl lg:text-[4.2rem]">
             {head[0]}
             <br />
             <span className="inline-flex items-center gap-3 lg:justify-end"><span className="star text-[0.7em]">✦</span>{head[1]}</span>

@@ -1,10 +1,10 @@
 import { ArrowUpRight } from 'lucide-react'
 
 // Rotating circular text badge with an arrow in the middle — links to contact.
-export default function OpenToWorkBadge({ className = '', size = 128 }) {
+export default function OpenToWorkBadge({ className = '', size = 128, href = '/#contact' }) {
   const text = 'OPEN TO WORK • CONTACT ME • '
   return (
-    <a href="/#contact" aria-label="Open to work — contact me"
+    <a href={href} aria-label="Open to work — contact me"
       className={`group relative grid place-items-center ${className}`} style={{ width: size, height: size }}>
       <span className="absolute inset-0 rounded-full bg-accent" />
       <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full animate-spin-slow">

@@ -20,7 +20,7 @@ export default function Contact({ profile }) {
         </Reveal>
 
         <Reveal variant="up" delay={0.05}>
-          <h2 className="display text-[13vw] font-900 leading-[0.9] tracking-tight text-ink sm:text-8xl">
+          <h2 className="display text-[9vw] font-700 leading-[0.95] tracking-tight text-ink sm:text-6xl">
             Let&apos;s build <span className="italic star">something</span>
           </h2>
         </Reveal>
@@ -54,7 +54,7 @@ export default function Contact({ profile }) {
             </Reveal>
           </div>
           <div className="flex items-start justify-center sm:justify-end">
-            <OpenToWorkBadge size={150} />
+            <OpenToWorkBadge size={150} href={`mailto:${profile.email}`} />
           </div>
         </div>
 

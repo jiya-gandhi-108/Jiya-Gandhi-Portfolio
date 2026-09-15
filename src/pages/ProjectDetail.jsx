@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText, Calendar, Tag, Layers, Mail } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { fetchProfile, fetchProjects, defaultProfile } from '../lib/data'
@@ -34,16 +34,16 @@ export default function ProjectDetail() {
   return (
     <div className="grain">
       <Nav profile={profile} />
-      <main className="mx-auto max-w-6xl px-5 pb-10 pt-28 sm:px-10 sm:pt-36">
+      <main className="mx-auto max-w-5xl px-5 pb-10 pt-28 sm:px-10 sm:pt-36">
         <Link to="/#work" className="inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-accent">
           <ArrowLeft size={15} /> back to work
         </Link>
 
-        {project === undefined && <p className="mt-10 font-sans text-sm text-muted">loading…</p>}
+        {project === undefined && <p className="mt-10 font-sans text-sm text-muted">loading&hellip;</p>}
 
         {project === null && (
           <div className="mt-16 rounded-lg border border-dashed border-line p-10 text-center">
-            <p className="display text-3xl font-700 text-ink">404</p>
+            <p className="display text-3xl font-600 text-ink">404</p>
             <p className="mt-2 font-sans text-sm text-muted">This project doesn&apos;t exist.</p>
             <Link to="/#work" className="btn-primary mt-6">See all work</Link>
           </div>
@@ -52,10 +52,10 @@ export default function ProjectDetail() {
         {project && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="mt-8 flex items-center gap-3 font-sans text-xs uppercase tracking-[0.2em] text-muted">
-              <span className="text-accent">{project.tag}</span><span>·</span><span>{project.year}</span>
+              <span className="text-accent">{project.tag}</span><span>&middot;</span><span>{project.year}</span>
             </div>
-            <h1 className="display mt-3 text-5xl font-900 leading-[0.95] tracking-tight text-ink sm:text-8xl">{project.title}</h1>
-            {project.subtitle && <p className="display mt-4 max-w-2xl text-2xl font-500 italic text-muted sm:text-3xl">{project.subtitle}</p>}
+            <h1 className="display mt-3 text-4xl font-600 leading-[1.02] tracking-tight text-ink sm:text-6xl">{project.title}</h1>
+            {project.subtitle && <p className="display mt-4 max-w-2xl text-xl font-500 italic text-muted sm:text-2xl">{project.subtitle}</p>}
 
             <div className="mt-7 flex flex-wrap gap-3">
               {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="btn-ghost"><Github size={16} /> Source</a>}
@@ -63,14 +63,23 @@ export default function ProjectDetail() {
               {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className="btn-ghost"><FileText size={16} /> Case study</a>}
             </div>
 
-            <div className="mt-10 overflow-hidden rounded-lg border border-line bg-graphite">
+            {/* project image — capped to a normal size, centered */}
+            <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-lg border border-line bg-graphite">
               {project.image_url ? (
-                <img src={project.image_url} alt={project.title} className="w-full object-cover" />
+                <img src={project.image_url} alt={project.title} className="aspect-[16/10] w-full object-cover" />
               ) : (
-                <div className="grid aspect-[16/8] w-full place-items-center tech-grid">
-                  <span className="display text-8xl font-900 text-line">{project.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}</span>
+                <div className="grid aspect-[16/10] w-full place-items-center tech-grid">
+                  <span className="display text-6xl font-700 text-line">{project.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}</span>
                 </div>
               )}
+            </div>
+
+            {/* NEW — at-a-glance facts strip */}
+            <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
+              <Fact icon={<Calendar size={15} />} label="Year" value={project.year || '—'} />
+              <Fact icon={<Tag size={15} />} label="Category" value={project.tag || '—'} />
+              <Fact icon={<Layers size={15} />} label="Technologies" value={stack.length ? String(stack.length) : '—'} />
+              <Fact icon={<Github size={15} />} label="Links" value={[project.github_url && 'Code', project.demo_url && 'Demo', project.case_study_url && 'Study'].filter(Boolean).join(' · ') || '—'} />
             </div>
 
             <div className="mt-12 grid gap-10 sm:grid-cols-2">
@@ -81,7 +90,7 @@ export default function ProjectDetail() {
             {project.long_desc && (
               <div className="mt-10">
                 <Label>How it works</Label>
-                <p className="mt-3 max-w-3xl text-lg leading-relaxed text-ink/90">{project.long_desc}</p>
+                <p className="mt-3 max-w-3xl text-base leading-relaxed text-ink/90">{project.long_desc}</p>
               </div>
             )}
 
@@ -99,7 +108,7 @@ export default function ProjectDetail() {
                   <div>
                     <Label>What I handled</Label>
                     <ul className="mt-3 space-y-1.5">
-                      {handled.map((h) => <li key={h} className="font-sans text-sm text-muted"><span className="star">✦</span> {h}</li>)}
+                      {handled.map((h) => <li key={h} className="font-sans text-sm text-muted"><span className="star">&#10022;</span> {h}</li>)}
                     </ul>
                   </div>
                 )}
@@ -109,17 +118,30 @@ export default function ProjectDetail() {
             {project.outcome && (
               <div className="mt-12 rounded-lg bg-royal p-6 sm:p-8">
                 <Label className="!text-paper/70">Outcome</Label>
-                <p className="display mt-2 text-2xl font-500 leading-snug text-paper sm:text-3xl">{project.outcome}</p>
+                <p className="display mt-2 text-xl font-500 leading-snug text-paper sm:text-2xl">{project.outcome}</p>
               </div>
             )}
+
+            {/* NEW — CTA band */}
+            <div className="mt-12 flex flex-col items-start justify-between gap-5 rounded-lg border border-line bg-graphite p-6 sm:flex-row sm:items-center sm:p-8">
+              <div>
+                <p className="display text-xl font-600 text-ink sm:text-2xl">Want something like this built?</p>
+                <p className="mt-1 max-w-md font-sans text-sm text-muted">Tell me the workflow you want gone &mdash; I&apos;ll tell you how I&apos;d ship it.</p>
+              </div>
+              {profile.email && (
+                <a href={`mailto:${profile.email}`} className="btn-primary shrink-0">
+                  <Mail size={16} /> Get in touch
+                </a>
+              )}
+            </div>
 
             {next && (
               <Link to={`/project/${next.id}`} className="group mt-16 flex items-center justify-between border-t border-line pt-8">
                 <div>
                   <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted">next project</p>
-                  <p className="display mt-1 text-3xl font-700 text-ink transition-colors group-hover:text-accent sm:text-5xl">{next.title}</p>
+                  <p className="display mt-1 text-2xl font-600 text-ink transition-colors group-hover:text-accent sm:text-3xl">{next.title}</p>
                 </div>
-                <ArrowUpRight size={40} className="text-muted transition-transform group-hover:translate-x-2 group-hover:-translate-y-1 group-hover:text-accent" />
+                <ArrowUpRight size={36} className="text-muted transition-transform group-hover:translate-x-2 group-hover:-translate-y-1 group-hover:text-accent" />
               </Link>
             )}
           </motion.article>
@@ -130,6 +152,14 @@ export default function ProjectDetail() {
   )
 }
 
+function Fact({ icon, label, value }) {
+  return (
+    <div className="bg-bg p-4">
+      <p className="flex items-center gap-1.5 font-sans text-[11px] uppercase tracking-[0.15em] text-muted">{icon} {label}</p>
+      <p className="mt-1.5 font-sans text-sm font-600 text-ink">{value}</p>
+    </div>
+  )
+}
 function Label({ children, className = '' }) {
   return <h2 className={`font-sans text-xs uppercase tracking-[0.2em] text-accent ${className}`}>{children}</h2>
 }
@@ -137,7 +167,7 @@ function Block({ label, children }) {
   return (
     <div>
       <Label>{label}</Label>
-      <p className="mt-3 text-lg leading-relaxed text-ink/90">{children}</p>
+      <p className="mt-3 text-base leading-relaxed text-ink/90">{children}</p>
     </div>
   )
 }
