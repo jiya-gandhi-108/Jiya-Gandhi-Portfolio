@@ -44,7 +44,7 @@ export const skillGroups = [
   { label: 'DevOps & Tools', icon: 'Wrench', items: ['Git', 'Docker', 'Vercel', 'Render', 'Railway', 'Postman'] },
 ]
 
-export const experience = [
+export const defaultExperience = [
   {
     role: 'AI Automation & Backend Developer',
     org: 'Freelance',
@@ -71,6 +71,13 @@ export const defaultProjects = [
     stack: ['Python', 'OpenAI API', 'n8n', 'Webhooks', 'CRM APIs'],
     handled: ['Voice-call workflow', 'LLM integration', 'Candidate scoring', 'Automated data transfer'],
     outcome: 'Standardized candidate evaluation and cut manual screening time.',
+    cooking: true,
+    status: 'In progress',
+    updates: [
+      { date: '2025-09-10', note: 'Added multi-language call handling and improved transcription accuracy.' },
+      { date: '2025-08-22', note: 'Wired candidate scores back into the CRM automatically.' },
+      { date: '2025-08-01', note: 'First working end-to-end call flow with live LLM interpretation.' },
+    ],
     github_url: 'https://github.com/jiya-gandhi-108', demo_url: '', case_study_url: '#', featured: true, sort_order: 1,
   },
   {
@@ -196,8 +203,79 @@ export async function fetchProjectById(id) {
   return list.find((p) => String(p.id) === String(id)) || null
 }
 
+export async function fetchExperience() {
+  if (!isSupabaseConfigured) return defaultExperience
+  try {
+    const { data, error } = await supabase
+      .from('experience').select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
+    if (error || !data || data.length === 0) return defaultExperience
+    return data
+  } catch { return defaultExperience }
+}
+
 function cleanNulls(obj) {
   const out = {}
   for (const k in obj) if (obj[k] !== null && obj[k] !== '') out[k] = obj[k]
   return out
+}
+
+// --------------------------- extra sections --------------------------------
+
+// "How I think about building" — principles (edit freely).
+export const principles = [
+  { title: 'Automate the boring parts', desc: 'If a task repeats, it shouldn’t need a human. I find the repetition and design it out.' },
+  { title: 'Build to hand over', desc: 'You get a working system plus the docs to run it yourself — no black boxes, no lock-in.' },
+  { title: 'Backend-first thinking', desc: 'Clean data models and reliable APIs come before anything shiny sits on top.' },
+  { title: 'Ship, then sharpen', desc: 'Get a real, working version in front of you fast — then refine it against actual use.' },
+]
+
+// "Currently exploring" — what I'm going deep on right now (edit freely).
+export const nowExploring = [
+  'AI agents & multi-step workflows',
+  'RAG over private data',
+  'LLM tool-use / function calling',
+  'Self-hostable automation (n8n)',
+  'Vector databases',
+  'Prompt & eval pipelines',
+]
+
+// FAQ — expandable answers (edit freely).
+export const faqs = [
+  { q: 'What kind of work do you take on?', a: 'Backend features and APIs, AI-powered automations, CRM and tool integrations, and small internal dashboards or operational systems.' },
+  { q: 'Which tools and stacks do you use?', a: 'Mostly Node.js and Python on the backend, PostgreSQL/MongoDB/Supabase for data, and OpenAI/Claude/Gemini with n8n for AI workflows — but I pick what fits your problem, not the other way around.' },
+  { q: 'How do we start?', a: 'You describe the workflow or problem. I map what should be automated and which tools/APIs are needed, then scope it before any building begins.' },
+  { q: 'Do I get the source code?', a: 'Yes. You receive the working system and documentation so your team can run and extend it independently.' },
+  { q: 'Can you work with my existing systems?', a: 'Usually, yes — most of my work is integrating with tools you already use (CRMs, databases, email, third-party APIs) rather than replacing them.' },
+  { q: 'How do you scope and price a project?', a: 'It depends on scope, which I only estimate after understanding the workflow. Reach out with what you’re trying to do and I’ll come back with an approach.' },
+]
+
+// "If I joined your team…" — the actual sequence I'd run (edit freely).
+export const joinTeam = {
+  intro: 'Hand me a repetitive business process. Here’s exactly what I’d do with it.',
+  steps: [
+    { title: 'Map the process', desc: 'Document how the work actually flows today, end to end.' },
+    { title: 'Find the bottlenecks', desc: 'Spot where time, errors, and hand-offs pile up.' },
+    { title: 'Decide what to automate', desc: 'Separate what needs a human from what a system can own.' },
+    { title: 'Build the workflow', desc: 'Implement the logic, the backend, and the automation.' },
+    { title: 'Integrate the APIs', desc: 'Connect the tools you already use so data moves on its own.' },
+    { title: 'Deploy it', desc: 'Ship it into your real environment, not a demo.' },
+    { title: 'Measure the impact', desc: 'Check whether it actually improved anything — and tune it.' },
+  ],
+}
+
+// "What I don't use AI for" — where I still reason manually (edit freely).
+export const noAiFor = {
+  statement: 'AI is a tool, not a substitute for engineering.',
+  intro: 'I lean on AI to move faster — but these decisions I still reason through myself:',
+  items: [
+    { label: 'Architecture', desc: 'How the pieces fit and where responsibilities live.' },
+    { label: 'Database design', desc: 'Schemas, relationships, and how data will grow.' },
+    { label: 'Security', desc: 'Auth, access rules, and protecting sensitive data.' },
+    { label: 'API contracts', desc: 'The shape and guarantees other systems depend on.' },
+    { label: 'Debugging', desc: 'Understanding the real cause, not the first plausible one.' },
+    { label: 'Deployment', desc: 'What runs where, and what happens when it fails.' },
+    { label: 'Edge cases', desc: 'The unusual inputs that quietly break naïve solutions.' },
+  ],
 }

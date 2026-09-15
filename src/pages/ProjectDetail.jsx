@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText, Calendar, Tag, Layers, Mail } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText, Calendar, Tag, Layers, Mail, Clock } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { fetchProfile, fetchProjects, defaultProfile } from '../lib/data'
@@ -51,8 +51,13 @@ export default function ProjectDetail() {
 
         {project && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div className="mt-8 flex items-center gap-3 font-sans text-xs uppercase tracking-[0.2em] text-muted">
+            <div className="mt-8 flex flex-wrap items-center gap-3 font-sans text-xs uppercase tracking-[0.2em] text-muted">
               <span className="text-accent">{project.tag}</span><span>&middot;</span><span>{project.year}</span>
+              {project.status && (
+                <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-600 text-accent">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" /> {project.status}
+                </span>
+              )}
             </div>
             <h1 className="display mt-3 text-4xl font-600 leading-[1.02] tracking-tight text-ink sm:text-6xl">{project.title}</h1>
             {project.subtitle && <p className="display mt-4 max-w-2xl text-xl font-500 italic text-muted sm:text-2xl">{project.subtitle}</p>}
@@ -121,6 +126,36 @@ export default function ProjectDetail() {
                 <p className="display mt-2 text-xl font-500 leading-snug text-paper sm:text-2xl">{project.outcome}</p>
               </div>
             )}
+
+            {/* NEW — project update history */}
+            {(() => {
+              const updates = Array.isArray(project.updates) ? project.updates : []
+              const sorted = [...updates]
+                .filter((u) => u && (u.note || u.date))
+                .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+              if (!sorted.length) return null
+              return (
+                <div className="mt-12">
+                  <Label>History of this project</Label>
+                  <div className="relative mt-5 pl-7">
+                    <span aria-hidden className="absolute left-[5px] top-2 h-[calc(100%-1rem)] w-px bg-line" />
+                    <ul className="space-y-6">
+                      {sorted.map((u, i) => (
+                        <li key={i} className="relative">
+                          <span className="absolute -left-[26px] top-1 grid place-items-center">
+                            <span className="h-3 w-3 rounded-full border-2 border-accent bg-bg" />
+                          </span>
+                          <p className="flex items-center gap-2 font-sans text-[11px] uppercase tracking-[0.15em] text-accent">
+                            <Clock size={12} /> {u.date || 'update'}
+                          </p>
+                          <p className="mt-1 max-w-2xl font-sans text-sm leading-relaxed text-ink/90">{u.note}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )
+            })()}
 
             {/* NEW — CTA band */}
             <div className="mt-12 flex flex-col items-start justify-between gap-5 rounded-lg border border-line bg-graphite p-6 sm:flex-row sm:items-center sm:p-8">

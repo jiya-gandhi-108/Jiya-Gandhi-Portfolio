@@ -46,6 +46,17 @@ const emptyProject = {
   demo_url: '',
   case_study_url: '',
   featured: false,
+  cooking: false,
+  status: '',
+  updates: [],
+  sort_order: 0,
+}
+
+const emptyExperience = {
+  role: '',
+  org: '',
+  period: '',
+  description: '',
   sort_order: 0,
 }
 
@@ -210,7 +221,7 @@ function Manage({ session }) {
       }
     >
       <div className="mb-6 flex gap-2">
-        {['projects', 'profile'].map((t) => (
+        {['projects', 'experience', 'profile'].map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -223,7 +234,9 @@ function Manage({ session }) {
         ))}
       </div>
       <p className="mb-6 font-mono text-xs text-muted">Signed in as {session.user.email}</p>
-      {tab === 'projects' ? <ProjectsManager /> : <ProfileManager />}
+      {tab === 'projects' && <ProjectsManager />}
+      {tab === 'experience' && <ExperienceManager />}
+      {tab === 'profile' && <ProfileManager />}
     </Shell>
   )
 }
@@ -323,6 +336,9 @@ function ProjectForm({ initial, onCancel, onSaved }) {
     ...initial,
     stack: Array.isArray(initial.stack) ? initial.stack.join(', ') : initial.stack || '',
     handled: Array.isArray(initial.handled) ? initial.handled.join(', ') : initial.handled || '',
+    updates: Array.isArray(initial.updates) ? initial.updates : [],
+    status: initial.status || '',
+    cooking: !!initial.cooking,
   })
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
@@ -331,6 +347,18 @@ function ProjectForm({ initial, onCancel, onSaved }) {
     const v = e.target.type === 'checkbox' ? e.target.checked : e.target.value
     setF((s) => ({ ...s, [k]: v }))
   }
+
+  // update-history editor
+  const addUpdate = () =>
+    setF((s) => ({ ...s, updates: [{ date: new Date().toISOString().slice(0, 10), note: '' }, ...(s.updates || [])] }))
+  const setUpdate = (i, k) => (e) =>
+    setF((s) => {
+      const arr = [...(s.updates || [])]
+      arr[i] = { ...arr[i], [k]: e.target.value }
+      return { ...s, updates: arr }
+    })
+  const removeUpdate = (i) =>
+    setF((s) => ({ ...s, updates: (s.updates || []).filter((_, idx) => idx !== i) }))
 
   const uploadImage = async (e) => {
     const file = e.target.files?.[0]
@@ -372,7 +400,19 @@ function ProjectForm({ initial, onCancel, onSaved }) {
       demo_url: f.demo_url?.trim() || null,
       case_study_url: f.case_study_url?.trim() || null,
       featured: !!f.featured,
+      cooking: !!f.cooking,
+      status: f.status?.trim() || null,
+      updates: (f.updates || [])
+        .filter((u) => u && ((u.note && u.note.trim()) || u.date))
+        .map((u) => ({ date: u.date || '', note: (u.note || '').trim() })),
       sort_order: Number(f.sort_order) || 0,
+    }
+    // Only one project can be "currently cooking" — clear it on the others.
+    if (payload.cooking) {
+      await supabase
+        .from('projects')
+        .update({ cooking: false })
+        .neq('id', f.id || '00000000-0000-0000-0000-000000000000')
     }
     let error
     if (f.id) ({ error } = await supabase.from('projects').update(payload).eq('id', f.id))
@@ -454,9 +494,45 @@ function ProjectForm({ initial, onCancel, onSaved }) {
           <Field label="Sort order">
             <input type="number" className="input" value={f.sort_order} onChange={set('sort_order')} />
           </Field>
-          <label className="flex items-center gap-2 pt-7 font-mono text-sm">
-            <input type="checkbox" checked={!!f.featured} onChange={set('featured')} /> Featured
-          </label>
+          <div className="flex items-center gap-6 pt-7 font-mono text-sm">
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={!!f.featured} onChange={set('featured')} /> Featured
+            </label>
+            <label className="flex items-center gap-2">
+              <input type="checkbox" checked={!!f.cooking} onChange={set('cooking')} /> Currently cooking
+            </label>
+          </div>
+        </div>
+        <p className="-mt-2 font-mono text-[11px] leading-relaxed text-muted">
+          <span className="text-accent">Featured</span> → shows in “Things I’ve shipped”. Every project shows in “My Coding World”.
+          <br /><span className="text-accent">Currently cooking</span> → shows in the “Currently cooking” section (only one project at a time).
+        </p>
+
+        <Field label="Current status (e.g. In progress, Testing, Almost done)">
+          <input className="input" value={f.status} onChange={set('status')} placeholder="In progress" />
+        </Field>
+
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <span className="font-mono text-xs text-muted">Update history — shown on the project page & the Cooking section</span>
+            <button type="button" onClick={addUpdate} className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1 font-mono text-xs text-ink hover:border-accent hover:text-accent">
+              <Plus size={13} /> Add update
+            </button>
+          </div>
+          <div className="space-y-2">
+            {(f.updates || []).length === 0 && (
+              <p className="font-mono text-xs text-muted">No updates yet. Add what you most recently did on this project.</p>
+            )}
+            {(f.updates || []).map((u, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <input type="date" className="input max-w-[160px]" value={u.date || ''} onChange={setUpdate(i, 'date')} />
+                <input className="input flex-1" placeholder="What you did most recently…" value={u.note || ''} onChange={setUpdate(i, 'note')} />
+                <button type="button" onClick={() => removeUpdate(i)} className="icon-btn" aria-label="Remove update">
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {err && <p className="text-sm text-red-500">{err}</p>}
@@ -582,6 +658,131 @@ function ProfileManager() {
         <button onClick={save} disabled={busy} className="btn-primary">
           {busy ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Save profile
         </button>
+      </div>
+    </div>
+  )
+}
+
+// ---------------- Experience ----------------
+
+function ExperienceManager() {
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [editing, setEditing] = useState(null)
+  const [msg, setMsg] = useState('')
+
+  const load = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from('experience')
+      .select('*')
+      .order('sort_order', { ascending: true })
+      .order('created_at', { ascending: true })
+    setItems(error ? [] : data || [])
+    setLoading(false)
+  }
+  useEffect(() => { load() }, [])
+
+  const remove = async (id) => {
+    if (!confirm('Delete this experience entry?')) return
+    const { error } = await supabase.from('experience').delete().eq('id', id)
+    if (error) setMsg(error.message)
+    else load()
+  }
+
+  if (editing !== null)
+    return <ExperienceForm initial={editing} onCancel={() => setEditing(null)} onSaved={() => { setEditing(null); load() }} />
+
+  return (
+    <div>
+      <div className="mb-4 flex items-center justify-between">
+        <h2 className="font-display text-xl font-700">Experience</h2>
+        <button onClick={() => setEditing({ ...emptyExperience })} className="btn-primary">
+          <Plus size={16} /> Add experience
+        </button>
+      </div>
+      {msg && <p className="mb-3 text-sm text-red-500">{msg}</p>}
+      {loading ? (
+        <Loader2 className="animate-spin text-muted" />
+      ) : items.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-line p-8 text-center text-sm text-muted">
+          No experience yet. Add your first role — it appears on the portfolio timeline instantly.
+        </div>
+      ) : (
+        <ul className="space-y-3">
+          {items.map((e) => (
+            <li key={e.id} className="flex items-center gap-4 rounded-xl border border-line bg-graphite p-3">
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-600">{e.role} <span className="text-muted">— {e.org}</span></p>
+                <p className="mt-0.5 font-mono text-xs text-muted">{e.period}</p>
+              </div>
+              <button onClick={() => setEditing(e)} className="icon-btn" aria-label="Edit"><Pencil size={15} /></button>
+              <button onClick={() => remove(e.id)} className="icon-btn" aria-label="Delete"><Trash2 size={15} /></button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function ExperienceForm({ initial, onCancel, onSaved }) {
+  const [f, setF] = useState({ ...initial })
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const set = (k) => (e) => setF((s) => ({ ...s, [k]: e.target.value }))
+
+  const save = async () => {
+    setErr('')
+    if (!f.role?.trim()) return setErr('Role is required.')
+    setBusy(true)
+    const payload = {
+      role: f.role.trim(),
+      org: f.org?.trim() || null,
+      period: f.period?.trim() || null,
+      description: f.description?.trim() || null,
+      sort_order: Number(f.sort_order) || 0,
+    }
+    let error
+    if (f.id) ({ error } = await supabase.from('experience').update(payload).eq('id', f.id))
+    else ({ error } = await supabase.from('experience').insert(payload))
+    setBusy(false)
+    if (error) setErr(error.message)
+    else onSaved()
+  }
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <div className="mb-5 flex items-center justify-between">
+        <h2 className="font-display text-xl font-700">{f.id ? 'Edit experience' : 'Add experience'}</h2>
+        <button onClick={onCancel} className="icon-btn" aria-label="Cancel"><X size={16} /></button>
+      </div>
+      <div className="space-y-4">
+        <Field label="Role / title *">
+          <input className="input" value={f.role || ''} onChange={set('role')} placeholder="AI Automation & Backend Developer" />
+        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Organisation">
+            <input className="input" value={f.org || ''} onChange={set('org')} placeholder="Freelance" />
+          </Field>
+          <Field label="Period / timeline">
+            <input className="input" value={f.period || ''} onChange={set('period')} placeholder="2023 — Present" />
+          </Field>
+        </div>
+        <Field label="Description">
+          <textarea rows={3} className="input" value={f.description || ''} onChange={set('description')} placeholder="What you did, tools used, impact…" />
+        </Field>
+        <Field label="Sort order (lower = higher on the timeline)">
+          <input type="number" className="input" value={f.sort_order} onChange={set('sort_order')} />
+        </Field>
+
+        {err && <p className="text-sm text-red-500">{err}</p>}
+        <div className="flex gap-3 pt-1">
+          <button onClick={save} disabled={busy} className="btn-primary">
+            {busy ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Save
+          </button>
+          <button onClick={onCancel} className="btn-ghost">Cancel</button>
+        </div>
       </div>
     </div>
   )

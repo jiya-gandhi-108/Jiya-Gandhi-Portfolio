@@ -1,9 +1,10 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { experience } from '../lib/data'
+import { defaultExperience } from '../lib/data'
 import { Reveal } from './Reveal'
 
-export default function Experience() {
+export default function Experience({ items }) {
   const reduce = useReducedMotion()
+  const experience = items && items.length ? items : defaultExperience
 
   return (
     <section id="experience" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">

@@ -38,6 +38,9 @@ create table if not exists public.projects (
   demo_url       text,                   -- optional
   case_study_url text,                   -- optional
   featured       boolean default false,
+  cooking        boolean default false,          -- the single "currently cooking" project
+  status         text,                            -- e.g. 'In progress'
+  updates        jsonb default '[]'::jsonb,       -- [{ date, note }] update history
   sort_order     integer default 0,
   created_at     timestamptz default now()
 );
@@ -128,3 +131,31 @@ values
    array['Live rooms','WebSocket sync','State persistence'],
    'https://github.com/jiya-gandhi-108', false, 4)
 on conflict do nothing;
+
+-- ---------- Experience (editable from the dashboard) ------------------
+create table if not exists public.experience (
+  id          uuid primary key default gen_random_uuid(),
+  role        text,
+  org         text,
+  period      text,
+  description text,
+  sort_order  integer default 0,
+  created_at  timestamptz default now()
+);
+
+alter table public.experience enable row level security;
+
+drop policy if exists "experience public read"  on public.experience;
+drop policy if exists "experience owner write"   on public.experience;
+create policy "experience public read"  on public.experience for select using (true);
+create policy "experience owner write"  on public.experience for all to authenticated using (true) with check (true);
+
+insert into public.experience (role, org, period, description, sort_order)
+select v.role, v.org, v.period, v.description, v.sort_order
+from (values
+  ('AI Automation & Backend Developer', 'Freelance', '2023 — Present',
+   'Building AI workflow automations, backend APIs, and CRM integrations for clients across recruitment, e-commerce, and internal-tools work.', 1),
+  ('Backend / Automation Intern', 'Right Advisors', '2024 · 6 months',
+   'Built recruitment automations and internal tooling across the Zoho stack — assignment logic, status flows, and reporting.', 2)
+) as v(role, org, period, description, sort_order)
+where not exists (select 1 from public.experience);
