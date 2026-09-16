@@ -57,6 +57,9 @@ const emptyExperience = {
   org: '',
   period: '',
   description: '',
+  details: '',
+  learnt: '',
+  handled: '',
   sort_order: 0,
 }
 
@@ -727,7 +730,11 @@ function ExperienceManager() {
 }
 
 function ExperienceForm({ initial, onCancel, onSaved }) {
-  const [f, setF] = useState({ ...initial })
+  const [f, setF] = useState({
+    ...initial,
+    learnt: Array.isArray(initial.learnt) ? initial.learnt.join(', ') : initial.learnt || '',
+    handled: Array.isArray(initial.handled) ? initial.handled.join(', ') : initial.handled || '',
+  })
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState('')
   const set = (k) => (e) => setF((s) => ({ ...s, [k]: e.target.value }))
@@ -741,6 +748,9 @@ function ExperienceForm({ initial, onCancel, onSaved }) {
       org: f.org?.trim() || null,
       period: f.period?.trim() || null,
       description: f.description?.trim() || null,
+      details: f.details?.trim() || null,
+      learnt: toList(f.learnt),
+      handled: toList(f.handled),
       sort_order: Number(f.sort_order) || 0,
     }
     let error
@@ -754,7 +764,7 @@ function ExperienceForm({ initial, onCancel, onSaved }) {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="font-display text-xl font-700">{f.id ? 'Edit experience' : 'Add experience'}</h2>
+        <h2 className="font-display text-xl font-700">{f.id ? 'Edit journey entry' : 'Add journey entry'}</h2>
         <button onClick={onCancel} className="icon-btn" aria-label="Cancel"><X size={16} /></button>
       </div>
       <div className="space-y-4">
@@ -769,8 +779,17 @@ function ExperienceForm({ initial, onCancel, onSaved }) {
             <input className="input" value={f.period || ''} onChange={set('period')} placeholder="2023 — Present" />
           </Field>
         </div>
-        <Field label="Description">
-          <textarea rows={3} className="input" value={f.description || ''} onChange={set('description')} placeholder="What you did, tools used, impact…" />
+        <Field label="Short summary (shown on the timeline)">
+          <textarea rows={2} className="input" value={f.description || ''} onChange={set('description')} placeholder="One or two lines about this role…" />
+        </Field>
+        <Field label="What I did (full detail — shown on the entry's own page)">
+          <textarea rows={4} className="input" value={f.details || ''} onChange={set('details')} placeholder="What you worked on during this period…" />
+        </Field>
+        <Field label="What I handled (comma separated)">
+          <input className="input" value={f.handled} onChange={set('handled')} placeholder="Assignment logic, Reporting, Internal tooling" />
+        </Field>
+        <Field label="What I learnt (comma separated)">
+          <input className="input" value={f.learnt} onChange={set('learnt')} placeholder="Working in a real CRM, Building reliable integrations" />
         </Field>
         <Field label="Sort order (lower = higher on the timeline)">
           <input type="number" className="input" value={f.sort_order} onChange={set('sort_order')} />

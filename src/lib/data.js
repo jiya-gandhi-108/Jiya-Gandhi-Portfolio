@@ -46,16 +46,24 @@ export const skillGroups = [
 
 export const defaultExperience = [
   {
+    id: 'freelance',
     role: 'AI Automation & Backend Developer',
     org: 'Freelance',
     period: '2023 — Present',
     desc: 'Building AI workflow automations, backend APIs, and CRM integrations for clients across recruitment, e-commerce, and internal-tools work.',
+    details: 'Working directly with clients to turn manual, repetitive processes into automated systems — scoping the problem, designing the backend, wiring up the integrations, and handing over something they can run themselves.',
+    learnt: ['Scoping automation from a vague business problem', 'Designing reliable integrations across third-party APIs', 'Communicating trade-offs to non-technical clients'],
+    handled: ['End-to-end delivery', 'Backend & API development', 'AI workflow design', 'Client communication'],
   },
   {
+    id: 'right-advisors',
     role: 'Backend / Automation Intern',
     org: 'Right Advisors',
     period: '2024 · 6 months',
     desc: 'Built recruitment automations and internal tooling across the Zoho stack — assignment logic, status flows, and reporting.',
+    details: 'Focused on removing manual work from the recruitment pipeline: automating how leads were assigned, how statuses advanced, and how activity rolled up into reports across the Zoho ecosystem.',
+    learnt: ['Working inside a real CRM/ATS at scale', 'Building automations others depend on daily', 'Turning messy workflows into repeatable ones'],
+    handled: ['Assignment logic', 'Status automation', 'Reporting flows', 'Internal tooling'],
   },
 ]
 
@@ -211,8 +219,14 @@ export async function fetchExperience() {
       .order('sort_order', { ascending: true })
       .order('created_at', { ascending: true })
     if (error || !data || data.length === 0) return defaultExperience
-    return data
+    // DB column is `description`; components read `desc` — expose both.
+    return data.map((r) => ({ ...r, desc: r.desc ?? r.description }))
   } catch { return defaultExperience }
+}
+
+export async function fetchExperienceById(id) {
+  const list = await fetchExperience()
+  return list.find((e) => String(e.id) === String(id)) || null
 }
 
 function cleanNulls(obj) {

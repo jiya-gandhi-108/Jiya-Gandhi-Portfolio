@@ -139,6 +139,9 @@ create table if not exists public.experience (
   org         text,
   period      text,
   description text,
+  details     text,                            -- full "what I did" write-up
+  learnt      text[] default '{}',             -- what I learnt
+  handled     text[] default '{}',             -- what I handled
   sort_order  integer default 0,
   created_at  timestamptz default now()
 );
