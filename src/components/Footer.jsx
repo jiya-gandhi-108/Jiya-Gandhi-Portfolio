@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { Github, Linkedin, Mail, ArrowUpRight } from 'lucide-react'
 
 export default function Footer({ profile }) {
@@ -15,7 +14,6 @@ export default function Footer({ profile }) {
             {profile.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer" className="icon-btn"><Github size={16} /></a>}
             {profile.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="icon-btn"><Linkedin size={16} /></a>}
             {profile.email && <a href={`mailto:${profile.email}`} className="icon-btn"><Mail size={16} /></a>}
-            <Link to="/dashboard" className="ml-2 font-sans text-xs text-muted transition-colors hover:text-accent">/dashboard</Link>
           </div>
         </div>
       </div>

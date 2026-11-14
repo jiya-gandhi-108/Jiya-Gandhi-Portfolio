@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { ArrowUpRight, Github, Linkedin, Mail, Phone, MapPin, Download } from 'lucide-react'
 import OpenToWorkBadge from './OpenToWorkBadge'
 import { Reveal } from './Reveal'
@@ -62,7 +61,6 @@ export default function Contact({ profile }) {
           <p className="font-sans text-sm text-muted">© {new Date().getFullYear()} {profile.name}. Built from scratch.</p>
           <div className="flex items-center gap-3">
             <a href="#top" className="font-sans text-xs uppercase tracking-[0.15em] text-muted transition-colors hover:text-accent">back to top ↑</a>
-            <Link to="/dashboard" className="ml-2 font-sans text-xs text-muted transition-colors hover:text-accent">/dashboard</Link>
           </div>
         </div>
       </div>

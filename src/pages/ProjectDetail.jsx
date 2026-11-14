@@ -1,29 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText, Calendar, Tag, Layers, Mail, Clock } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
-import { fetchProfile, fetchProjects, defaultProfile } from '../lib/data'
+import { profile, projects as all, getProjectById } from '../lib/data'
 
 const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
 
 export default function ProjectDetail() {
   const { id } = useParams()
-  const [profile, setProfile] = useState(defaultProfile)
-  const [all, setAll] = useState([])
-  const [project, setProject] = useState(undefined)
+  const project = getProjectById(id)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    let alive = true
-    fetchProfile().then((p) => alive && p && setProfile(p))
-    fetchProjects().then((list) => {
-      if (!alive) return
-      setAll(list)
-      setProject(list.find((p) => String(p.id) === String(id)) || null)
-    })
-    return () => { alive = false }
   }, [id])
 
   const stack = toList(project?.stack)
@@ -38,8 +28,6 @@ export default function ProjectDetail() {
         <Link to="/#work" className="inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-accent">
           <ArrowLeft size={15} /> back to work
         </Link>
-
-        {project === undefined && <p className="mt-10 font-sans text-sm text-muted">loading&hellip;</p>}
 
         {project === null && (
           <div className="mt-16 rounded-lg border border-dashed border-line p-10 text-center">

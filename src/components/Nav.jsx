@@ -13,15 +13,15 @@ export default function Nav({ profile }) {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-40">
-        <div className="flex items-center justify-between px-5 py-5 sm:px-8">
-          <Link to="/" className="display text-xl font-700 leading-none text-ink mix-blend-difference sm:text-2xl" aria-label="Home">
+      <header className="fixed inset-x-0 top-0 z-40 border-b border-line/60 bg-bg/85 shadow-lg shadow-black/20 backdrop-blur-md">
+        <div className="flex items-center justify-between px-5 py-4 sm:px-8">
+          <Link to="/" className="display text-xl font-700 leading-none text-ink sm:text-2xl" aria-label="Home">
             {profile?.name || 'Jiya Gandhi'}
           </Link>
 
           <div className="hidden items-center gap-7 md:flex">
             {links.map((l) => (
-              <a key={l.label} href={l.href} className="nav-link mix-blend-difference !text-white">{l.label}</a>
+              <a key={l.label} href={l.href} className="nav-link">{l.label}</a>
             ))}
             {profile?.resume_url && (
               <a href={profile.resume_url} download
@@ -31,7 +31,7 @@ export default function Nav({ profile }) {
             )}
           </div>
 
-          <button onClick={() => setOpen(true)} className="text-ink mix-blend-difference md:hidden" aria-label="Menu"><Menu size={24} /></button>
+          <button onClick={() => setOpen(true)} className="text-ink md:hidden" aria-label="Menu"><Menu size={24} /></button>
         </div>
       </header>
 

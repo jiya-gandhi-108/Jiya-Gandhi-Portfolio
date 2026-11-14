@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import NameReveal from '../components/NameReveal'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
@@ -14,24 +14,10 @@ import Experience from '../components/Experience'
 import Skills from '../components/Skills'
 import Freelance from '../components/Freelance'
 import Contact from '../components/Contact'
-import { fetchProfile, fetchProjects, fetchExperience, defaultProfile, defaultProjects, defaultExperience } from '../lib/data'
+import { profile, projects, experience } from '../lib/data'
 
 export default function Portfolio() {
-  const [profile, setProfile] = useState(defaultProfile)
-  const [projects, setProjects] = useState(defaultProjects)
-  const [experience, setExperience] = useState(defaultExperience)
   const [revealDone, setRevealDone] = useState(false)
-
-  useEffect(() => {
-    let alive = true
-    Promise.all([fetchProfile(), fetchProjects(), fetchExperience()]).then(([p, pr, ex]) => {
-      if (!alive) return
-      if (p) setProfile(p)
-      if (pr && pr.length) setProjects(pr)
-      if (ex && ex.length) setExperience(ex)
-    })
-    return () => { alive = false }
-  }, [])
 
   // "Things I've shipped" = only Featured projects. "My Coding World" = all.
   const main = useMemo(() => projects.filter((p) => p.featured), [projects])

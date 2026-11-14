@@ -1,24 +1,19 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Sparkles, ListChecks } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
-import { fetchProfile, fetchExperienceById, defaultProfile } from '../lib/data'
+import { profile, getExperienceById } from '../lib/data'
 
 const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
 
 export default function JourneyDetail() {
   const { id } = useParams()
-  const [profile, setProfile] = useState(defaultProfile)
-  const [entry, setEntry] = useState(undefined)
+  const entry = getExperienceById(id)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    let alive = true
-    fetchProfile().then((p) => alive && p && setProfile(p))
-    fetchExperienceById(id).then((e) => alive && setEntry(e || null))
-    return () => { alive = false }
   }, [id])
 
   const learnt = toList(entry?.learnt)
@@ -31,8 +26,6 @@ export default function JourneyDetail() {
         <Link to="/#experience" className="inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-accent">
           <ArrowLeft size={15} /> back to my journey
         </Link>
-
-        {entry === undefined && <p className="mt-10 font-sans text-sm text-muted">loading&hellip;</p>}
 
         {entry === null && (
           <div className="mt-16 rounded-lg border border-dashed border-line p-10 text-center">

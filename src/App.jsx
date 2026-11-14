@@ -1,25 +1,19 @@
-import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PixelCursor from './components/PixelCursor'
 import Portfolio from './pages/Portfolio'
 import ProjectDetail from './pages/ProjectDetail'
 import JourneyDetail from './pages/JourneyDetail'
 
-const Dashboard = lazy(() => import('./pages/Dashboard'))
-
 export default function App() {
   return (
     <BrowserRouter>
       <PixelCursor />
-      <Suspense fallback={<div className="grid min-h-screen place-items-center font-sans text-sm text-muted">loading…</div>}>
-        <Routes>
-          <Route path="/" element={<Portfolio />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-          <Route path="/journey/:id" element={<JourneyDetail />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="*" element={<Portfolio />} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/" element={<Portfolio />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+        <Route path="/journey/:id" element={<JourneyDetail />} />
+        <Route path="*" element={<Portfolio />} />
+      </Routes>
     </BrowserRouter>
   )
 }
