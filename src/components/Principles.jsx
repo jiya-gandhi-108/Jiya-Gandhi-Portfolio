@@ -5,7 +5,6 @@ import { Reveal, RevealGroup, RevealItem } from './Reveal'
 export default function Principles() {
   return (
     <section id="principles" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
-      <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-muted">how I think</p></Reveal>
       <Reveal variant="up" delay={0.05}>
         <h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">
           How I think about <span className="italic star">building</span>

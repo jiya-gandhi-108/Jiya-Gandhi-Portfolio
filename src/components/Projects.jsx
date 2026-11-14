@@ -17,28 +17,26 @@ function ProjectRow({ project, index }) {
   return (
     <div ref={ref} className="grid items-center gap-8 border-t border-line py-14 sm:py-20 lg:grid-cols-2 lg:gap-14">
       <div className={flip ? 'lg:order-2' : ''}>
-        <div className="flex items-center gap-3 font-sans text-xs uppercase tracking-[0.2em] text-muted">
-          <span className="text-accent">{String(index + 1).padStart(2, '0')}</span>
-          <span>{project.tag}</span>
-          <span className="ml-auto lg:ml-0">{project.year}</span>
-        </div>
-
         <Reveal variant="up">
-          <Link to={`/project/${project.id}`} className="group mt-3 block">
+          <Link to={`/project/${project.id}`} className="group block">
             <h3 className="display text-3xl font-600 leading-[1.02] text-ink transition-colors group-hover:text-accent sm:text-4xl">
-              {project.title}
+              <span className="mr-3 text-accent">{String(index + 1).padStart(2, '0')}</span>{project.title}
             </h3>
           </Link>
         </Reveal>
 
+        {(project.tag || project.year) && (
+          <p className="display mt-3 text-lg font-500 italic text-ink/80 sm:text-xl">
+            {[project.tag, project.year].filter(Boolean).join(' · ')}
+          </p>
+        )}
+
         <p className="mt-4 max-w-md font-sans text-base leading-relaxed text-muted">{project.subtitle || project.problem}</p>
 
         {stack.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-2">
-            {stack.slice(0, 5).map((s) => (
-              <span key={s} className="rounded-full border border-line px-3 py-1 font-sans text-xs text-ink/80">{s}</span>
-            ))}
-          </div>
+          <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-ink/70">
+            <span className="font-600 text-ink">Built with </span>{stack.slice(0, 6).join(' · ')}
+          </p>
         )}
 
         <div className="mt-6 flex items-center gap-3">
@@ -76,11 +74,13 @@ export default function Projects({ projects = [] }) {
   if (!projects.length) return null
   return (
     <section id="work" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
-      <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-muted">selected work</p></Reveal>
       <Reveal variant="up" delay={0.05}>
         <h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">
           Things I&apos;ve <span className="italic star">shipped</span>
         </h2>
+      </Reveal>
+      <Reveal variant="up" delay={0.1}>
+        <p className="mt-4 max-w-xl font-sans text-base text-muted">Selected work — production systems, AI agents and full-stack apps I&apos;ve built end to end.</p>
       </Reveal>
       <div className="mt-8">
         {projects.map((p, i) => (

@@ -27,7 +27,7 @@ function Counter({ to, suffix = '' }) {
 // "By the numbers" — figures computed from real portfolio data.
 export default function Stats({ projects = [] }) {
   const projectCount = projects.length
-  const techCount = new Set(skillGroups.flatMap((g) => g.items)).size
+  const techCount = new Set(skillGroups.flatMap((g) => g.items.map((i) => i.name))).size
   const domainCount = new Set(
     projects.flatMap((p) => String(p.tag || '').split('·').map((t) => t.trim()).filter(Boolean))
   ).size

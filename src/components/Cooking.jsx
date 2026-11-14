@@ -115,13 +115,10 @@ export default function Cooking({ project }) {
     <section id="cooking" ref={ref} className="relative w-full py-24 sm:py-32">
       {/* heading */}
       <div className="mx-auto max-w-7xl px-5 sm:px-10">
-        <div className="flex items-center gap-3">
-          <Reveal variant="left"><p className="font-sans text-xs uppercase tracking-[0.25em] text-accent">fresh out the kitchen</p></Reveal>
-          <Pan visible={show} />
-        </div>
         <Reveal variant="up" delay={0.05}>
-          <h2 className="display mt-2 text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">
-            Currently <span className="italic star">cooking</span>
+          <h2 className="display flex items-center gap-3 text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">
+            <span>Currently <span className="italic star">cooking</span></span>
+            <Pan visible={show} />
           </h2>
         </Reveal>
         <Reveal variant="up" delay={0.1}>
@@ -152,7 +149,7 @@ export default function Cooking({ project }) {
                 <div className="flex flex-col justify-center p-7 sm:p-10">
                   <div className="flex flex-wrap items-center gap-3">
                     {project.status && (
-                      <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-sans text-xs font-600 uppercase tracking-wide text-accent">
+                      <span className="inline-flex items-center gap-2 font-sans text-sm font-600 text-accent">
                         <span className="relative flex h-2 w-2">
                           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
                           <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
@@ -160,13 +157,13 @@ export default function Cooking({ project }) {
                         {project.status}
                       </span>
                     )}
-                    {project.tag && <span className="font-sans text-xs uppercase tracking-[0.2em] text-muted">{project.tag}</span>}
+                    {project.tag && <span className="font-sans text-sm text-muted">{project.tag}</span>}
                   </div>
                   <h3 className="display mt-4 text-2xl font-600 leading-tight text-ink transition-colors group-hover:text-accent sm:text-3xl">{project.title}</h3>
                   {project.subtitle && <p className="mt-2 font-sans text-sm text-muted sm:text-base">{project.subtitle}</p>}
                   {latest && (
                     <div className="mt-6 rounded-lg border border-line bg-bg p-4">
-                      <p className="flex items-center gap-2 font-sans text-[11px] uppercase tracking-[0.15em] text-muted">
+                      <p className="flex items-center gap-2 font-sans text-sm font-600 text-ink/80">
                         <Clock size={13} className="text-accent" /> Latest update{latest.date ? ` · ${latest.date}` : ''}
                       </p>
                       <p className="mt-1.5 font-sans text-sm leading-relaxed text-ink/90">{latest.note}</p>

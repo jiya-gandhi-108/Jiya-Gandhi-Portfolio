@@ -1,5 +1,4 @@
 import { ArrowUpRight, Github, Linkedin, Mail, Phone, MapPin, Download } from 'lucide-react'
-import OpenToWorkBadge from './OpenToWorkBadge'
 import { Reveal } from './Reveal'
 
 // Full contact section, shown inline at the bottom of the page (id="contact").
@@ -8,16 +7,6 @@ export default function Contact({ profile }) {
     <section id="contact" className="relative overflow-hidden border-t border-line">
       <div aria-hidden className="pointer-events-none absolute inset-0 tech-grid opacity-25" />
       <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-10 sm:py-28">
-        <Reveal variant="left">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-line px-4 py-1.5 font-sans text-xs uppercase tracking-[0.2em] text-ink/80">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
-            {profile.available ? 'available for work' : 'in touch'}
-          </div>
-        </Reveal>
-
         <Reveal variant="up" delay={0.05}>
           <h2 className="display text-[9vw] font-700 leading-[0.95] tracking-tight text-ink sm:text-6xl">
             Let&apos;s build <span className="italic star">something</span>
@@ -40,7 +29,7 @@ export default function Contact({ profile }) {
           </a>
         </Reveal>
 
-        <div className="mt-14 grid gap-10 border-t border-line pt-12 sm:grid-cols-2">
+        <div className="mt-14 border-t border-line pt-12">
           <div className="space-y-4">
             {profile.phone && <Reveal variant="left"><p className="flex items-center gap-3 font-sans text-lg text-ink"><Phone size={18} className="text-accent" /> {profile.phone}</p></Reveal>}
             {profile.location && <Reveal variant="left" delay={0.05}><p className="flex items-center gap-3 font-sans text-lg text-ink"><MapPin size={18} className="text-accent" /> {profile.location}</p></Reveal>}
@@ -52,15 +41,12 @@ export default function Contact({ profile }) {
               </div>
             </Reveal>
           </div>
-          <div className="flex items-start justify-center sm:justify-end">
-            <OpenToWorkBadge size={150} href={`mailto:${profile.email}`} />
-          </div>
         </div>
 
         <div className="mt-16 flex flex-col justify-between gap-4 border-t border-line pt-8 sm:flex-row sm:items-center">
           <p className="font-sans text-sm text-muted">© {new Date().getFullYear()} {profile.name}. Built from scratch.</p>
           <div className="flex items-center gap-3">
-            <a href="#top" className="font-sans text-xs uppercase tracking-[0.15em] text-muted transition-colors hover:text-accent">back to top ↑</a>
+            <a href="#top" className="font-sans text-sm text-muted transition-colors hover:text-accent">Back to top ↑</a>
           </div>
         </div>
       </div>

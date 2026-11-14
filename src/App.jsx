@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PixelCursor from './components/PixelCursor'
+import FloatingContact from './components/FloatingContact'
+import { profile } from './lib/data'
 import Portfolio from './pages/Portfolio'
 import ProjectDetail from './pages/ProjectDetail'
 import JourneyDetail from './pages/JourneyDetail'
@@ -14,6 +16,7 @@ export default function App() {
         <Route path="/journey/:id" element={<JourneyDetail />} />
         <Route path="*" element={<Portfolio />} />
       </Routes>
+      <FloatingContact profile={profile} />
     </BrowserRouter>
   )
 }

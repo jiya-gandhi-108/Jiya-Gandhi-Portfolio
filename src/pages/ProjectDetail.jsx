@@ -39,15 +39,15 @@ export default function ProjectDetail() {
 
         {project && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <div className="mt-8 flex flex-wrap items-center gap-3 font-sans text-xs uppercase tracking-[0.2em] text-muted">
-              <span className="text-accent">{project.tag}</span><span>&middot;</span><span>{project.year}</span>
+            <h1 className="display mt-8 text-4xl font-600 leading-[1.02] tracking-tight text-ink sm:text-6xl">{project.title}</h1>
+            <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-base text-ink/80">
+              <span>{[project.tag, project.year].filter(Boolean).join(' · ')}</span>
               {project.status && (
-                <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-600 text-accent">
+                <span className="inline-flex items-center gap-2 font-600 text-accent">
                   <span className="h-1.5 w-1.5 rounded-full bg-accent" /> {project.status}
                 </span>
               )}
-            </div>
-            <h1 className="display mt-3 text-4xl font-600 leading-[1.02] tracking-tight text-ink sm:text-6xl">{project.title}</h1>
+            </p>
             {project.subtitle && <p className="display mt-4 max-w-2xl text-xl font-500 italic text-muted sm:text-2xl">{project.subtitle}</p>}
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -92,9 +92,7 @@ export default function ProjectDetail() {
                 {stack.length > 0 && (
                   <div>
                     <Label>Stack</Label>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {stack.map((s) => <span key={s} className="rounded-full border border-line px-3 py-1 font-sans text-xs text-ink/80">{s}</span>)}
-                    </div>
+                    <p className="mt-3 font-sans text-base leading-relaxed text-muted">{stack.join(' · ')}</p>
                   </div>
                 )}
                 {handled.length > 0 && (
@@ -110,7 +108,7 @@ export default function ProjectDetail() {
 
             {project.outcome && (
               <div className="mt-12 rounded-lg bg-royal p-6 sm:p-8">
-                <Label className="!text-paper/70">Outcome</Label>
+                <Label className="!text-paper">Outcome</Label>
                 <p className="display mt-2 text-xl font-500 leading-snug text-paper sm:text-2xl">{project.outcome}</p>
               </div>
             )}
@@ -133,7 +131,7 @@ export default function ProjectDetail() {
                           <span className="absolute -left-[26px] top-1 grid place-items-center">
                             <span className="h-3 w-3 rounded-full border-2 border-accent bg-bg" />
                           </span>
-                          <p className="flex items-center gap-2 font-sans text-[11px] uppercase tracking-[0.15em] text-accent">
+                          <p className="flex items-center gap-2 font-sans text-sm font-600 text-accent">
                             <Clock size={12} /> {u.date || 'update'}
                           </p>
                           <p className="mt-1 max-w-2xl font-sans text-sm leading-relaxed text-ink/90">{u.note}</p>
@@ -161,7 +159,7 @@ export default function ProjectDetail() {
             {next && (
               <Link to={`/project/${next.id}`} className="group mt-16 flex items-center justify-between border-t border-line pt-8">
                 <div>
-                  <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted">next project</p>
+                  <p className="font-sans text-sm text-muted">Next project</p>
                   <p className="display mt-1 text-2xl font-600 text-ink transition-colors group-hover:text-accent sm:text-3xl">{next.title}</p>
                 </div>
                 <ArrowUpRight size={36} className="text-muted transition-transform group-hover:translate-x-2 group-hover:-translate-y-1 group-hover:text-accent" />
@@ -178,13 +176,13 @@ export default function ProjectDetail() {
 function Fact({ icon, label, value }) {
   return (
     <div className="bg-bg p-4">
-      <p className="flex items-center gap-1.5 font-sans text-[11px] uppercase tracking-[0.15em] text-muted">{icon} {label}</p>
+      <p className="flex items-center gap-1.5 font-sans text-sm text-muted">{icon} {label}</p>
       <p className="mt-1.5 font-sans text-sm font-600 text-ink">{value}</p>
     </div>
   )
 }
 function Label({ children, className = '' }) {
-  return <h2 className={`font-sans text-xs uppercase tracking-[0.2em] text-accent ${className}`}>{children}</h2>
+  return <h2 className={`display text-2xl font-600 text-ink sm:text-3xl ${className}`}>{children}</h2>
 }
 function Block({ label, children }) {
   return (

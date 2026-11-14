@@ -5,7 +5,6 @@ import { Reveal, RevealGroup, RevealItem } from './Reveal'
 export default function NoAi() {
   return (
     <section id="no-ai" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
-      <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-muted">the honest part</p></Reveal>
       <Reveal variant="up" delay={0.05}>
         <h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">
           What I <span className="italic star">don&apos;t</span> use AI for

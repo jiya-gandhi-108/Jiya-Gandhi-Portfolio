@@ -9,10 +9,6 @@ export default function Equation() {
     <section id="about" className="relative overflow-hidden bg-royal py-20 text-paper sm:py-32">
       <div aria-hidden className="pointer-events-none absolute inset-0 tech-grid opacity-[0.12]" />
       <div className="relative mx-auto max-w-5xl px-6 sm:px-10">
-        <Reveal variant="up">
-          <p className="mb-10 text-center sm:mb-12 font-sans text-xs uppercase tracking-[0.3em] text-paper/50">the equation</p>
-        </Reveal>
-
         {/* restrained, uniform icon row — thin outline, no sticker look */}
         <RevealGroup className="mx-auto mb-12 grid max-w-[13rem] grid-cols-3 place-items-center gap-3 sm:mb-14 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center sm:gap-4" stagger={0.06}>
           {icons.map((Icon, i) => (

@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, Sparkles, ListChecks } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { profile, getExperienceById } from '../lib/data'
-
-const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
 
 export default function JourneyDetail() {
   const { id } = useParams()
@@ -15,9 +13,6 @@ export default function JourneyDetail() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [id])
-
-  const learnt = toList(entry?.learnt)
-  const handled = toList(entry?.handled)
 
   return (
     <div className="grain">
@@ -37,37 +32,31 @@ export default function JourneyDetail() {
 
         {entry && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <p className="mt-8 font-sans text-xs uppercase tracking-[0.2em] text-accent">{entry.period}</p>
-            <h1 className="display mt-3 text-4xl font-600 leading-[1.05] tracking-tight text-ink sm:text-5xl">{entry.role}</h1>
+            <h1 className="display mt-8 text-4xl font-600 leading-[1.05] tracking-tight text-ink sm:text-5xl">{entry.role}</h1>
             {entry.org && <p className="display mt-2 text-xl font-500 italic text-muted sm:text-2xl">{entry.org}</p>}
+            <p className="mt-3 font-sans text-sm text-ink/70">{entry.period}{entry.location ? ` · ${entry.location}` : ''}</p>
 
             {entry.desc && <p className="mt-8 max-w-2xl text-base leading-relaxed text-ink/90">{entry.desc}</p>}
 
-            {entry.details && (
+            {entry.points?.length > 0 && (
               <div className="mt-10">
-                <Label>What I did</Label>
-                <p className="mt-3 max-w-2xl whitespace-pre-line text-base leading-relaxed text-ink/90">{entry.details}</p>
+                <Heading>What I did</Heading>
+                <ul className="mt-4 space-y-3">
+                  {entry.points.map((pt) => (
+                    <li key={pt} className="flex gap-3 font-sans text-base leading-relaxed text-ink/85">
+                      <span aria-hidden className="star mt-[2px] shrink-0">&#10022;</span><span>{pt}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 
-            <div className="mt-10 grid gap-10 sm:grid-cols-2">
-              {handled.length > 0 && (
-                <div>
-                  <Label><ListChecks size={13} className="inline" /> What I handled</Label>
-                  <ul className="mt-3 space-y-1.5">
-                    {handled.map((h) => <li key={h} className="font-sans text-sm text-muted"><span className="star">&#10022;</span> {h}</li>)}
-                  </ul>
-                </div>
-              )}
-              {learnt.length > 0 && (
-                <div>
-                  <Label><Sparkles size={13} className="inline" /> What I learnt</Label>
-                  <ul className="mt-3 space-y-1.5">
-                    {learnt.map((l) => <li key={l} className="font-sans text-sm text-muted"><span className="star">&#10022;</span> {l}</li>)}
-                  </ul>
-                </div>
-              )}
-            </div>
+            {entry.stack?.length > 0 && (
+              <div className="mt-10">
+                <Heading>Tools &amp; stack</Heading>
+                <p className="mt-3 font-sans text-base leading-relaxed text-muted">{entry.stack.join(' · ')}</p>
+              </div>
+            )}
           </motion.article>
         )}
       </main>
@@ -76,6 +65,6 @@ export default function JourneyDetail() {
   )
 }
 
-function Label({ children }) {
-  return <h2 className="flex items-center gap-1.5 font-sans text-xs uppercase tracking-[0.2em] text-accent">{children}</h2>
+function Heading({ children }) {
+  return <h2 className="display text-2xl font-600 text-ink sm:text-3xl">{children}</h2>
 }

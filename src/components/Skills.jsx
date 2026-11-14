@@ -1,37 +1,147 @@
-import { Braces, Server, Database, Bot, Contact, Wrench } from 'lucide-react'
-import { skillGroups } from '../lib/data'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Braces, Server, Database, Bot, Brain, Cloud, Contact, Wrench, ArrowUpRight, X } from 'lucide-react'
+import { skillGroups, projectsForSkill } from '../lib/data'
 import { Reveal, RevealGroup, RevealItem } from './Reveal'
 
-const ICONS = { Braces, Server, Database, Bot, Contact, Wrench }
+const ICONS = { Braces, Server, Database, Bot, Brain, Cloud, Contact, Wrench }
+
+// projects for a whole group = union of each skill's projects
+function projectsForGroup(group) {
+  const seen = new Map()
+  group.items.forEach((it) => projectsForSkill(it).forEach((p) => seen.set(p.id, p)))
+  return [...seen.values()]
+}
 
 export default function Skills() {
+  // { group, skill } — skill null = every project in that group
+  const [view, setView] = useState(null)
+
   return (
     <section id="skills" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
-      <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-muted">tools of the trade</p></Reveal>
       <Reveal variant="up" delay={0.05}>
         <h2 className="display text-5xl font-700 leading-none text-ink sm:text-7xl">Skills &amp; <span className="italic star">stack</span></h2>
+      </Reveal>
+      <Reveal variant="up" delay={0.1}>
+        <p className="mt-4 max-w-xl font-sans text-base text-muted">Tap a skill, or &ldquo;View projects&rdquo;, to see where I&apos;ve actually used it.</p>
       </Reveal>
 
       <RevealGroup className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" stagger={0.07}>
         {skillGroups.map((g) => {
           const Icon = ICONS[g.icon] || Wrench
+          const count = projectsForGroup(g).length
           return (
             <RevealItem key={g.label} variant="up">
-              <div className="h-full rounded-lg border border-line bg-graphite p-5 transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.03] hover:border-accent/60 hover:shadow-xl hover:shadow-black/30">
+              <div className="flex h-full flex-col rounded-lg border border-line bg-graphite p-5 transition-all duration-300 hover:-translate-y-1 hover:border-accent/60 hover:shadow-xl hover:shadow-black/30">
                 <div className="flex items-center gap-3">
                   <span className="grid h-9 w-9 place-items-center rounded-md border border-line text-accent"><Icon size={18} /></span>
-                  <h3 className="display text-lg font-600 text-ink">{g.label}</h3>
+                  <h3 className="display text-xl font-600 text-ink">{g.label}</h3>
                 </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {g.items.map((it) => (
-                    <span key={it} className="rounded-full border border-line px-3 py-1 font-sans text-xs text-ink/80">{it}</span>
-                  ))}
+
+                <p className="mt-4 font-sans text-[15px] leading-7 text-ink/80">
+                  {g.items.map((it, i) => {
+                    const has = projectsForSkill(it).length > 0
+                    return (
+                      <Fragment key={it.name}><span className="whitespace-nowrap">
+                        {has ? (
+                          <button type="button" onClick={() => setView({ group: g, skill: it.name })}
+                            className="underline decoration-line decoration-1 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent">
+                            {it.name}
+                          </button>
+                        ) : (
+                          <span>{it.name}</span>
+                        )}
+                        {i < g.items.length - 1 && <span aria-hidden className="pl-1.5 text-muted">·</span>}
+                      </span>{i < g.items.length - 1 && ' '}</Fragment>
+                    )
+                  })}
+                </p>
+
+                <div className="mt-auto pt-5">
+                  {count > 0 ? (
+                    <button type="button" onClick={() => setView({ group: g, skill: null })}
+                      className="group inline-flex items-center gap-1.5 font-sans text-sm font-600 text-accent">
+                      View projects ({count})
+                      <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </button>
+                  ) : (
+                    <p className="font-sans text-sm text-muted">Projects coming soon</p>
+                  )}
                 </div>
               </div>
             </RevealItem>
           )
         })}
       </RevealGroup>
+
+      <AnimatePresence>
+        {view && <SkillProjects view={view} setView={setView} onClose={() => setView(null)} />}
+      </AnimatePresence>
     </section>
+  )
+}
+
+function SkillProjects({ view, setView, onClose }) {
+  const { group, skill } = view
+  const list = useMemo(
+    () => (skill ? projectsForSkill(group.items.find((i) => i.name === skill)) : projectsForGroup(group)),
+    [group, skill],
+  )
+  const usable = group.items.filter((it) => projectsForSkill(it).length > 0)
+
+  useEffect(() => {
+    const onKey = (e) => e.key === 'Escape' && onClose()
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey) }
+  }, [onClose])
+
+  const filterBtn = (active) =>
+    `font-sans text-sm transition-colors ${active ? 'font-600 text-accent underline decoration-2 underline-offset-4' : 'text-muted hover:text-ink'}`
+
+  return (
+    <motion.div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/60 backdrop-blur-sm sm:items-center sm:p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+      <motion.div role="dialog" aria-modal="true" aria-label={`Projects using ${skill || group.label}`}
+        onClick={(e) => e.stopPropagation()}
+        initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} transition={{ duration: 0.25 }}
+        className="flex max-h-[85vh] w-full max-w-2xl flex-col rounded-t-2xl border border-line bg-bg sm:rounded-2xl">
+        <div className="flex items-start justify-between gap-4 border-b border-line p-5 sm:p-6">
+          <div>
+            <h3 className="display text-2xl font-600 text-ink sm:text-3xl">
+              Projects using <span className="italic text-accent">{skill || group.label}</span>
+            </h3>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+              <button type="button" className={filterBtn(!skill)} onClick={() => setView({ group, skill: null })}>All</button>
+              {usable.map((it) => (
+                <button key={it.name} type="button" className={filterBtn(skill === it.name)} onClick={() => setView({ group, skill: it.name })}>
+                  {it.name}
+                </button>
+              ))}
+            </div>
+          </div>
+          <button type="button" onClick={onClose} className="icon-btn shrink-0" aria-label="Close"><X size={18} /></button>
+        </div>
+
+        <ul className="overflow-y-auto p-3 sm:p-4">
+          {list.map((p) => (
+            <li key={p.id}>
+              <Link to={`/project/${p.id}`} className="group flex items-center gap-4 rounded-lg p-3 transition-colors hover:bg-graphite">
+                <div className="h-16 w-24 shrink-0 overflow-hidden rounded-md border border-line bg-graphite">
+                  {p.image_url && <img src={p.image_url} alt="" className="h-full w-full object-cover" loading="lazy" />}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="display text-lg font-600 leading-tight text-ink transition-colors group-hover:text-accent">{p.title}</p>
+                  <p className="mt-1 font-sans text-sm text-muted">{[p.tag, p.year].filter(Boolean).join(' · ')}</p>
+                </div>
+                <ArrowUpRight size={18} className="shrink-0 text-muted transition-colors group-hover:text-accent" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </motion.div>
+    </motion.div>
   )
 }

@@ -9,7 +9,6 @@ export default function Freelance({ profile }) {
   return (
     <section id="hire" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
       <div className="rounded-2xl border border-line bg-graphite p-8 sm:p-12">
-        <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-accent">for hire</p></Reveal>
         <Reveal variant="up" delay={0.05}>
           <h2 className="display text-4xl font-700 leading-none text-ink sm:text-6xl">Need something built?</h2>
         </Reveal>

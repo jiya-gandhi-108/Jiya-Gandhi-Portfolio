@@ -8,8 +8,8 @@ Fully static — no database, no environment variables. All content lives in the
 - **Name-split intro** — "Jiya / Gandhi" splits apart to reveal the hero.
 - **Editorial hero** — big serif (Fraunces) headline, a collage portrait, the
   journey line *"From Backend Developer to AI Automation Engineer"*, and a
-  rotating **Open to work** badge.
-- **Skills marquee**, featured project rows, "currently cooking", and a horizontal "coding world" strip.
+  floating **WhatsApp + email** buttons on every page.
+- Featured project rows, "currently cooking", and a horizontal "coding world" strip.
 - **Equation section** (royal-blue) — `Backend × Automation × Intelligence = AI Automation Engineer`.
 - Custom **pixel cursor**, film-grain texture, warm non-neon palette (cream / orange / royal blue).
 - Detail pages at **`/project/:id`** and **`/journey/:id`**. Fully responsive.
@@ -29,11 +29,12 @@ Everything is hardcoded — edit, commit, and redeploy:
 
 | What | Where |
 | --- | --- |
-| Profile (name, email, phone, location, GitHub/LinkedIn, résumé, avatar) | `src/lib/data.js` → `profile` |
-| Experience / journey | `src/lib/data.js` → `experience` |
+| Profile (name, email, phone, WhatsApp, location, GitHub/LinkedIn, résumé, avatar) | `src/lib/data.js` → `profile` |
+| Experience / journey (`points` = bullets, `stack` = tools) | `src/lib/data.js` → `experience` |
+| Skills & "View projects" matching (`match` words) | `src/lib/data.js` → `skillGroups` |
 | Projects (text, links, stack, updates) | `src/data/projects.json` |
 | Project images | `public/projects/` (referenced as `/projects/<file>` in the JSON) |
-| Skills, equation, process, principles, FAQ, offers | `src/lib/data.js` |
+| Equation, process, principles, offers | `src/lib/data.js` |
 | Portrait / résumé | `public/assets/jiya.png`, `public/Jiya_Gandhi_Resume.pdf` |
 
 ### Project fields

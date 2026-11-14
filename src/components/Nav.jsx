@@ -2,6 +2,21 @@ import { Link } from 'react-router-dom'
 import { Github, Linkedin, Mail, Menu, X, Download } from 'lucide-react'
 import { useState } from 'react'
 
+// mobile menu: every section except the equation
+const mobileLinks = [
+  { href: '/#top', label: 'Home' },
+  { href: '/#work', label: "Things I've shipped" },
+  { href: '/#cooking', label: 'Currently cooking' },
+  { href: '/#coding-world', label: 'My coding world' },
+  { href: '/#process', label: 'How I work' },
+  { href: '/#principles', label: 'How I think' },
+  { href: '/#join-team', label: 'If I joined your team' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#skills', label: 'Skills & stack' },
+  { href: '/#hire', label: 'Need something built?' },
+  { href: '/#contact', label: 'Contact' },
+]
+
 const links = [
   { href: '/#about', label: 'About' },
   { href: '/#work', label: 'Work' },
@@ -36,22 +51,28 @@ export default function Nav({ profile }) {
       </header>
 
       {open && (
-        <div className="fixed inset-0 z-[80] flex flex-col bg-bg px-6 py-6 md:hidden">
-          <div className="flex justify-end">
-            <button onClick={() => setOpen(false)} className="text-ink" aria-label="Close"><X size={26} /></button>
+        <div className="fixed inset-0 z-[80] flex flex-col bg-bg md:hidden">
+          <div className="flex items-center justify-between border-b border-line px-5 py-4">
+            <span className="display text-xl font-700 text-ink">{profile?.name || 'Jiya Gandhi'}</span>
+            <button onClick={() => setOpen(false)} className="text-ink" aria-label="Close"><X size={24} /></button>
           </div>
-          <nav className="mt-10 flex flex-col gap-6">
-            {links.map((l) => (
-              <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="display text-5xl font-700 text-ink">{l.label}</a>
+          <nav className="flex-1 overflow-y-auto px-5 py-3">
+            {mobileLinks.map((l) => (
+              <a key={l.label} href={l.href} onClick={() => setOpen(false)}
+                className="block border-b border-line/60 py-3 font-sans text-base font-500 text-ink transition-colors active:text-accent">
+                {l.label}
+              </a>
             ))}
           </nav>
-          {profile?.resume_url && (
-            <a href={profile.resume_url} download onClick={() => setOpen(false)} className="btn-primary mt-8 w-fit"><Download size={16} /> Download résumé</a>
-          )}
-          <div className="mt-auto flex gap-5">
-            {profile?.github_url && <a href={profile.github_url} className="icon-btn"><Github size={16} /></a>}
-            {profile?.linkedin_url && <a href={profile.linkedin_url} className="icon-btn"><Linkedin size={16} /></a>}
-            {profile?.email && <a href={`mailto:${profile.email}`} className="icon-btn"><Mail size={16} /></a>}
+          <div className="border-t border-line px-5 py-4">
+            {profile?.resume_url && (
+              <a href={profile.resume_url} download onClick={() => setOpen(false)} className="btn-primary w-full justify-center"><Download size={16} /> Download résumé</a>
+            )}
+            <div className="mt-4 flex gap-3">
+              {profile?.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="GitHub"><Github size={16} /></a>}
+              {profile?.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="LinkedIn"><Linkedin size={16} /></a>}
+              {profile?.email && <a href={`mailto:${profile.email}`} className="icon-btn" aria-label="Email"><Mail size={16} /></a>}
+            </div>
           </div>
         </div>
       )}

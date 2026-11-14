@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react'
 import NameReveal from '../components/NameReveal'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
-import SkillsMarquee from '../components/SkillsMarquee'
 import Projects from '../components/Projects'
 import Cooking from '../components/Cooking'
 import Equation from '../components/Equation'
@@ -35,7 +34,6 @@ export default function Portfolio() {
       <Nav profile={profile} />
       <main>
         <Hero profile={profile} started={revealDone} />
-        <SkillsMarquee />
         <Projects projects={main} />
         <Cooking project={cooking} />
         <Equation />

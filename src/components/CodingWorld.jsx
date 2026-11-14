@@ -9,7 +9,6 @@ export default function CodingWorld({ projects = [] }) {
   return (
     <section id="coding-world" className="overflow-hidden py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-10">
-        <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-muted">the rest of it <span className="star">✦</span></p></Reveal>
         <Reveal variant="up" delay={0.05}><h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">My Coding World</h2></Reveal>
         <Reveal variant="up" delay={0.1}><p className="mt-4 max-w-lg font-sans text-sm text-muted">More builds, tools, and experiments — everything that didn&apos;t make the top of the list.</p></Reveal>
       </div>
@@ -32,7 +31,7 @@ export default function CodingWorld({ projects = [] }) {
               <h3 className="display text-xl font-600 leading-tight text-ink transition-colors group-hover:text-accent">{p.title}</h3>
               <ArrowUpRight size={18} className="mt-1 shrink-0 text-muted transition-colors group-hover:text-accent" />
             </div>
-            <p className="mt-1 font-sans text-xs uppercase tracking-wide text-muted">{p.tag}</p>
+            <p className="mt-1 font-sans text-sm text-muted">{p.tag}</p>
           </Link>
         ))}
       </div>

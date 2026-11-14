@@ -26,11 +26,10 @@ export default function Hero({ profile, started }) {
       <div className="relative mx-auto grid min-h-[80vh] max-w-[1600px] items-center gap-10 px-6 pb-16 sm:px-10 lg:grid-cols-[1fr_minmax(320px,400px)_1fr] lg:gap-10 lg:px-14 lg:pb-0">
         {/* LEFT — the journey line, CTAs, socials */}
         <motion.div {...show(0.15)} className="order-3 lg:order-1">
-          <p className="mb-3 font-sans text-xs uppercase tracking-[0.25em] text-muted">the pivot <span className="star">✦</span></p>
           <p className="display text-3xl font-500 leading-[1.15] text-ink sm:text-4xl">
-            From <span className="italic text-muted">{profile.journey?.from || 'Backend Developer'}</span>{' '}
-            <span className="star">✦</span>
-            <span className="block">to {profile.journey?.to || 'AI Automation Engineer'}</span>
+            <span className="italic text-muted">{profile.journey?.from || 'Backend Developer'}</span>{' '}
+            <span className="star">✦</span>{' '}
+            <span className="whitespace-nowrap">{profile.journey?.to || 'AI Automation Engineer'}</span>
           </p>
           <p className="mt-5 max-w-sm font-sans text-sm leading-relaxed text-muted">{profile.tagline}</p>
 
@@ -74,9 +73,9 @@ export default function Hero({ profile, started }) {
         {/* RIGHT — big serif headline (right-aligned on desktop) */}
         <motion.div {...show(0.25)} className="order-2 lg:order-3 lg:text-right">
           <h1 className="display text-[12vw] font-700 leading-[0.98] tracking-[-0.015em] text-ink sm:text-6xl lg:text-[4.2rem]">
-            {head[0]}
+            <span className="inline-flex items-center gap-3">{head[0]}<span className="star text-[0.7em] lg:hidden">✦</span></span>
             <br />
-            <span className="inline-flex items-center gap-3 lg:justify-end"><span className="star text-[0.7em]">✦</span>{head[1]}</span>
+            <span className="inline-flex items-center gap-3 lg:justify-end"><span className="star hidden text-[0.7em] lg:inline">✦</span>{head[1]}</span>
             <br />
             {head[2]}
           </h1>

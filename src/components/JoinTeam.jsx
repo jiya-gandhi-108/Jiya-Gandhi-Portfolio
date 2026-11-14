@@ -7,7 +7,6 @@ export default function JoinTeam() {
     <section id="join-team" className="relative overflow-hidden bg-royal py-20 text-paper sm:py-28">
       <div aria-hidden className="pointer-events-none absolute inset-0 tech-grid opacity-[0.12]" />
       <div className="relative mx-auto max-w-5xl px-6 sm:px-10">
-        <Reveal variant="left"><p className="mb-2 font-sans text-xs uppercase tracking-[0.25em] text-paper/50">the value</p></Reveal>
         <Reveal variant="up" delay={0.05}>
           <h2 className="display text-4xl font-600 leading-[1.05] text-paper sm:text-5xl">
             If I joined your <span className="italic text-accent">team&hellip;</span>
