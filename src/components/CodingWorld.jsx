@@ -28,7 +28,7 @@ export default function CodingWorld({ projects = [] }) {
               <h3 className="h-card text-lg transition-colors group-hover:text-accent">{p.title}</h3>
               <ArrowUpRight size={18} className="mt-0.5 shrink-0 text-muted transition-colors group-hover:text-accent" />
             </div>
-            {p.tag && <p className="mono mt-2 text-muted">{p.tag}</p>}
+            {p.tag && <p className="date mt-2 text-[12px] font-500 text-ink/55 sm:text-[12px]">{p.tag}</p>}
           </Link>
         ))}
       </div>

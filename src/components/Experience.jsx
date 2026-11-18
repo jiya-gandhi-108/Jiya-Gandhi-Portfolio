@@ -18,24 +18,23 @@ export default function Experience({ items }) {
       <MaskHeading text="The journey so far" accent={[3]} />
       <p className="mt-5 max-w-lg text-base text-ink/65">Freelance, agency, in-house. Three roles, one lane: backend APIs to AI agents.</p>
 
-      <div ref={ref} className="relative mt-12 pl-8 sm:pl-10">
-        <span aria-hidden className="absolute bottom-0 left-[6px] top-0 w-px bg-line sm:left-[8px]" />
-        <motion.span aria-hidden style={{ scaleY: fill }} className="absolute bottom-0 left-[6px] top-0 w-px origin-top bg-accent sm:left-[8px]" />
+      <div ref={ref} className="relative mt-12 pl-10 sm:pl-12">
+        <span aria-hidden className="absolute bottom-0 left-[11px] top-0 w-[2px] bg-line" />
+        <motion.span aria-hidden style={{ scaleY: fill }} className="absolute bottom-0 left-[11px] top-0 w-[2px] origin-top bg-accent" />
 
         {list.map((e, i) => (
           <FadeUp key={e.id} delay={i * 0.05}>
             <article className="group relative border-b border-line py-7 last:border-b-0">
-              <span aria-hidden className="absolute -left-8 top-9 h-3.5 w-3.5 rounded-full border-2 border-accent bg-bg transition-colors group-hover:bg-accent sm:-left-10" />
-              <div className="grid gap-2 sm:grid-cols-[210px_1fr] sm:gap-8">
+              <span aria-hidden className="absolute -left-10 top-8 h-6 w-6 rounded-full border-[3px] border-accent bg-bg transition-colors group-hover:bg-accent sm:-left-12" />
+              <div className="grid gap-3 sm:grid-cols-[230px_1fr] sm:gap-8">
                 <div>
-                  <p className="mono text-accent">{e.period}</p>
-                  {e.location && <p className="mono mt-1 text-muted">{e.location}</p>}
+                  <p className="date text-accent">{e.period}</p>
+                  {e.location && <p className="date mt-1 font-500 text-ink/55">{e.location}</p>}
                 </div>
                 <div>
-                  <h3 className="h-card text-[clamp(1.35rem,2.4vw,1.9rem)]">
-                    {e.role} <span className="text-ink/45">@ {e.org}</span>
-                  </h3>
-                  <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-ink/70">{e.summary || e.desc}</p>
+                  <h3 className="h-card text-[clamp(1.35rem,2.4vw,1.9rem)]">{e.role}</h3>
+                  <p className="mt-1.5 font-display text-lg font-600 normal-case tracking-[-0.01em] text-ink/60 sm:text-xl">@ {e.org}</p>
+                  <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink/75">{e.summary || e.desc}</p>
                   <Link to={`/journey/${e.id}`}
                     className="mt-4 inline-flex items-center gap-1.5 font-display text-sm font-700 uppercase tracking-[0.02em] text-accent underline decoration-accent/40 decoration-2 underline-offset-[6px] transition-colors hover:decoration-accent">
                     Know more about me <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

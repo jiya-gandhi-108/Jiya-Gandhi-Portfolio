@@ -7,21 +7,15 @@ export const profile = {
   first: 'Jiya',
   last: 'Gandhi',
   role: 'AI Automation Engineer',
+  // Shown big in the second stage of the hero.
+  roles: ['AI Automation Engineer', 'Backend Developer'],
   location: 'Delhi, India',
-  // Big hero letters (top-left, middle, bottom-right), same rhythm as the reference.
-  heroLetters: ['JIYA', 'GAN', 'DHI'],
   // Hero headline: three lines, alternating lime / white / lime.
   headline: ['I automate the boring', 'stuff so your team', 'can touch grass'],
   tldr: 'Backend dev turned AI automation engineer. I build the APIs, agents and workflows that quietly do the work nobody wants to do. No fluff, just systems that ship.',
-  heroList: ['AI agents & chatbots', 'Backend & APIs', 'Workflow automation', 'CRM integrations', 'Stuff that just works'],
 
-  // Cursor effect in the hero (desktop only). Pick one:
-  //   'reveal'    : photo is black & white, a circle around the cursor shows it in colour
-  //   'magnet'    : the big lime letters lean away from the cursor
-  //   'crosshair' : thin lime crosshair + live X/Y readout, editorial-grid vibe
-  //   'trail'     : little lime pixels trail behind the cursor
-  //   'none'      : no effect
-  // Tip: preview any of them without editing code by opening  /?cursor=trail  (or magnet, crosshair...)
+  // Hero hover effect (desktop only): a circle around the cursor shows the photo in colour
+  // and turns the lime name white. Set to 'none' to switch it off.
   heroCursor: 'reveal',
 
   email: 'jiya108gandhi@gmail.com',
@@ -32,32 +26,17 @@ export const profile = {
   linkedin_url: 'https://www.linkedin.com/in/jiya-gandhi-108',
   resume_url: '/Jiya_Gandhi_Resume.pdf',
   avatar_url: '/assets/jiya.png',
+  // Background-removed portrait used in the hero. Replace this file to change the photo.
+  cutout_url: '/assets/jiya-cutout.webp',
   available: true,
 }
-
-// Receipts. Every number here comes straight from the résumé / project list.
-//   3+ yrs   : building since Jan 2023
-//   15+      : client projects delivered as a freelancer (résumé)
-//   builds   : counted from projects.json at build time
-//   3        : roles (freelance, agency, in-house)
-export const startYear = 2023
 
 // The pitch, shown as the scroll-highlight paragraph under the hero.
 export const pitch =
   'Hand me a messy, repetitive process. I map it, build the backend, wire up the APIs and ship an automation your team actually uses. Three-plus years, fifteen-plus client builds, and a voice agent that screens candidates on its own. That’s the pitch, no cap.'
 
-// Scrolling band of short, loud facts.
-export const band = [
-  '15+ client projects shipped',
-  'AI agents that actually work',
-  'Zero black boxes',
-  'Backend first, always',
-  'Docs included, no ghosting',
-  'Ships on time, fr',
-]
-
 // Skills grouped for the Stack section. Icon names are resolved in Skills.jsx.
-// Skills & stack (from the résumé).
+// Skills & stack (from the resume).
 // `match` = words looked for in each project's stack / tag / title to power "View projects".
 // Leave `match` out to just use the skill name.
 export const skillGroups = [
@@ -221,14 +200,6 @@ export const projects = [...projectsData].sort(
 
 export const getProjectById = (id) => projects.find((p) => String(p.id) === String(id)) || null
 export const getExperienceById = (id) => experience.find((e) => String(e.id) === String(id)) || null
-
-// Hero receipts (see the note near the top for where each number comes from).
-export const stats = [
-  { value: `${Math.max(3, new Date().getFullYear() - startYear)}+`, label: 'Years shipping' },
-  { value: '15+', label: 'Client projects' },
-  { value: String(projectsData.length), label: 'Builds on GitHub' },
-  { value: '3', label: 'Roles, one lane' },
-]
 
 // What I can build for you
 export const offers = [

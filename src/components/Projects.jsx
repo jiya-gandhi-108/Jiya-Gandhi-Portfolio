@@ -6,6 +6,14 @@ import { MaskHeading, ClipReveal, FadeUp } from './Motion'
 const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
 export const initials = (t) => t.split(' ').map((w) => w[0]).join('').slice(0, 3)
 
+export function StackTags({ items = [], className = '' }) {
+  return (
+    <ul className={`flex flex-wrap gap-2 ${className}`}>
+      {items.map((s) => <li key={s} className="rounded-full border border-line px-3 py-1.5 text-[13px] font-500 text-ink/80">{s}</li>)}
+    </ul>
+  )
+}
+
 function ProjectRow({ project, index }) {
   const reduce = useReducedMotion()
   const flip = index % 2 === 1
@@ -16,19 +24,14 @@ function ProjectRow({ project, index }) {
     <article className="grid items-center gap-8 border-t border-line py-12 sm:py-16 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
       <div className={flip ? 'lg:order-2' : ''}>
         <FadeUp>
-          <span className="font-display text-6xl font-900 leading-none tracking-[-0.04em] text-accent sm:text-7xl">
-            {String(index + 1).padStart(2, '0')}
-          </span>
-        </FadeUp>
-        <FadeUp delay={0.05}>
-          <Link to={`/project/${project.id}`} className="group mt-4 block">
-            <h3 className="h-card text-[clamp(1.7rem,3.2vw,2.75rem)] transition-colors group-hover:text-accent">{project.title}</h3>
+          {meta && <p className="date text-accent">{meta}</p>}
+          <Link to={`/project/${project.id}`} className="group mt-3 block">
+            <h3 className="h-card text-[clamp(1.8rem,3.3vw,2.9rem)] transition-colors group-hover:text-accent">{project.title}</h3>
           </Link>
-          {meta && <p className="mono mt-3 text-muted">{meta}</p>}
-          <p className="mt-4 max-w-md text-base leading-relaxed text-ink/75">{project.subtitle || project.problem}</p>
-          {stack.length > 0 && <p className="mono mt-4 max-w-md leading-relaxed text-ink/55">{stack.slice(0, 6).join(' / ')}</p>}
+          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink/80">{project.summary || project.built || project.subtitle}</p>
+          {stack.length > 0 && <StackTags items={stack.slice(0, 7)} className="mt-5" />}
           <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-3">
-            <Link to={`/project/${project.id}`} className="btn-primary">Peep the build <ArrowUpRight size={16} /></Link>
+            <Link to={`/project/${project.id}`} className="btn-primary">Explore more about this project <ArrowUpRight size={16} /></Link>
             {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Source on GitHub"><Github size={16} /></a>}
             {project.demo_url && <a href={project.demo_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Live demo"><ExternalLink size={16} /></a>}
             {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Case study"><FileText size={16} /></a>}
@@ -69,7 +72,7 @@ export default function Projects({ projects = [] }) {
     <section id="work" className="wrap py-16 sm:py-24">
       <MaskHeading text="Stuff I've shipped" accent={[2]} />
       <FadeUp>
-        <p className="mt-5 max-w-lg text-base text-ink/65">Production systems, AI agents and full-stack apps. Built end to end, no tutorials harmed.</p>
+        <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink/70">Production systems, AI agents and full-stack apps. Built end to end, no tutorials harmed.</p>
       </FadeUp>
       <div className="mt-10">
         {projects.map((p, i) => <ProjectRow key={p.id} project={p} index={i} />)}

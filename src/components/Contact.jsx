@@ -35,7 +35,7 @@ export default function Contact({ profile }) {
           <div className="flex flex-wrap gap-3 sm:justify-end">
             {profile.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer" className="btn-ghost"><Github size={16} /> GitHub</a>}
             {profile.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="btn-ghost"><Linkedin size={16} /> LinkedIn</a>}
-            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost"><Download size={16} /> Résumé</a>}
+            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost"><Download size={16} /> Resume</a>}
           </div>
         </div>
 

@@ -96,39 +96,3 @@ export function FadeUp({ children, className = '', delay = 0, as = 'div' }) {
     </M>
   )
 }
-
-// Two rows of loud facts that slide in opposite directions as you scroll.
-export function Band({ items = [] }) {
-  const reduce = useReducedMotion()
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const x1 = useTransform(scrollYProgress, [0, 1], reduce ? ['0%', '0%'] : ['0%', '-30%'])
-  const x2 = useTransform(scrollYProgress, [0, 1], reduce ? ['-20%', '-20%'] : ['-30%', '0%'])
-  const row = [...items, ...items, ...items]
-  const rowCls =
-    'flex w-max items-center gap-6 whitespace-nowrap font-display font-800 uppercase leading-none tracking-[-0.03em] sm:gap-10'
-  return (
-    <section ref={ref} aria-label="Quick facts" className="overflow-hidden border-y border-line py-6 sm:py-9">
-      <motion.div style={{ x: x1 }} className={`${rowCls} text-[clamp(2rem,6vw,5rem)] text-ink`}>
-        {row.map((t, i) => (
-          <span key={i} className="flex items-center gap-6 sm:gap-10">
-            {t}
-            <span aria-hidden className="text-accent">✱</span>
-          </span>
-        ))}
-      </motion.div>
-      <motion.div
-        aria-hidden
-        style={{ x: x2, WebkitTextStroke: '1.5px rgb(var(--accent))', color: 'transparent' }}
-        className={`${rowCls} mt-3 text-[clamp(2rem,6vw,5rem)] sm:mt-5`}
-      >
-        {row.map((t, i) => (
-          <span key={i} className="flex items-center gap-6 sm:gap-10">
-            {t}
-            <span style={{ WebkitTextStroke: 0, color: 'rgb(var(--ink))' }}>✱</span>
-          </span>
-        ))}
-      </motion.div>
-    </section>
-  )
-}

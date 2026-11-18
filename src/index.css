@@ -55,6 +55,8 @@ body {
   }
   .h-card { @apply font-display font-700 uppercase leading-[0.95] tracking-[-0.02em] text-ink; }
   .mono { @apply font-mono text-[11px] uppercase tracking-[0.14em]; }
+  /* dates and meta lines: bigger and bolder than .mono */
+  .date { @apply font-mono text-[13px] font-600 uppercase tracking-[0.06em] sm:text-sm; }
   .bar { @apply border-l-[3px] border-accent pl-3; }
   .btn-primary {
     @apply inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 font-display text-sm font-700 uppercase
@@ -72,13 +74,10 @@ body {
   .card { @apply rounded-2xl border border-line bg-graphite; }
 }
 
-/* hero cursor effects */
+/* hero cursor reveal: the host sets --x/--y/--r, masked layers inherit them */
 @property --r { syntax: '<length>'; inherits: true; initial-value: 0px; }
+.reveal-host { --x: -999px; --y: -999px; transition: --r 0.35s cubic-bezier(.2,.7,.1,1); }
 .reveal-mask {
-  --x: 50%; --y: 50%;
-  transition: --r 0.35s cubic-bezier(.2,.7,.1,1);
   -webkit-mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), #000 97%, transparent 100%);
           mask-image: radial-gradient(circle var(--r) at var(--x) var(--y), #000 97%, transparent 100%);
 }
-@keyframes pix { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.2); } }
-.pix { position: absolute; width: 12px; height: 12px; background: rgb(var(--accent)); pointer-events: none; animation: pix 0.7s steps(5) forwards; }

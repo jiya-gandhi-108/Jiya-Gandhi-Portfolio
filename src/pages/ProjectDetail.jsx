@@ -49,7 +49,8 @@ export default function ProjectDetail() {
         {project && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <h1 className="mt-8 font-display text-[clamp(2.3rem,6.5vw,5.25rem)] font-900 uppercase leading-[0.92] tracking-[-0.04em] text-ink">{project.title}</h1>
-            {project.subtitle && <p className="mt-5 max-w-2xl text-lg text-ink/70 sm:text-xl">{project.subtitle}</p>}
+            {project.subtitle && <p className="mt-5 max-w-2xl font-display text-xl font-600 text-ink/70 sm:text-2xl">{project.subtitle}</p>}
+            {project.summary && <p className="mt-4 max-w-3xl text-[17px] leading-relaxed text-ink/80">{project.summary}</p>}
 
             <div className="mt-7 flex flex-wrap gap-3">
               {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="btn-ghost"><Github size={16} /> Source</a>}
@@ -69,7 +70,7 @@ export default function ProjectDetail() {
               <dl className={`mt-6 grid gap-px overflow-hidden rounded-2xl border border-line bg-line ${facts.length > 2 ? 'sm:grid-cols-3' : 'grid-cols-2'}`}>
                 {facts.map(([label, value]) => (
                   <div key={label} className="bg-bg p-4">
-                    <dt className="mono text-muted">{label}</dt>
+                    <dt className="date font-500 text-muted">{label}</dt>
                     <dd className="mt-1.5 font-display text-base font-700 uppercase text-ink">{value}</dd>
                   </div>
                 ))}
@@ -92,7 +93,7 @@ export default function ProjectDetail() {
                 {stack.length > 0 && (
                   <Block title="Stack">
                     <ul className="flex flex-wrap gap-2">
-                      {stack.map((s) => <li key={s} className="mono rounded-full border border-line px-3 py-1.5 text-ink/80">{s}</li>)}
+                      {stack.map((s) => <li key={s} className="rounded-full border border-line px-3 py-1.5 text-[13px] font-500 text-ink/80">{s}</li>)}
                     </ul>
                   </Block>
                 )}
@@ -117,7 +118,7 @@ export default function ProjectDetail() {
                   {updates.map((u, i) => (
                     <li key={i} className="relative">
                       <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full border-2 border-accent bg-bg" />
-                      {u.date && <p className="mono text-accent">{u.date}</p>}
+                      {u.date && <p className="date text-accent">{u.date}</p>}
                       <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink/85">{u.note}</p>
                     </li>
                   ))}

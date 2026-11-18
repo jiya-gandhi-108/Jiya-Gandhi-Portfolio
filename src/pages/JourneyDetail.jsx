@@ -12,7 +12,6 @@ export default function JourneyDetail() {
   const { id } = useParams()
   const entry = getExperienceById(id)
   useEffect(() => { window.scrollTo(0, 0) }, [id])
-  const idx = experience.findIndex((e) => String(e.id) === String(id))
   const others = experience.filter((e) => String(e.id) !== String(id))
 
   return (
@@ -32,10 +31,9 @@ export default function JourneyDetail() {
 
         {entry && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <p className="mono mt-10 text-accent">{String(experience.length - idx).padStart(2, '0')} / {String(experience.length).padStart(2, '0')}</p>
-            <h1 className="mt-3 font-display text-[clamp(2.3rem,6.5vw,5rem)] font-900 uppercase leading-[0.92] tracking-[-0.04em] text-ink">{entry.role}</h1>
-            <p className="mt-3 font-display text-2xl font-700 uppercase tracking-[-0.02em] text-accent sm:text-3xl">@ {entry.org}</p>
-            <p className="mono mt-4 text-ink/70">{entry.period}{entry.location ? ` · ${entry.location}` : ''}</p>
+            <h1 className="mt-10 font-display text-[clamp(2.3rem,6.5vw,5rem)] font-900 uppercase leading-[0.92] tracking-[-0.04em] text-ink">{entry.role}</h1>
+            <p className="mt-3 font-display text-2xl font-700 normal-case tracking-[-0.02em] text-accent sm:text-3xl">@ {entry.org}</p>
+            <p className="date mt-4 text-ink/80">{entry.period}{entry.location ? ` · ${entry.location}` : ''}</p>
 
             {entry.desc && <p className="bar mt-10 max-w-2xl text-lg leading-relaxed text-ink/85">{entry.desc}</p>}
 
@@ -46,7 +44,7 @@ export default function JourneyDetail() {
                   {entry.points.map((pt, i) => (
                     <FadeUp key={pt} delay={i * 0.04} as="li">
                       <div className="card flex gap-4 p-5">
-                        <span className="font-display text-2xl font-900 leading-none text-accent">{String(i + 1).padStart(2, '0')}</span>
+                        <span aria-hidden className="mt-[0.55em] h-2 w-2 shrink-0 rounded-full bg-accent" />
                         <span className="text-base leading-relaxed text-ink/85">{pt}</span>
                       </div>
                     </FadeUp>
@@ -59,7 +57,7 @@ export default function JourneyDetail() {
               <section className="mt-14">
                 <h2 className="h-card text-2xl sm:text-3xl">Tools I used there</h2>
                 <ul className="mt-5 flex flex-wrap gap-2">
-                  {entry.stack.map((s) => <li key={s} className="mono rounded-full border border-line px-3 py-1.5 text-ink/80">{s}</li>)}
+                  {entry.stack.map((s) => <li key={s} className="rounded-full border border-line px-3 py-1.5 text-[13px] font-500 text-ink/80">{s}</li>)}
                 </ul>
               </section>
             )}
@@ -71,9 +69,9 @@ export default function JourneyDetail() {
                   {others.map((o) => (
                     <Link key={o.id} to={`/journey/${o.id}`} className="card group flex items-center justify-between gap-4 p-5 transition-colors hover:border-accent/60">
                       <div className="min-w-0">
-                        <p className="mono text-accent">{o.period}</p>
+                        <p className="date text-accent">{o.period}</p>
                         <p className="h-card mt-2 text-lg transition-colors group-hover:text-accent">{o.role}</p>
-                        <p className="text-sm text-ink/55">@ {o.org}</p>
+                        <p className="mt-0.5 text-base text-ink/60">@ {o.org}</p>
                       </div>
                       <ArrowUpRight size={22} className="shrink-0 text-muted group-hover:text-accent" />
                     </Link>

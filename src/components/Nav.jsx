@@ -13,7 +13,6 @@ const links = [
 ]
 const mobileLinks = [
   { href: '/#top', label: 'Home' },
-  { href: '/#about', label: 'The pitch' },
   { href: '/#work', label: "Stuff I've shipped" },
   { href: '/#cooking', label: 'Currently cooking' },
   { href: '/#archive', label: 'Full archive' },
@@ -36,15 +35,15 @@ export default function Nav({ profile }) {
     <>
       <header className="fixed inset-x-0 top-0 z-40 bg-bg/85 backdrop-blur-md md:right-[var(--dock)]">
         <div className="flex items-center justify-between px-4 py-3.5 sm:px-6 md:pl-7 md:pr-4">
-          <Link to="/" className="font-display text-[22px] font-800 lowercase leading-none tracking-[-0.04em] text-ink" aria-label="Home">
-            {profile?.first?.toLowerCase() || 'jiya'}<span className="text-accent">.</span>
+          <Link to="/" className="font-display text-[19px] font-900 uppercase leading-none tracking-[-0.03em] text-ink sm:text-[21px]" aria-label="Home">
+            {profile?.name || 'Jiya Gandhi'}<span className="text-accent">.</span>
           </Link>
 
           <nav className="hidden items-center gap-6 md:flex" aria-label="Main">
             {links.map((l) => <a key={l.label} href={l.href} className="nav-link">{l.label}</a>)}
             {profile?.resume_url && (
               <a href={profile.resume_url} download className="inline-flex items-center gap-1.5 rounded-full border border-accent px-3.5 py-1.5 font-display text-[12px] font-700 uppercase text-accent transition-colors hover:bg-accent hover:text-black">
-                <Download size={13} /> Résumé
+                <Download size={13} /> Resume
               </a>
             )}
           </nav>
@@ -65,7 +64,7 @@ export default function Nav({ profile }) {
       {open && (
         <div className="fixed inset-0 z-[80] flex flex-col bg-bg md:hidden">
           <div className="flex items-center justify-between px-4 py-3.5">
-            <span className="font-display text-[22px] font-800 lowercase tracking-[-0.04em] text-ink">{profile?.first?.toLowerCase()}<span className="text-accent">.</span></span>
+            <span className="font-display text-[19px] font-900 uppercase tracking-[-0.03em] text-ink">{profile?.name}<span className="text-accent">.</span></span>
             <button onClick={() => setOpen(false)} className="grid h-9 w-9 place-items-center text-ink" aria-label="Close menu"><X size={24} /></button>
           </div>
           <nav className="flex-1 overflow-y-auto px-4 py-2" aria-label="Mobile">
@@ -78,7 +77,7 @@ export default function Nav({ profile }) {
           </nav>
           <div className="border-t border-line px-4 py-4">
             {profile?.resume_url && (
-              <a href={profile.resume_url} download onClick={() => setOpen(false)} className="btn-primary w-full justify-center"><Download size={16} /> Download résumé</a>
+              <a href={profile.resume_url} download onClick={() => setOpen(false)} className="btn-primary w-full justify-center"><Download size={16} /> Download resume</a>
             )}
             <div className="mt-4 flex gap-3">
               {profile?.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="GitHub"><Github size={16} /></a>}

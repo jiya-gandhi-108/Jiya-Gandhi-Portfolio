@@ -2,6 +2,7 @@
   {
     "id": "1e75e24a-a587-46d2-84dc-1a1d47b9254d",
     "title": "AI Lead Qualification System",
+    "summary": "Inbound leads come in messy. This platform reads each one with an LLM, scores it out of 100, explains the score, assigns an owner and drafts the outreach email, then schedules follow-ups so hot leads never go cold.",
     "image_url": "/projects/1e75e24a-a587-46d2-84dc-1a1d47b9254d-1789454627719-Untitled.png",
     "problem": "Sales teams lose time manually reading inbound leads, guessing which ones are worth pursuing, documenting each one, and remembering to follow up, so good leads go cold and reps spend effort on poor-fit ones.",
     "built": "An AI lead qualification and pipeline platform that captures leads from multiple sources, uses an LLM to extract requirements and buying signals, scores each lead out of 100, routes and assigns it, drafts personalized outreach, and automates follow-up tasks, all inside a real-time pipeline.",
@@ -45,6 +46,7 @@
   {
     "id": "a67bb871-153d-4c0d-93cf-356193233e83",
     "title": "AI Voice Calling & Lead Qualification Agent",
+    "summary": "An AI agent that calls candidates, runs a natural first-round screening and writes a structured summary with a rating and next step. Every call syncs into Zoho Recruit, so recruiters skip the dialing and go straight to the good candidates.",
     "image_url": "/projects/a67bb871-153d-4c0d-93cf-356193233e83-1789450539146-WhatsApp_Image_2026-08-12_at_5.41.49_PM.jpeg",
     "problem": "Recruiters spent hours dialing candidates for first-round screening and logging every call by hand.",
     "built": "An AI-assisted calling workflow that captures caller intent, qualifies leads, structures notes, and pushes follow-up-ready records into CRM pipelines.",
@@ -83,6 +85,7 @@
   {
     "id": "8d1e13bd-14b5-4def-bfdd-bd77bb835c2b",
     "title": "Growing Digitally: Agency Website + CMS",
+    "summary": "A full-stack agency site with a custom CMS. The team edits pages, pricing, blog posts and testimonials themselves, and every enquiry lands in a leads dashboard with an email alert. Plain PHP 8, runs on cheap shared hosting.",
     "image_url": "/projects/8d1e13bd-14b5-4def-bfdd-bd77bb835c2b-1789468555318-Untitled.png",
     "problem": "A digital agency needed a fast marketing website plus a custom admin panel to manage leads, content, and pricing, without a developer for every change.",
     "built": "A full-stack PHP + MySQL agency website with a custom, role-based admin CMS: dynamic content editing, lead capture and management, services/pricing/blog/testimonials CRUD, and secure authentication.",
@@ -117,6 +120,7 @@
   {
     "id": "dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea",
     "title": "Task Management Application",
+    "summary": "Replaced WhatsApp task-chasing with one console. Owners and leads assign work with deadlines, reminders escalate on their own over in-app, push and email, and nobody escapes the 6 PM end-of-day report.",
     "image_url": "/projects/dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea-1789452801864-Untitled.png",
     "problem": "Task assignment across owner, team leaders, and employees ran on WhatsApp and memory: no deadlines that stuck, no visibility into who was behind, and no reliable end-of-day accountability.",
     "built": "A role-based task command console where the owner and leaders assign work with deadlines, employees update status and file mandatory end-of-day reports, and everyone is chased by automatic reminders: in-app, browser push, and email.",
@@ -154,6 +158,7 @@
   {
     "id": "99c8903d-8e87-4313-b9bd-f07e7d68f6eb",
     "title": "Real-Time Coding Collaboration Platform",
+    "summary": "Rooms where a group edits the same code live over WebSockets, with chat and presence built in. JWT-gated and MongoDB-backed, so no more screen sharing or copy-pasting code between tools.",
     "image_url": "/projects/99c8903d-8e87-4313-b9bd-f07e7d68f6eb-1789457406202-ChatGPT_Image_Sep_15__2026__12_59_53_PM.png",
     "problem": "Collaborative coding relied on screen sharing or copy-pasting code between tools, so only one person could actually type and discussion lived apart from the code.",
     "built": "A room-based platform where authenticated users edit the same code simultaneously over WebSockets, with in-room chat and live join/leave/editing presence.",
@@ -189,6 +194,7 @@
   {
     "id": "4a63acaa-c08b-47fa-8d1e-073ad33b7143",
     "title": "ContentCraft: AI Content Generator",
+    "summary": "Five AI agents (research, outline, draft, edit, SEO) pass each piece down a pipeline, grounded in a pgvector brand memory so everything sounds on-brand. Finished content publishes straight to WordPress or Ghost.",
     "image_url": "/projects/4a63acaa-c08b-47fa-8d1e-073ad33b7143-1789459195377-ChatGPT_Image_Sep_15__2026__01_29_39_PM.png",
     "problem": "AI content tools produce generic, isolated drafts with no brand memory, no live research, and SEO handled as a separate manual step after writing.",
     "built": "A multi-agent content platform that runs every request through a Research → Outline → Draft → Edit → SEO pipeline, grounded in a RAG-based brand memory, with direct publishing to CMS platforms.",
@@ -226,6 +232,7 @@
   {
     "id": "88a77dcb-2bfe-4d10-8d78-5caca3e120d5",
     "title": "SN Jewel: Jewellery E-Commerce",
+    "summary": "A jewellery storefront with the full commerce loop: browsing, cart, checkout and Razorpay payments. Stock is enforced in both the listing and the cart, so out-of-stock pieces can't be bought.",
     "image_url": "/projects/88a77dcb-2bfe-4d10-8d78-5caca3e120d5-1789461799373-ChatGPT_Image_Sep_15__2026__02_13_03_PM.png",
     "problem": "An online jewelry storefront needed reliable commerce logic (accurate stock visibility, consistent cart state, and secure payments) rather than just a product listing page.",
     "built": "A full-stack storefront with a React frontend, PHP API backend, and MySQL database, covering the full commerce loop: browsing, cart, checkout, and Razorpay payment processing.",
@@ -258,6 +265,7 @@
   {
     "id": "b3f6050e-35ed-45c9-a2cd-c6f6681bc70c",
     "title": "Distraction Detector",
+    "summary": "Webcam in, alerts out. MediaPipe tracks gaze and blinks frame by frame, classifies focused vs distracted, and flags fatigue the moment it happens. No special hardware needed.",
     "image_url": "/projects/b3f6050e-35ed-45c9-a2cd-c6f6681bc70c-1789463119195-ChatGPT_Image_Sep_15__2026__02_35_03_PM.png",
     "problem": "Attention lapses and fatigue during work, study, or driving are hard to notice in the moment, and existing productivity tools track time and activity but not actual visual attention.",
     "built": "A real-time computer vision pipeline that tracks gaze direction and blink/eye-closure patterns from a webcam feed and raises an immediate alert when distraction or fatigue is detected.",
@@ -288,6 +296,7 @@
   {
     "id": "1ec45006-c702-49fe-bec6-6da5aedc04d2",
     "title": "AI SaaS HRMS Platform",
+    "summary": "A multi-tenant HR SaaS covering the whole employee lifecycle across 26 modules: attendance, payroll, hiring, performance and more. Each company's data is isolated at the database with row-level security and proven by end-to-end tests.",
     "image_url": "/projects/1ec45006-c702-49fe-bec6-6da5aedc04d2-1789540068917-ChatGPT_Image_Sep_16__2026__11_57_32_AM.png",
     "problem": "HR teams juggle attendance, payroll, recruitment, and performance across separate tools, and a SaaS serving many companies must keep each tenant's data fully isolated, which is hard to do safely at scale.",
     "built": "A multi-tenant, enterprise-grade HR operations SaaS with 26 domain modules (attendance, payroll, recruitment, performance, onboarding and more) on a Next.js client, a modular NestJS/Fastify API, PostgreSQL with row-level security, Temporal workflows, and a FastAPI AI gateway.",

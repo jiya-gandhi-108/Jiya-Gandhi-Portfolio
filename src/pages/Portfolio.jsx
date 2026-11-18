@@ -12,8 +12,7 @@ import Experience from '../components/Experience'
 import Skills from '../components/Skills'
 import Freelance from '../components/Freelance'
 import Contact from '../components/Contact'
-import { Band } from '../components/Motion'
-import { profile, projects, experience, pitch, band } from '../lib/data'
+import { profile, projects, experience, pitch } from '../lib/data'
 
 export default function Portfolio() {
   const [revealDone, setRevealDone] = useState(false)
@@ -28,7 +27,6 @@ export default function Portfolio() {
       <main>
         <Hero profile={profile} started={revealDone} />
         <About text={pitch} tldr={profile.tldr} />
-        <Band items={band} />
         <Projects projects={featured} />
         <Cooking project={cooking} />
         <CodingWorld projects={projects} />

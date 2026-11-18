@@ -1,266 +1,194 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { ArrowDownRight, Download } from 'lucide-react'
-import { stats } from '../lib/data'
+import { ArrowDownRight, Download, MapPin } from 'lucide-react'
 
 const EASE = [0.2, 0.7, 0.1, 1]
-const MODES = ['reveal', 'magnet', 'crosshair', 'trail', 'none']
 
-// Which cursor effect to use: ?cursor=xyz in the URL wins (handy for previewing), else data.js.
-function useCursorMode(fallback) {
+// The hero is a pinned, two-stage scroll:
+//   stage 1  : photo in the centre, JIYA top-left, GANDHI bottom-right, two buttons
+//   scrolling: the name fades out, the photo slides from the centre to the left
+//   stage 2  : roles, headline, 15+ projects, location and the buttons fade in on the right
+// Hover (desktop): a circle around the cursor shows the photo in colour and turns the lime name white.
+
+function useCursorOn(setting) {
   return useMemo(() => {
-    if (typeof window === 'undefined') return 'none'
+    if (typeof window === 'undefined' || setting === 'none') return false
     const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!fine || reduce) return 'none'
-    const q = new URLSearchParams(window.location.search).get('cursor')
-    return MODES.includes(q) ? q : MODES.includes(fallback) ? fallback : 'none'
-  }, [fallback])
+    return fine && !reduce
+  }, [setting])
 }
 
-// Big lime word, split into letters so the magnet effect can move each one.
-function Letters({ text, className = '', style }) {
-  return (
-    <motion.span aria-hidden style={style} className={`absolute block select-none font-display font-900 uppercase leading-[0.8] tracking-[-0.045em] text-accent ${className}`}>
-      {text.split('').map((c, i) => (
-        <span key={i} data-ch className="inline-block transition-transform duration-300 ease-out will-change-transform">{c}</span>
-      ))}
-    </motion.span>
-  )
-}
+const nameCls = 'absolute block select-none whitespace-nowrap font-display font-900 uppercase leading-[0.8] tracking-[-0.045em]'
 
 export default function Hero({ profile, started }) {
   const reduce = useReducedMotion()
-  const mode = useCursorMode(profile.heroCursor)
-  const sectionRef = useRef(null)
+  const cursorOn = useCursorOn(profile.heroCursor)
+  const runway = useRef(null)
   const cardRef = useRef(null)
-  const imgWrapRef = useRef(null)
-  const revealRef = useRef(null)
-  const crossX = useRef(null)
-  const crossY = useRef(null)
-  const readout = useRef(null)
-  const trailRef = useRef(null)
-  const last = useRef({ x: -999, y: -999 })
-  const [inside, setInside] = useState(false)
 
-  // scroll: the letters drift apart, the photo eases in, the headline fades
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
-  const still = reduce ? [0, 0] : null
-  const xLeft = useTransform(scrollYProgress, [0, 1], still || ['0%', '-18%'])
-  const xRight = useTransform(scrollYProgress, [0, 1], still || ['0%', '18%'])
-  const yMid = useTransform(scrollYProgress, [0, 1], still || ['0%', '-45%'])
-  const imgScale = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [1, 1.1])
-  const fade = useTransform(scrollYProgress, [0, 0.6], reduce ? [1, 1] : [1, 0])
+  const { scrollYProgress: p } = useScroll({ target: runway, offset: ['start start', 'end end'] })
+  const t = (input, output) => useTransform(p, input, output) // eslint-disable-line react-hooks/rules-of-hooks
 
-  const [L1, L2, L3] = profile.heroLetters || ['JIYA', 'GAN', 'DHI']
-  const head = profile.headline || []
+  // stage 1 out
+  const nameOpacity = t([0, 0.28], [1, 0])
+  const jiyaY = t([0, 0.32], [0, -90])
+  const gandhiY = t([0, 0.32], [0, 90])
+  const stage1Opacity = t([0, 0.16], [1, 0])
+  const stage1Events = t([0, 0.1], ['auto', 'none'])
+  // photo: centre -> left (desktop), centre -> top-left and smaller (mobile)
+  const imgLeft = t([0.12, 0.58], ['50%', '25%'])
+  const imgScale = t([0.12, 0.58], [1, 0.9])
+  const mImgLeft = t([0.12, 0.55], ['50%', '27%'])
+  const mImgTop = t([0.12, 0.55], ['17%', '2%'])
+  const mImgScale = t([0.12, 0.55], [1, 0.58])
+  // stage 2 in, one item after another
+  const inA = { opacity: t([0.45, 0.6], [0, 1]), y: t([0.45, 0.6], [40, 0]) }
+  const inB = { opacity: t([0.53, 0.68], [0, 1]), y: t([0.53, 0.68], [40, 0]) }
+  const inC = { opacity: t([0.61, 0.76], [0, 1]), y: t([0.61, 0.76], [40, 0]) }
+  const inD = { opacity: t([0.69, 0.84], [0, 1]), y: t([0.69, 0.84], [40, 0]) }
+  const stage2Events = t([0.7, 0.8], ['none', 'auto'])
 
-  const intro = (delay = 0, y = 24) => ({
+  const intro = (delay = 0, y = 30) => ({
     initial: { opacity: 0, y: reduce ? 0 : y },
     animate: started ? { opacity: 1, y: 0 } : {},
     transition: { duration: 0.8, delay, ease: EASE },
   })
 
   const onMove = (e) => {
-    const card = cardRef.current
-    if (!card || mode === 'none') return
-    const r = card.getBoundingClientRect()
-    const x = e.clientX - r.left
-    const y = e.clientY - r.top
-
-    if (mode === 'reveal' && revealRef.current && imgWrapRef.current) {
-      const ir = imgWrapRef.current.getBoundingClientRect()
-      revealRef.current.style.setProperty('--x', `${e.clientX - ir.left}px`)
-      revealRef.current.style.setProperty('--y', `${e.clientY - ir.top}px`)
-    }
-    if (mode === 'magnet') {
-      card.querySelectorAll('[data-ch]').forEach((el) => {
-        const b = el.getBoundingClientRect()
-        const dx = b.left + b.width / 2 - e.clientX
-        const dy = b.top + b.height / 2 - e.clientY
-        const d = Math.hypot(dx, dy)
-        const R = 280
-        if (d < R) {
-          const f = (1 - d / R) * 34
-          el.style.transform = `translate(${(dx / d) * f}px, ${(dy / d) * f}px) rotate(${(dx / R) * 6}deg)`
-        } else el.style.transform = ''
-      })
-    }
-    if (mode === 'crosshair') {
-      if (crossX.current) crossX.current.style.transform = `translateX(${x}px)`
-      if (crossY.current) crossY.current.style.transform = `translateY(${y}px)`
-      if (readout.current) {
-        readout.current.style.transform = `translate(${x + 14}px, ${y + 14}px)`
-        readout.current.textContent = `X ${String(Math.round(x)).padStart(4, '0')}  Y ${String(Math.round(y)).padStart(4, '0')}`
-      }
-    }
-    if (mode === 'trail' && trailRef.current) {
-      const gx = Math.round(x / 12) * 12
-      const gy = Math.round(y / 12) * 12
-      if (Math.hypot(gx - last.current.x, gy - last.current.y) >= 12) {
-        last.current = { x: gx, y: gy }
-        const p = document.createElement('span')
-        p.className = 'pix'
-        p.style.left = `${gx - 6}px`
-        p.style.top = `${gy - 6}px`
-        trailRef.current.appendChild(p)
-        setTimeout(() => p.remove(), 720)
-      }
-    }
+    const el = cardRef.current
+    if (!el || !cursorOn) return
+    const r = el.getBoundingClientRect()
+    el.style.setProperty('--x', `${e.clientX - r.left}px`)
+    el.style.setProperty('--y', `${e.clientY - r.top}px`)
   }
+  const setRadius = (v) => cursorOn && cardRef.current?.style.setProperty('--r', v)
 
-  const onLeave = () => {
-    setInside(false)
-    cardRef.current?.querySelectorAll('[data-ch]').forEach((el) => { el.style.transform = '' })
-  }
+  const head = profile.headline || []
+  const roles = profile.roles || []
 
-  useEffect(() => {
-    if (revealRef.current) revealRef.current.style.setProperty('--r', inside ? '170px' : '0px')
-  }, [inside])
+  // the two names, rendered twice on desktop (lime base + white copy under the cursor circle)
+  const Names = ({ white = false }) => (
+    <>
+      <motion.span aria-hidden style={{ opacity: nameOpacity, y: jiyaY }}
+        className={`${nameCls} left-[2.5%] top-[5%] text-[clamp(8rem,16vw,17rem)] ${white ? 'text-ink' : 'text-accent'}`}>
+        {profile.first}
+      </motion.span>
+      <motion.span aria-hidden style={{ opacity: nameOpacity, y: gandhiY }}
+        className={`${nameCls} bottom-[2%] right-[2.5%] text-[clamp(7rem,14.5vw,16rem)] ${white ? 'text-ink' : 'text-accent'}`}>
+        {profile.last}
+      </motion.span>
+    </>
+  )
+  const Photo = ({ color = false }) => (
+    <motion.img
+      src={profile.cutout_url}
+      alt={color ? '' : `Portrait of ${profile.name}`}
+      aria-hidden={color || undefined}
+      draggable={false}
+      style={{ left: imgLeft, x: '-50%', scale: imgScale }}
+      className={`absolute bottom-0 h-[82%] w-auto max-w-none origin-bottom ${cursorOn && !color ? 'grayscale' : ''}`}
+    />
+  )
 
   return (
-    <section id="top" ref={sectionRef} className="px-3 pt-[72px] sm:px-4 sm:pt-[76px]">
-      <h1 className="sr-only">{profile.name}, {profile.role}</h1>
+    <section id="top" ref={runway} className="relative h-[230vh] lg:h-[260vh]">
+      <h1 className="sr-only">{profile.name}, {roles.join(' and ')}</h1>
 
-      {/* ---------------- DESKTOP (lg+) ---------------- */}
-      <div
-        ref={cardRef}
-        onMouseMove={onMove}
-        onMouseEnter={() => setInside(true)}
-        onMouseLeave={onLeave}
-        className={`relative hidden overflow-hidden rounded-[22px] border border-line bg-bg lg:block ${mode === 'crosshair' ? 'cursor-none' : ''}`}
-        style={{ height: 'clamp(660px, calc(100svh - 92px), 960px)' }}
-      >
-        {/* portrait: sits in the lower right so the headline gets clean space above it */}
-        <motion.div ref={imgWrapRef} style={{ scale: imgScale }} className="absolute bottom-0 right-0 top-[25%] w-[56%] origin-bottom">
-          <img
-            src={profile.avatar_url}
-            alt={`Portrait of ${profile.name}`}
-            className={`h-full w-full object-cover ${mode === 'reveal' ? 'grayscale' : ''}`}
-            style={{ objectPosition: '55% 18%' }}
-            loading="eager"
-          />
-          {mode === 'reveal' && (
-            <img
-              ref={revealRef}
-              src={profile.avatar_url}
-              alt=""
-              aria-hidden
-              className="reveal-mask absolute inset-0 h-full w-full object-cover"
-              style={{ objectPosition: '55% 18%' }}
-            />
-          )}
-          {/* soft blend into the black on the left and top edges */}
-          <div aria-hidden className="absolute inset-y-0 left-0 w-[28%] bg-gradient-to-r from-bg to-transparent" />
-          <div aria-hidden className="absolute inset-x-0 top-0 h-[18%] bg-gradient-to-b from-bg to-transparent" />
-        </motion.div>
-
-        {/* four thin columns with the receipts, like the reference's phase markers */}
-        <motion.div {...intro(0.5, 0)} className="absolute inset-x-[3%] top-[40%] z-[6] grid h-[30%] grid-cols-4">
-          {stats.map((s, i) => (
-            <div key={s.label} className="flex flex-col justify-between border-l border-ink/15 pl-3">
-              <span className="mono text-muted">{String(i + 1).padStart(3, '0')}</span>
-              <div>
-                <p className="font-display text-[clamp(1.8rem,2.6vw,2.6rem)] font-800 leading-none text-ink">{s.value}</p>
-                <p className="mono mt-1.5 text-accent">{s.label}</p>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* the big letters */}
-        <motion.div style={{ opacity: fade }} className="pointer-events-none absolute inset-0 z-10"><motion.div {...intro(0.05, 40)} className="absolute inset-0">
-          <Letters text={L1} style={{ x: xLeft }} className="left-[2.5%] top-[8%] text-[clamp(8rem,15.5vw,17rem)]" />
-          <Letters text={L2} style={{ y: yMid }} className="left-[33%] top-[38%] text-[clamp(8rem,15.5vw,17rem)]" />
-          <Letters text={L3} style={{ x: xRight }} className="bottom-[1%] right-[2.5%] text-[clamp(8rem,15.5vw,17rem)]" />
-        </motion.div></motion.div>
-
-        {/* headline, top right */}
-        <motion.div style={{ opacity: fade }} className="absolute right-[3%] top-[8%] z-20 w-[40%] max-w-[600px]"><motion.div {...intro(0.25)}>
-          <p className="font-display text-[clamp(1.6rem,3vw,3.2rem)] font-800 uppercase leading-[0.95] tracking-[-0.025em]">
-            <span className="block text-accent">{head[0]}</span>
-            <span className="block text-ink">{head[1]}</span>
-            <span className="block text-accent">{head[2]}</span>
-          </p>
-          <div className="bar mt-4">
-            <p className="font-display text-base font-800 uppercase leading-tight text-accent">{profile.name}</p>
-            <p className="mono mt-0.5 text-ink/80">{profile.role} · {profile.location.split(',')[0]}</p>
-          </div>
-        </motion.div></motion.div>
-
-        {/* bottom left: what I do + CTAs */}
-        <motion.div {...intro(0.4)} className="absolute bottom-[4.5%] left-[3%] z-20 flex items-end gap-5">
-          <div className="mono leading-tight text-accent">
-            <p>{profile.location.split(',')[0]}</p>
-            <p className="text-ink">{new Date().getFullYear()}</p>
-          </div>
-          <div>
-            <ul className="bar border-ink/40 font-display text-[15px] font-700 uppercase leading-[1.35] text-ink">
-              {profile.heroList.map((t) => <li key={t}>{t}</li>)}
-            </ul>
-            <div className="mt-5 flex gap-3">
-              <a href="#work" className="btn-primary">See my work <ArrowDownRight size={16} /></a>
-              {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost bg-bg/60"><Download size={15} /> Résumé</a>}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* cursor effect layers */}
-        {mode === 'crosshair' && (
-          <div aria-hidden className={`pointer-events-none absolute inset-0 z-30 transition-opacity ${inside ? 'opacity-100' : 'opacity-0'}`}>
-            <span ref={crossX} className="absolute inset-y-0 left-0 w-px bg-accent/80" />
-            <span ref={crossY} className="absolute inset-x-0 top-0 h-px bg-accent/80" />
-            <span ref={readout} className="mono absolute left-0 top-0 whitespace-pre rounded bg-accent px-1.5 py-0.5 text-black" />
-          </div>
-        )}
-        {mode === 'trail' && <div ref={trailRef} aria-hidden className="pointer-events-none absolute inset-0 z-30" />}
-      </div>
-
-      {/* ---------------- MOBILE / TABLET (< lg) ---------------- */}
-      <div className="overflow-hidden rounded-[20px] border border-line bg-bg lg:hidden">
-        <motion.p
-          aria-hidden
-          {...intro(0.05, 30)}
-          className="relative z-10 px-4 pt-5 font-display text-[31vw] font-900 uppercase leading-[0.8] tracking-[-0.045em] text-accent sm:text-[26vw]"
+      <div className="sticky top-0 h-[100svh] px-3 pb-3 pt-[64px] sm:px-4">
+        {/* ---------------- DESKTOP (lg+) ---------------- */}
+        <motion.div
+          {...intro(0.05, 20)}
+          ref={cardRef}
+          onMouseMove={onMove}
+          onMouseEnter={() => setRadius('170px')}
+          onMouseLeave={() => setRadius('0px')}
+          className="reveal-host relative hidden h-full overflow-hidden rounded-[22px] border border-line bg-bg lg:block"
         >
-          {L1}
-        </motion.p>
-        <div className="relative -mt-[7vw] aspect-[4/5] sm:aspect-[5/4]">
-          <img src={profile.avatar_url} alt={`Portrait of ${profile.name}`} className="h-full w-full object-cover" style={{ objectPosition: '56% 22%' }} />
-          <div aria-hidden className="absolute inset-x-0 top-0 h-1/4 bg-gradient-to-b from-bg to-transparent" />
-          <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg to-transparent" />
-          <p aria-hidden className="absolute -bottom-[1vw] right-3 font-display text-[22vw] font-900 uppercase leading-[0.8] tracking-[-0.045em] text-accent sm:text-[19vw]">
-            {L2}{L3}
-          </p>
-        </div>
+          {/* photo: grey base + colour copy revealed under the cursor */}
+          <div className="absolute inset-0"><Photo /></div>
+          {cursorOn && <div aria-hidden className="reveal-mask pointer-events-none absolute inset-0"><Photo color /></div>}
 
-        <div className="px-5 pb-7 pt-6 sm:px-8">
-          <motion.p {...intro(0.2)} className="font-display text-[clamp(1.9rem,8.4vw,3.4rem)] font-800 uppercase leading-[0.95] tracking-[-0.025em]">
-            <span className="block text-accent">{head[0]}</span>
-            <span className="block text-ink">{head[1]}</span>
-            <span className="block text-accent">{head[2]}</span>
-          </motion.p>
-          <div className="bar mt-4">
-            <p className="font-display text-base font-800 uppercase text-accent">{profile.name}</p>
-            <p className="mono mt-0.5 text-ink/80">{profile.role} · {profile.location.split(',')[0]}</p>
-          </div>
-          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-ink/75">{profile.tldr}</p>
+          {/* name: lime base + white copy under the cursor */}
+          <div className="pointer-events-none absolute inset-0 z-10"><Names /></div>
+          {cursorOn && <div aria-hidden className="reveal-mask pointer-events-none absolute inset-0 z-10"><Names white /></div>}
 
-          <div className="mt-7 grid grid-cols-2 gap-y-6">
-            {stats.map((s, i) => (
-              <div key={s.label} className="border-l border-ink/15 pl-3">
-                <span className="mono text-muted">{String(i + 1).padStart(3, '0')}</span>
-                <p className="mt-2 font-display text-3xl font-800 leading-none text-ink">{s.value}</p>
-                <p className="mono mt-1.5 text-accent">{s.label}</p>
-              </div>
-            ))}
-          </div>
+          {/* stage 1 buttons + scroll hint */}
+          <motion.div style={{ opacity: stage1Opacity, pointerEvents: stage1Events }} className="absolute bottom-[5%] left-[3%] z-20 flex gap-3">
+            <a href="#work" className="btn-primary">See my work <ArrowDownRight size={16} /></a>
+            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost bg-bg/70"><Download size={15} /> Resume</a>}
+          </motion.div>
+          <motion.div aria-hidden style={{ opacity: stage1Opacity }} className="mono absolute left-1/2 top-[4%] z-20 -translate-x-1/2 text-muted">
+            scroll ↓
+          </motion.div>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#work" className="btn-primary justify-center">See my work <ArrowDownRight size={16} /></a>
-            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost justify-center"><Download size={15} /> Résumé</a>}
-          </div>
-        </div>
+          {/* stage 2 text, right side */}
+          <motion.div style={{ pointerEvents: stage2Events }} className="absolute right-[4%] top-1/2 z-20 w-[44%] max-w-[640px] -translate-y-1/2">
+            <motion.p style={inA} className="font-display text-[clamp(2.2rem,4.2vw,4.4rem)] font-900 uppercase leading-[0.9] tracking-[-0.035em]">
+              <span className="block text-accent">{roles[0]}</span>
+              <span className="block text-ink">&amp; {roles[1]}</span>
+            </motion.p>
+            <motion.p style={inB} className="bar mt-7 font-display text-[clamp(1.15rem,1.7vw,1.6rem)] font-800 uppercase leading-[1.05] tracking-[-0.015em]">
+              <span className="block text-accent">{head[0]}</span>
+              <span className="block text-ink">{head[1]}</span>
+              <span className="block text-accent">{head[2]}</span>
+            </motion.p>
+            <motion.div style={inC} className="mt-8">
+              <p className="font-display text-[clamp(1.6rem,2.4vw,2.4rem)] font-800 leading-none text-ink">
+                <span className="text-accent">15+</span> client projects delivered
+              </p>
+              <p className="mt-3 flex items-center gap-2 text-base text-ink/70"><MapPin size={16} className="text-accent" /> {profile.location}</p>
+            </motion.div>
+            <motion.div style={inD} className="mt-8 flex gap-3">
+              <a href="#work" className="btn-primary">See my work <ArrowDownRight size={16} /></a>
+              {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost"><Download size={15} /> Resume</a>}
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* ---------------- MOBILE / TABLET (< lg) ---------------- */}
+        <motion.div {...intro(0.05, 20)} className="relative h-full overflow-hidden rounded-[20px] border border-line bg-bg lg:hidden">
+          <motion.img
+            src={profile.cutout_url}
+            alt={`Portrait of ${profile.name}`}
+            draggable={false}
+            style={{ left: mImgLeft, top: mImgTop, x: '-50%', scale: mImgScale }}
+            className="absolute h-[54%] w-auto max-w-none origin-top"
+          />
+          <motion.span aria-hidden style={{ opacity: nameOpacity, y: jiyaY }}
+            className={`${nameCls} left-4 top-4 z-10 text-[27vw] text-accent sm:text-[22vw]`}>
+            {profile.first}
+          </motion.span>
+          <motion.span aria-hidden style={{ opacity: nameOpacity, y: gandhiY }}
+            className={`${nameCls} bottom-[92px] right-3 z-10 text-[21vw] text-accent sm:bottom-[100px] sm:text-[18vw]`}>
+            {profile.last}
+          </motion.span>
+          <motion.div style={{ opacity: stage1Opacity, pointerEvents: stage1Events }} className="absolute inset-x-4 bottom-5 z-20 flex gap-3">
+            <a href="#work" className="btn-primary flex-1 justify-center whitespace-nowrap px-3 text-[13px]">See my work <ArrowDownRight size={16} /></a>
+            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost flex-1 justify-center whitespace-nowrap px-3 text-[13px]"><Download size={15} /> Resume</a>}
+          </motion.div>
+
+          {/* stage 2 */}
+          <motion.div style={{ pointerEvents: stage2Events }} className="absolute inset-x-5 bottom-5 z-20 sm:inset-x-8">
+            <motion.p style={inA} className="font-display text-[clamp(1.7rem,8.2vw,3rem)] font-900 uppercase leading-[0.92] tracking-[-0.035em]">
+              <span className="block text-accent">{roles[0]}</span>
+              <span className="block text-ink">&amp; {roles[1]}</span>
+            </motion.p>
+            <motion.p style={inB} className="bar mt-4 font-display text-[clamp(0.95rem,4.3vw,1.4rem)] font-800 uppercase leading-[1.05]">
+              <span className="block text-accent">{head[0]}</span>
+              <span className="block text-ink">{head[1]}</span>
+              <span className="block text-accent">{head[2]}</span>
+            </motion.p>
+            <motion.div style={inC} className="mt-5">
+              <p className="font-display text-[clamp(1.3rem,6vw,2rem)] font-800 leading-none text-ink"><span className="text-accent">15+</span> client projects delivered</p>
+              <p className="mt-2 flex items-center gap-2 text-sm text-ink/70"><MapPin size={15} className="text-accent" /> {profile.location}</p>
+            </motion.div>
+            <motion.div style={inD} className="mt-5 flex gap-3">
+              <a href="#work" className="btn-primary flex-1 justify-center whitespace-nowrap px-3 text-[13px]">See my work <ArrowDownRight size={16} /></a>
+              {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost flex-1 justify-center whitespace-nowrap px-3 text-[13px]"><Download size={15} /> Resume</a>}
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )
