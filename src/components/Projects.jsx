@@ -6,10 +6,12 @@ import { MaskHeading, ClipReveal, FadeUp } from './Motion'
 const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
 export const initials = (t) => t.split(' ').map((w) => w[0]).join('').slice(0, 3)
 
-export function StackTags({ items = [], className = '' }) {
+export function StackTags({ items = [], className = '', light = false }) {
   return (
     <ul className={`flex flex-wrap gap-2 ${className}`}>
-      {items.map((s) => <li key={s} className="rounded-full border border-line px-3 py-1.5 text-[13px] font-500 text-ink/80">{s}</li>)}
+      {items.map((s) => (
+        <li key={s} className={`rounded-full border px-3 py-1.5 text-[13px] font-500 ${light ? 'border-black/15 text-black/80' : 'border-line text-ink/80'}`}>{s}</li>
+      ))}
     </ul>
   )
 }
@@ -19,28 +21,39 @@ function ProjectRow({ project, index }) {
   const flip = index % 2 === 1
   const stack = toList(project.stack)
   const meta = [project.tag, project.year].filter(Boolean).join(' · ')
+  // projects whose showcase image is light get a light-mode panel ("theme": "light" in projects.json)
+  const L = project.theme === 'light'
+  const iconCls = L ? 'icon-btn border-black/20 text-black hover:border-black hover:text-black' : 'icon-btn'
 
   return (
-    <article className="grid items-center gap-8 border-t border-line py-12 sm:py-16 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+    <article
+      className={`grid items-center gap-8 lg:grid-cols-[1fr_1.15fr] lg:gap-16 ${
+        L
+          ? 'my-8 -mx-5 rounded-[28px] bg-light px-5 py-10 text-black sm:-mx-8 sm:px-8 sm:py-14 lg:-mx-10 lg:px-10'
+          : 'border-t border-line py-12 sm:py-16'
+      }`}
+    >
       <div className={flip ? 'lg:order-2' : ''}>
         <FadeUp>
-          {meta && <p className="date text-accent">{meta}</p>}
+          {meta && (L
+            ? <p className="date inline-block rounded-full bg-accent px-3 py-1 text-black">{meta}</p>
+            : <p className="date text-accent">{meta}</p>)}
           <Link to={`/project/${project.id}`} className="group mt-3 block">
-            <h3 className="h-card text-[clamp(1.8rem,3.3vw,2.9rem)] transition-colors group-hover:text-accent">{project.title}</h3>
+            <h3 className={`h-card text-[clamp(1.8rem,3.3vw,2.9rem)] transition-colors ${L ? 'text-black group-hover:text-black/65' : 'group-hover:text-accent'}`}>{project.title}</h3>
           </Link>
-          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink/80">{project.summary || project.built || project.subtitle}</p>
-          {stack.length > 0 && <StackTags items={stack.slice(0, 7)} className="mt-5" />}
+          <p className={`mt-5 max-w-xl text-[17px] leading-relaxed ${L ? 'text-black/75' : 'text-ink/80'}`}>{project.summary || project.built || project.subtitle}</p>
+          {stack.length > 0 && <StackTags items={stack.slice(0, 7)} className="mt-5" light={L} />}
           <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-3">
             <Link to={`/project/${project.id}`} className="btn-primary">View Details <ArrowUpRight size={16} /></Link>
-            {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Source on GitHub"><Github size={16} /></a>}
-            {project.demo_url && <a href={project.demo_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Live demo"><ExternalLink size={16} /></a>}
-            {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Case study"><FileText size={16} /></a>}
+            {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className={iconCls} aria-label="Source on GitHub"><Github size={16} /></a>}
+            {project.demo_url && <a href={project.demo_url} target="_blank" rel="noreferrer" className={iconCls} aria-label="Live demo"><ExternalLink size={16} /></a>}
+            {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className={iconCls} aria-label="Case study"><FileText size={16} /></a>}
           </div>
         </FadeUp>
       </div>
 
       <Link to={`/project/${project.id}`} className={`group block ${flip ? 'lg:order-1' : ''}`} aria-label={`Open ${project.title}`}>
-        <ClipReveal className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-line bg-graphite">
+        <ClipReveal className={`relative aspect-[4/3] overflow-hidden rounded-2xl border ${L ? 'border-black/10 bg-light' : 'border-line bg-graphite'}`}>
           {project.image_url ? (
             <motion.img
               src={project.image_url}

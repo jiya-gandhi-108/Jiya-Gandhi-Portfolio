@@ -16,6 +16,7 @@ export default {
         line: 'rgb(var(--line) / <alpha-value>)',
         accent: 'rgb(var(--accent) / <alpha-value>)',
         graphite: 'rgb(var(--graphite) / <alpha-value>)',
+        light: 'rgb(var(--light) / <alpha-value>)',
       },
       keyframes: {
         marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },

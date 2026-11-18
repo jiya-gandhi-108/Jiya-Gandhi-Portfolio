@@ -25,7 +25,7 @@ export const profile = {
   github_url: 'https://github.com/jiya-gandhi-108',
   linkedin_url: 'https://www.linkedin.com/in/jiya-gandhi-108',
   resume_url: '/Jiya_Gandhi_Resume.pdf',
-  avatar_url: '/assets/jiya.png',
+  avatar_url: '/assets/jiya.jpg',
   // Background-removed portrait used in the hero. Replace this file to change the photo.
   cutout_url: '/assets/jiya-cutout.webp',
   available: true,

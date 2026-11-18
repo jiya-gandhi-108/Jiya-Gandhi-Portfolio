@@ -10,6 +10,7 @@
   --muted: 138 138 132;  /* #8A8A84 */
   --line: 40 40 40;      /* #282828 */
   --accent: 140 255 46;  /* #8CFF2E lime */
+  --light: 248 247 242;  /* #F8F7F2 light-mode sections (matches the light showcase images) */
   --dock: 72px;          /* right gutter that holds the floating buttons (md+) */
 }
 

@@ -5,7 +5,7 @@ const EASE = [0.2, 0.7, 0.1, 1]
 
 // Section heading: each word rises out of its own mask, one after another.
 // `accent` = indexes of words to paint lime.
-export function MaskHeading({ text, as = 'h2', className = 'h-sec', accent = [], delay = 0 }) {
+export function MaskHeading({ text, as = 'h2', className = 'h-sec', accent = [], accentClass = 'text-accent', delay = 0 }) {
   const reduce = useReducedMotion()
   const words = text.split(' ')
   const Tag = motion[as] || motion.h2
@@ -22,7 +22,7 @@ export function MaskHeading({ text, as = 'h2', className = 'h-sec', accent = [],
         <Fragment key={i}>
           <span aria-hidden className="inline-block overflow-hidden pb-[0.06em] align-bottom">
             <motion.span
-              className={`inline-block ${accent.includes(i) ? 'text-accent' : ''}`}
+              className={`inline-block ${accent.includes(i) ? accentClass : ''}`}
               variants={{
                 hidden: { y: reduce ? 0 : '105%' },
                 show: { y: 0, transition: { duration: 0.75, ease: EASE } },

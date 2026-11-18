@@ -3,7 +3,7 @@
     "id": "1e75e24a-a587-46d2-84dc-1a1d47b9254d",
     "title": "AI Lead Qualification System",
     "summary": "Inbound leads come in messy. This platform reads each one with an LLM, scores it out of 100, explains the score, assigns an owner and drafts the outreach email, then schedules follow-ups so hot leads never go cold.",
-    "image_url": "/projects/1e75e24a-a587-46d2-84dc-1a1d47b9254d-1789454627719-Untitled.png",
+    "image_url": "/projects/1e75e24a-a587-46d2-84dc-1a1d47b9254d-showcase.webp",
     "problem": "Sales teams lose time manually reading inbound leads, guessing which ones are worth pursuing, documenting each one, and remembering to follow up, so good leads go cold and reps spend effort on poor-fit ones.",
     "built": "An AI lead qualification and pipeline platform that captures leads from multiple sources, uses an LLM to extract requirements and buying signals, scores each lead out of 100, routes and assigns it, drafts personalized outreach, and automates follow-up tasks, all inside a real-time pipeline.",
     "stack": [
@@ -41,13 +41,14 @@
     "year": "2025",
     "tag": "AI · Sales Automation",
     "long_desc": "Leads arrive from a live demo form, manual entry, CSV import, or a public API endpoint. Each one is validated, checked for duplicates, then analyzed by Groq, which extracts the requirement, pain points, use cases, intent, budget, timeline, and decision-maker likelihood as structured JSON, with a deterministic local fallback and multiple API keys for resilience. A configurable six-factor engine scores the lead out of 100 and classifies it HOT, WARM, COLD, or UNQUALIFIED, generating a plain-language explanation and a personalized email draft. Leads are assigned to the signed-in user (or fallback-routed for anonymous submissions) and enter a pipeline that runs from New through Qualified, Contacted, Responded, Meeting Booked, Proposal, and Won/Lost. Follow-ups are scheduled automatically (priority tasks for HOT leads, nurture tasks for WARM) with overdue detection and a manual run option. Workflow events stream to the browser live over Server-Sent Events, and an analytics dashboard surfaces temperature distribution, average score, the conversion funnel, lead sources, and wins. Everything is multi-tenant with role-based access (Owner, Admin, Sales Manager, Sales Rep, Viewer).",
-    "outcome": "Turns raw inbound messages into scored, explained, owner-assigned pipeline records with outreach drafts and scheduled follow-ups, so reps focus on the hottest leads instead of triaging and documenting by hand."
+    "outcome": "Turns raw inbound messages into scored, explained, owner-assigned pipeline records with outreach drafts and scheduled follow-ups, so reps focus on the hottest leads instead of triaging and documenting by hand.",
+    "theme": "light"
   },
   {
     "id": "a67bb871-153d-4c0d-93cf-356193233e83",
     "title": "AI Voice Calling & Lead Qualification Agent",
     "summary": "An AI agent that calls candidates, runs a natural first-round screening and writes a structured summary with a rating and next step. Every call syncs into Zoho Recruit, so recruiters skip the dialing and go straight to the good candidates.",
-    "image_url": "/projects/a67bb871-153d-4c0d-93cf-356193233e83-1789450539146-WhatsApp_Image_2026-08-12_at_5.41.49_PM.jpeg",
+    "image_url": "/projects/a67bb871-153d-4c0d-93cf-356193233e83-showcase.webp",
     "problem": "Recruiters spent hours dialing candidates for first-round screening and logging every call by hand.",
     "built": "An AI-assisted calling workflow that captures caller intent, qualifies leads, structures notes, and pushes follow-up-ready records into CRM pipelines.",
     "stack": [
@@ -121,7 +122,7 @@
     "id": "dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea",
     "title": "Task Management Application",
     "summary": "Replaced WhatsApp task-chasing with one console. Owners and leads assign work with deadlines, reminders escalate on their own over in-app, push and email, and nobody escapes the 6 PM end-of-day report.",
-    "image_url": "/projects/dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea-1789452801864-Untitled.png",
+    "image_url": "/projects/dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea-showcase.webp",
     "problem": "Task assignment across owner, team leaders, and employees ran on WhatsApp and memory: no deadlines that stuck, no visibility into who was behind, and no reliable end-of-day accountability.",
     "built": "A role-based task command console where the owner and leaders assign work with deadlines, employees update status and file mandatory end-of-day reports, and everyone is chased by automatic reminders: in-app, browser push, and email.",
     "stack": [
@@ -159,7 +160,7 @@
     "id": "99c8903d-8e87-4313-b9bd-f07e7d68f6eb",
     "title": "Real-Time Coding Collaboration Platform",
     "summary": "Rooms where a group edits the same code live over WebSockets, with chat and presence built in. JWT-gated and MongoDB-backed, so no more screen sharing or copy-pasting code between tools.",
-    "image_url": "/projects/99c8903d-8e87-4313-b9bd-f07e7d68f6eb-1789457406202-ChatGPT_Image_Sep_15__2026__12_59_53_PM.png",
+    "image_url": "/projects/99c8903d-8e87-4313-b9bd-f07e7d68f6eb-showcase.webp",
     "problem": "Collaborative coding relied on screen sharing or copy-pasting code between tools, so only one person could actually type and discussion lived apart from the code.",
     "built": "A room-based platform where authenticated users edit the same code simultaneously over WebSockets, with in-room chat and live join/leave/editing presence.",
     "stack": [
@@ -266,7 +267,7 @@
     "id": "b3f6050e-35ed-45c9-a2cd-c6f6681bc70c",
     "title": "Distraction Detector",
     "summary": "Webcam in, alerts out. MediaPipe tracks gaze and blinks frame by frame, classifies focused vs distracted, and flags fatigue the moment it happens. No special hardware needed.",
-    "image_url": "/projects/b3f6050e-35ed-45c9-a2cd-c6f6681bc70c-1789463119195-ChatGPT_Image_Sep_15__2026__02_35_03_PM.png",
+    "image_url": "/projects/b3f6050e-35ed-45c9-a2cd-c6f6681bc70c-showcase.webp",
     "problem": "Attention lapses and fatigue during work, study, or driving are hard to notice in the moment, and existing productivity tools track time and activity but not actual visual attention.",
     "built": "A real-time computer vision pipeline that tracks gaze direction and blink/eye-closure patterns from a webcam feed and raises an immediate alert when distraction or fatigue is detected.",
     "stack": [
@@ -297,7 +298,7 @@
     "id": "1ec45006-c702-49fe-bec6-6da5aedc04d2",
     "title": "AI SaaS HRMS Platform",
     "summary": "A multi-tenant HR SaaS covering the whole employee lifecycle across 26 modules: attendance, payroll, hiring, performance and more. Each company's data is isolated at the database with row-level security and proven by end-to-end tests.",
-    "image_url": "/projects/1ec45006-c702-49fe-bec6-6da5aedc04d2-1789540068917-ChatGPT_Image_Sep_16__2026__11_57_32_AM.png",
+    "image_url": "/projects/1ec45006-c702-49fe-bec6-6da5aedc04d2-showcase.webp",
     "problem": "HR teams juggle attendance, payroll, recruitment, and performance across separate tools, and a SaaS serving many companies must keep each tenant's data fully isolated, which is hard to do safely at scale.",
     "built": "A multi-tenant, enterprise-grade HR operations SaaS with 26 domain modules (attendance, payroll, recruitment, performance, onboarding and more) on a Next.js client, a modular NestJS/Fastify API, PostgreSQL with row-level security, Temporal workflows, and a FastAPI AI gateway.",
     "stack": [
@@ -329,6 +330,7 @@
     "long_desc": "Atlas is a multi-tenant HR SaaS where tenancy is designed in from the data layer up. A Next.js 15 client talks to a modular NestJS/Fastify API backed by PostgreSQL with Prisma and row-level security, so every query is scoped to its tenant at the database itself. Isolation is enforced across auth, request context, ORM, and DB, and proven by an end-to-end tenant-isolation test suite. The API is split into 26 domain modules covering the full employee lifecycle (employees, attendance + geofencing, leave/policy engine, shifts, payroll, recruitment/ATS, onboarding, offboarding, performance 9-box, and more). Temporal runs durable onboarding/offboarding workflows, a worker handles webhooks and document-expiry reminders, a FastAPI gateway isolates AI (resume parsing, HR assistant, attrition risk), and OpenSearch powers global search. It runs either as a full Docker stack or as a zero-dependency in-memory demo.",
     "outcome": "A production-shaped HR SaaS for the full employee lifecycle, with each customer's data provably separated, long-running processes automated reliably, and AI contained behind a safe boundary, with security enforced from the database up and continuously verified by tests.",
     "cooking": true,
-    "status": "In Progress"
+    "status": "In Progress",
+    "theme": "light"
   }
 ]
