@@ -8,9 +8,12 @@ export const initials = (t) => t.split(' ').map((w) => w[0]).join('').slice(0, 3
 
 export function StackTags({ items = [], className = '', light = false }) {
   return (
-    <ul className={`flex flex-wrap gap-2 ${className}`}>
-      {items.map((s) => (
-        <li key={s} className={`rounded-full border px-3 py-1.5 text-[13px] font-500 ${light ? 'border-black/15 text-black/80' : 'border-line text-ink/80'}`}>{s}</li>
+    <ul className={`flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-[15px] font-500 ${light ? 'text-black/70' : 'text-ink/70'} ${className}`}>
+      {items.map((s, i) => (
+        <li key={s} className="flex items-center gap-2.5">
+          {i > 0 && <span aria-hidden className={`h-1 w-1 rounded-full ${light ? 'bg-black/35' : 'bg-accent'}`} />}
+          {s}
+        </li>
       ))}
     </ul>
   )
@@ -35,9 +38,7 @@ function ProjectRow({ project, index }) {
     >
       <div className={flip ? 'lg:order-2' : ''}>
         <FadeUp>
-          {meta && (L
-            ? <p className="date inline-block rounded-full bg-accent px-3 py-1 text-black">{meta}</p>
-            : <p className="date text-accent">{meta}</p>)}
+          {meta && <p className={`date ${L ? 'text-black/60' : 'text-accent'}`}>{meta}</p>}
           <Link to={`/project/${project.id}`} className="group mt-3 block">
             <h3 className={`h-card text-[clamp(1.8rem,3.3vw,2.9rem)] transition-colors ${L ? 'text-black group-hover:text-black/65' : 'group-hover:text-accent'}`}>{project.title}</h3>
           </Link>

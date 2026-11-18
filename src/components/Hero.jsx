@@ -4,6 +4,7 @@ import { ArrowDownRight, Download, MapPin } from 'lucide-react'
 
 const EASE = [0.2, 0.7, 0.1, 1]
 const STATS_H = 118 // height the '15+ / location' block opens up to (desktop)
+const M_STATS_H = 84 // same, mobile
 const clamp01 = (v) => Math.min(1, Math.max(0, v))
 const lerp = (a, b, k) => a + (b - a) * k
 // 'AI Automation Engineer' -> ['AI Automation', 'Engineer'] so the roles stack in four lines
@@ -34,6 +35,10 @@ export default function Hero({ profile, started }) {
   const cardRef = useRef(null)
   const rolesRef = useRef(null)
   const lowerRef = useRef(null)
+  const mCardRef = useRef(null)
+  const mRolesRef = useRef(null)
+  const mHeadRef = useRef(null)
+  const mBtnsRef = useRef(null)
 
   const { scrollYProgress: p } = useScroll({ target: runway, offset: ['start start', 'end end'] })
   const t = (input, output) => useTransform(p, input, output) // eslint-disable-line react-hooks/rules-of-hooks
@@ -46,9 +51,6 @@ export default function Hero({ profile, started }) {
   // photo: centre -> left (desktop), centre -> top-left and smaller (mobile)
   const imgLeft = t([0.12, 0.58], ['50%', '25%'])
   const imgScale = t([0.12, 0.58], [1, 0.9])
-  const mImgLeft = t([0.12, 0.55], ['50%', '27%'])
-  const mImgTop = t([0.12, 0.55], ['17%', '2%'])
-  const mImgScale = t([0.12, 0.55], [1, 0.58])
   // lower block (headline + buttons): bottom-left -> right side, grows a little
   const colLeft = t([0.12, 0.6], ['3%', '52%'])
   const colBottom = t([0.45, 0.66], ['5%', '13%'])
@@ -56,7 +58,17 @@ export default function Hero({ profile, started }) {
   // the 15+ / location block opens up inside the column once it has arrived
   const statsH = t([0.5, 0.72], [0, STATS_H])
   const statsO = t([0.58, 0.74], [0, 1])
-  const mStatsH = t([0.45, 0.68], [0, 84])
+  const mStatsH = t([0.45, 0.68], [0, M_STATS_H])
+  // mobile: GANDHI collapses as it fades, so its space goes to the photo
+  const mGandhiMax = t([0.15, 0.45], ['30vw', '0vw'])
+  const mGandhiMb = t([0.15, 0.45], [16, 0])
+  // mobile photo: shrinks only as much as needed to sit right above the final text block
+  const mdims = useMotionValue({ H: 0, top: 0 })
+  const mScale = (d) => (d.H ? Math.min(1.1, Math.max(0.5, (d.top - d.H * 0.02 - 14) / (d.H * 0.54))) : 0.6)
+  const kM = (v) => clamp01((v - 0.12) / 0.43)
+  const mImgScale = useTransform([p, mdims], ([v, d]) => lerp(1, mScale(d), kM(v)))
+  const mImgTop = useTransform([p, mdims], ([v, d]) => lerp(d.H * 0.17, d.H * 0.02, kM(v)))
+  const mImgLeft = useTransform([p, mdims], ([v, d]) => `${lerp(50, 50 - (1 - Math.min(1, mScale(d))) * 40, kM(v))}%`)
 
   // roles: top-right corner -> sits right above the headline. Positions depend on the card size,
   // so we measure the card and the blocks and keep them in a motion value.
@@ -77,12 +89,21 @@ export default function Hero({ profile, started }) {
       const j = c.querySelector('[data-jiya]')
       dims.set({ W: c.clientWidth, H: c.clientHeight, rw: r.offsetWidth, rh: r.offsetHeight, low: l.offsetHeight - statsH.get() + STATS_H, jr: j ? j.offsetLeft + j.offsetWidth : 0 })
     }
-    measure()
-    const ro = new ResizeObserver(measure)
+    const measureMobile = () => {
+      const c = mCardRef.current
+      if (!c || !c.clientHeight || !mRolesRef.current) return
+      const H = c.clientHeight
+      const textH = mRolesRef.current.offsetHeight + 12 + mHeadRef.current.offsetHeight + M_STATS_H + 16 + mBtnsRef.current.offsetHeight
+      mdims.set({ H, top: H - 20 - textH })
+    }
+    const all = () => { measure(); measureMobile() }
+    all()
+    const ro = new ResizeObserver(all)
     if (cardRef.current) ro.observe(cardRef.current)
-    document.fonts?.ready?.then(measure)
+    if (mCardRef.current) ro.observe(mCardRef.current)
+    document.fonts?.ready?.then(all)
     return () => ro.disconnect()
-  }, [dims, statsH])
+  }, [dims, mdims, statsH])
 
   const intro = (delay = 0, y = 30) => ({
     initial: { opacity: 0, y: reduce ? 0 : y },
@@ -207,7 +228,7 @@ export default function Hero({ profile, started }) {
         </motion.div>
 
         {/* ---------------- MOBILE / TABLET (< lg) ---------------- */}
-        <motion.div {...intro(0.05, 20)} className="relative h-full overflow-hidden rounded-[20px] border border-line bg-bg lg:hidden">
+        <motion.div {...intro(0.05, 20)} ref={mCardRef} className="relative h-full overflow-hidden rounded-[20px] border border-line bg-bg lg:hidden">
           <motion.img
             src={profile.cutout_url}
             alt={`Portrait of ${profile.name}`}
@@ -222,26 +243,26 @@ export default function Hero({ profile, started }) {
 
           {/* bottom column: GANDHI (fades), roles, headline, 15+ (opens up), buttons */}
           <div className="absolute inset-x-5 bottom-5 z-20 sm:inset-x-8">
-            <motion.p aria-hidden style={{ opacity: nameOpacity }}
-              className="mb-4 whitespace-nowrap text-right font-display text-[20vw] font-900 uppercase leading-[0.8] tracking-[-0.045em] text-accent sm:text-[17vw]">
+            <motion.p aria-hidden style={{ opacity: nameOpacity, maxHeight: mGandhiMax, marginBottom: mGandhiMb }}
+              className="overflow-hidden whitespace-nowrap text-right font-display text-[20vw] font-900 uppercase leading-[0.8] tracking-[-0.045em] text-accent sm:text-[17vw]">
               {profile.last}
             </motion.p>
-            <p className="font-display text-[clamp(1.6rem,7.6vw,3rem)] font-900 uppercase leading-[1.02] tracking-[-0.035em]">
+            <p ref={mRolesRef} className="font-display text-[clamp(1.75rem,8.6vw,3.2rem)] font-900 uppercase leading-[1.02] tracking-[-0.035em]">
               <span className="block text-accent">{roles[0]}</span>
               <span className="block text-ink">&amp; {roles[1]}</span>
             </p>
-            <p className="bar mt-3 font-display text-[clamp(0.9rem,4vw,1.4rem)] font-800 uppercase leading-[1.28]">
+            <p ref={mHeadRef} className="bar mt-3 font-display text-[clamp(1rem,4.6vw,1.5rem)] font-800 uppercase leading-[1.28]">
               <span className="block text-accent">{head[0]}</span>
               <span className="block text-ink">{head[1]}</span>
               <span className="block text-accent">{head[2]}</span>
             </p>
             <motion.div style={{ height: mStatsH, opacity: statsO }} className="overflow-hidden">
               <div className="pt-4">
-                <p className="font-display text-[clamp(1.2rem,5.6vw,2rem)] font-800 leading-none text-ink"><span className="text-accent">15+</span> client projects delivered</p>
+                <p className="whitespace-nowrap font-display text-[clamp(1.1rem,5.1vw,2.1rem)] font-800 leading-none text-ink"><span className="text-accent">15+</span> client projects delivered</p>
                 <p className="mt-2 flex items-center gap-2 text-sm text-ink/70"><MapPin size={15} className="text-accent" /> {profile.location}</p>
               </div>
             </motion.div>
-            <div className="mt-4 flex gap-3">
+            <div ref={mBtnsRef} className="mt-4 flex gap-3">
               <a href="#work" className="btn-primary flex-1 justify-center whitespace-nowrap px-3 text-[13px]">See my work <ArrowDownRight size={16} /></a>
               {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost flex-1 justify-center whitespace-nowrap px-3 text-[13px]"><Download size={15} /> Resume</a>}
             </div>

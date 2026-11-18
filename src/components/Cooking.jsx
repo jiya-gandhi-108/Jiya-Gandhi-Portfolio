@@ -56,9 +56,7 @@ export default function Cooking({ project }) {
             )}
           </Link>
           <div className="flex flex-col justify-center p-7 sm:p-10">
-            {meta && (L
-              ? <p className="date inline-block self-start rounded-full bg-accent px-3 py-1 text-black">{meta}</p>
-              : <p className="date text-accent">{meta}</p>)}
+            {meta && <p className={`date ${L ? 'text-black/60' : 'text-accent'}`}>{meta}</p>}
             <h3 className={`h-card mt-3 text-[clamp(1.7rem,3.2vw,2.75rem)] ${L ? 'text-black' : ''}`}>{project.title}</h3>
             {project.subtitle && <p className={`mt-2 font-display text-lg font-600 ${L ? 'text-black/60' : 'text-ink/60'}`}>{project.subtitle}</p>}
             <p className={`mt-5 text-[17px] leading-relaxed ${L ? 'text-black/75' : 'text-ink/80'}`}>{project.summary || project.built}</p>
