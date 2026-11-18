@@ -126,6 +126,59 @@ export default function Hero({ profile, started }) {
     />
   )
 
+  // Desktop hero text. Rendered twice: the real layer, and (swap) a copy where lime and white trade
+  // places, shown only inside the cursor circle. The copy has no refs and invisible buttons.
+  const HeroText = ({ swap = false }) => {
+    const A = swap ? 'text-ink' : 'text-accent' // "lime" slot
+    const B = swap ? 'text-accent' : 'text-ink' // "white" slot
+    return (
+      <>
+        <motion.div aria-hidden style={{ opacity: hintOpacity }} className={`mono absolute right-[3%] top-[5%] text-sm ${swap ? 'text-accent' : 'text-ink/60'}`}>
+          scroll ↓
+        </motion.div>
+
+        {/* roles: top-right at first, then slides down into place above the headline */}
+        <motion.p
+          ref={swap ? undefined : rolesRef}
+          aria-hidden={swap || undefined}
+          style={{ left: rolesLeft, top: rolesTop, scale: rolesScale }}
+          className="absolute w-max origin-top-left font-display text-[clamp(2.4rem,4.4vw,4.8rem)] font-900 uppercase leading-[1.06] tracking-[-0.035em]"
+        >
+          {splitLast(roles[0]).map((l) => <span key={l} className={`block ${A}`}>{l}</span>)}
+          {splitLast(`& ${roles[1]}`).map((l) => <span key={l} className={`block ${B}`}>{l}</span>)}
+        </motion.p>
+
+        {/* headline + buttons: bottom-left at first, then slides right and grows. Nothing here fades out. */}
+        <motion.div
+          ref={swap ? undefined : lowerRef}
+          aria-hidden={swap || undefined}
+          style={{ left: colLeft, bottom: colBottom, scale: colScale }}
+          className="absolute w-[44%] max-w-[640px] origin-bottom-left"
+        >
+          <p className={`bar font-display text-[clamp(1.15rem,1.7vw,1.6rem)] font-800 uppercase leading-[1.3] tracking-[-0.01em] ${swap ? 'border-ink' : ''}`}>
+            <span className={`block ${A}`}>{head[0]}</span>
+            <span className={`block ${B}`}>{head[1]}</span>
+            <span className={`block ${A}`}>{head[2]}</span>
+          </p>
+          <motion.div style={{ height: statsH, opacity: statsO }} className="overflow-hidden">
+            <div className="pt-8">
+              <p className={`font-display text-[clamp(1.6rem,2.4vw,2.4rem)] font-800 leading-none ${B}`}>
+                <span className={A}>15+</span> client projects delivered
+              </p>
+              <p className={`mt-3 flex items-center gap-2 text-base ${swap ? 'text-accent' : 'text-ink/70'}`}>
+                <MapPin size={16} className={A} /> {profile.location}
+              </p>
+            </div>
+          </motion.div>
+          <div className={`mt-8 flex gap-3 ${swap ? 'invisible' : 'pointer-events-auto'}`}>
+            <a href="#work" tabIndex={swap ? -1 : undefined} className="btn-primary">See my work <ArrowDownRight size={16} /></a>
+            {profile.resume_url && <a href={profile.resume_url} tabIndex={swap ? -1 : undefined} download className="btn-ghost bg-bg/70"><Download size={15} /> Resume</a>}
+          </div>
+        </motion.div>
+      </>
+    )
+  }
+
   return (
     <section id="top" ref={runway} className="relative h-[230vh] lg:h-[260vh]">
       <h1 className="sr-only">{profile.name}, {roles.join(' and ')}</h1>
@@ -148,40 +201,9 @@ export default function Hero({ profile, started }) {
           <div className="pointer-events-none absolute inset-0 z-10"><Names /></div>
           {cursorOn && <div aria-hidden className="reveal-mask pointer-events-none absolute inset-0 z-10"><Names white /></div>}
 
-          <motion.div aria-hidden style={{ opacity: hintOpacity }} className="mono absolute right-[3%] top-[5%] z-20 text-sm text-ink/60">
-            scroll ↓
-          </motion.div>
-
-          {/* roles: top-right at first, then slides down into place above the headline */}
-          <motion.p
-            ref={rolesRef}
-            style={{ left: rolesLeft, top: rolesTop, scale: rolesScale }}
-            className="absolute z-20 w-max origin-top-left font-display text-[clamp(2.4rem,4.4vw,4.8rem)] font-900 uppercase leading-[1.06] tracking-[-0.035em]"
-          >
-            {splitLast(roles[0]).map((l) => <span key={l} className="block text-accent">{l}</span>)}
-            {splitLast(`& ${roles[1]}`).map((l) => <span key={l} className="block text-ink">{l}</span>)}
-          </motion.p>
-
-          {/* headline + buttons: bottom-left at first, then slides right and grows. Nothing here fades out. */}
-          <motion.div ref={lowerRef} style={{ left: colLeft, bottom: colBottom, scale: colScale }} className="absolute z-20 w-[44%] max-w-[640px] origin-bottom-left">
-            <p className="bar font-display text-[clamp(1.15rem,1.7vw,1.6rem)] font-800 uppercase leading-[1.3] tracking-[-0.01em]">
-              <span className="block text-accent">{head[0]}</span>
-              <span className="block text-ink">{head[1]}</span>
-              <span className="block text-accent">{head[2]}</span>
-            </p>
-            <motion.div style={{ height: statsH, opacity: statsO }} className="overflow-hidden">
-              <div className="pt-8">
-                <p className="font-display text-[clamp(1.6rem,2.4vw,2.4rem)] font-800 leading-none text-ink">
-                  <span className="text-accent">15+</span> client projects delivered
-                </p>
-                <p className="mt-3 flex items-center gap-2 text-base text-ink/70"><MapPin size={16} className="text-accent" /> {profile.location}</p>
-              </div>
-            </motion.div>
-            <div className="mt-8 flex gap-3">
-              <a href="#work" className="btn-primary">See my work <ArrowDownRight size={16} /></a>
-              {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost bg-bg/70"><Download size={15} /> Resume</a>}
-            </div>
-          </motion.div>
+          {/* all hero text: base layer + a colour-swapped copy under the cursor circle (lime <-> white) */}
+          <div className="pointer-events-none absolute inset-0 z-20"><HeroText /></div>
+          {cursorOn && <div aria-hidden className="reveal-mask pointer-events-none absolute inset-0 z-20"><HeroText swap /></div>}
         </motion.div>
 
         {/* ---------------- MOBILE / TABLET (< lg) ---------------- */}

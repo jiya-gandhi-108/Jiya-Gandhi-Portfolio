@@ -17,7 +17,7 @@ export default function CodingWorld({ projects = [] }) {
         {row.map((p, i) => (
           <Link key={i} to={`/project/${p.id}`} aria-hidden={i >= projects.length ? true : undefined} tabIndex={i >= projects.length ? -1 : undefined}
             className="card group w-[280px] shrink-0 p-4 transition-colors hover:border-accent/60 sm:w-[300px]">
-            <div className="h-36 overflow-hidden rounded-xl bg-bg">
+            <div className="aspect-[4/3] overflow-hidden rounded-xl bg-bg">
               {p.image_url ? (
                 <img src={p.image_url} alt={p.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : (

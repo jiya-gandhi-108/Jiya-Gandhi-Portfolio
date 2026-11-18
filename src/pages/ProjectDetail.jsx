@@ -58,11 +58,11 @@ export default function ProjectDetail() {
               {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className="btn-ghost"><FileText size={16} /> Case study</a>}
             </div>
 
-            <ClipReveal className="mt-10 overflow-hidden rounded-2xl border border-line bg-graphite">
+            <ClipReveal className="mx-auto mt-10 max-w-4xl overflow-hidden rounded-2xl border border-line bg-graphite">
               {project.image_url ? (
-                <img src={project.image_url} alt={project.title} className="aspect-[16/10] w-full object-cover" />
+                <img src={project.image_url} alt={project.title} className="aspect-[4/3] w-full object-cover" />
               ) : (
-                <div className="grid aspect-[16/10] place-items-center"><span className="font-display text-7xl font-900 text-line">{initials(project.title)}</span></div>
+                <div className="grid aspect-[4/3] place-items-center"><span className="font-display text-7xl font-900 text-line">{initials(project.title)}</span></div>
               )}
             </ClipReveal>
 

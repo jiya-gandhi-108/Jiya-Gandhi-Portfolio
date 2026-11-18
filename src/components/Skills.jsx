@@ -119,7 +119,7 @@ function SkillProjects({ view, setView, onClose }) {
           {list.map((p) => (
             <li key={p.id}>
               <Link to={`/project/${p.id}`} className="group flex items-center gap-4 rounded-lg p-3 transition-colors hover:bg-graphite">
-                <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-graphite">
+                <div className="aspect-[4/3] w-24 shrink-0 overflow-hidden rounded-lg border border-line bg-graphite">
                   {p.image_url && <img src={p.image_url} alt="" className="h-full w-full object-cover" loading="lazy" />}
                 </div>
                 <div className="min-w-0 flex-1">

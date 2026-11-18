@@ -37,8 +37,8 @@ export default function Cooking({ project }) {
       <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink/70">The one thing on the stove right now, and everything that goes into it.</p>
 
       <div ref={stage} className="relative mt-10 overflow-hidden rounded-2xl">
-        <div className="card grid overflow-hidden md:grid-cols-2">
-          <Link to={`/project/${project.id}`} className="group relative block h-64 overflow-hidden md:h-full md:min-h-[400px]" aria-label={`Open ${project.title}`}>
+        <div className="card grid items-center overflow-hidden md:grid-cols-2">
+          <Link to={`/project/${project.id}`} className="group relative block aspect-[4/3] overflow-hidden" aria-label={`Open ${project.title}`}>
             {project.image_url ? (
               <img src={project.image_url} alt={project.title} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
             ) : (
