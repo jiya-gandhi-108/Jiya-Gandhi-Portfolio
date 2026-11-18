@@ -196,7 +196,7 @@
     "id": "4a63acaa-c08b-47fa-8d1e-073ad33b7143",
     "title": "ContentCraft: AI Content Generator",
     "summary": "Five AI agents (research, outline, draft, edit, SEO) pass each piece down a pipeline, grounded in a pgvector brand memory so everything sounds on-brand. Finished content publishes straight to WordPress or Ghost.",
-    "image_url": "/projects/4a63acaa-c08b-47fa-8d1e-073ad33b7143-1789459195377-ChatGPT_Image_Sep_15__2026__01_29_39_PM.png",
+    "image_url": "/projects/4a63acaa-c08b-47fa-8d1e-073ad33b7143-showcase.webp",
     "problem": "AI content tools produce generic, isolated drafts with no brand memory, no live research, and SEO handled as a separate manual step after writing.",
     "built": "A multi-agent content platform that runs every request through a Research → Outline → Draft → Edit → SEO pipeline, grounded in a RAG-based brand memory, with direct publishing to CMS platforms.",
     "stack": [
