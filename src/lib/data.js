@@ -1,27 +1,32 @@
 // All portfolio content lives in this file (and src/data/projects.json).
-// There is no database — edit the values here and redeploy to update the site.
+// There is no database: edit the values here and redeploy to update the site.
 import projectsData from '../data/projects.json'
 
 export const profile = {
   name: 'Jiya Gandhi',
   first: 'Jiya',
   last: 'Gandhi',
-  roles: ['AI Automation Engineer', 'Backend Developer'],
-  journey: { from: 'Backend Developer', to: 'AI Automation Engineer' },
-  headline: ['Building', 'Intelligent', 'Systems'],
-  headline_sub: 'Same logic, bigger problems to solve.',
-  tagline:
-    'I build backend systems, API integrations, and AI-powered workflow automations that eliminate repetitive work.',
+  role: 'AI Automation Engineer',
   location: 'Delhi, India',
-  hero_points: [
-    'Building AI-powered workflows',
-    'Developing scalable backend systems',
-    'Integrating APIs & creating automation',
-    'Turning ideas into impact',
-  ],
+  // Big hero letters (top-left, middle, bottom-right), same rhythm as the reference.
+  heroLetters: ['JIYA', 'GAN', 'DHI'],
+  // Hero headline: three lines, alternating lime / white / lime.
+  headline: ['I automate the boring', 'stuff so your team', 'can touch grass'],
+  tldr: 'Backend dev turned AI automation engineer. I build the APIs, agents and workflows that quietly do the work nobody wants to do. No fluff, just systems that ship.',
+  heroList: ['AI agents & chatbots', 'Backend & APIs', 'Workflow automation', 'CRM integrations', 'Stuff that just works'],
+
+  // Cursor effect in the hero (desktop only). Pick one:
+  //   'reveal'    : photo is black & white, a circle around the cursor shows it in colour
+  //   'magnet'    : the big lime letters lean away from the cursor
+  //   'crosshair' : thin lime crosshair + live X/Y readout, editorial-grid vibe
+  //   'trail'     : little lime pixels trail behind the cursor
+  //   'none'      : no effect
+  // Tip: preview any of them without editing code by opening  /?cursor=trail  (or magnet, crosshair...)
+  heroCursor: 'reveal',
+
   email: 'jiya108gandhi@gmail.com',
   phone: '+91 9213729985',
-  // WhatsApp number in international format, digits only (used for the floating WhatsApp button)
+  // WhatsApp number in international format, digits only
   whatsapp: '919213729985',
   github_url: 'https://github.com/jiya-gandhi-108',
   linkedin_url: 'https://www.linkedin.com/in/jiya-gandhi-108',
@@ -30,13 +35,28 @@ export const profile = {
   available: true,
 }
 
-export const equation = {
-  terms: ['Backend', 'Automation', 'Intelligence'],
-  result: 'AI Automation Engineer',
-  footnote: 'Backend developer at heart — automation engineer by obsession.',
-}
+// Receipts. Every number here comes straight from the résumé / project list.
+//   3+ yrs   : building since Jan 2023
+//   15+      : client projects delivered as a freelancer (résumé)
+//   builds   : counted from projects.json at build time
+//   3        : roles (freelance, agency, in-house)
+export const startYear = 2023
 
-// grouped, for the Skills section grid — icon names resolved in Skills.jsx
+// The pitch, shown as the scroll-highlight paragraph under the hero.
+export const pitch =
+  'Hand me a messy, repetitive process. I map it, build the backend, wire up the APIs and ship an automation your team actually uses. Three-plus years, fifteen-plus client builds, and a voice agent that screens candidates on its own. That’s the pitch, no cap.'
+
+// Scrolling band of short, loud facts.
+export const band = [
+  '15+ client projects shipped',
+  'AI agents that actually work',
+  'Zero black boxes',
+  'Backend first, always',
+  'Docs included, no ghosting',
+  'Ships on time, fr',
+]
+
+// Skills grouped for the Stack section. Icon names are resolved in Skills.jsx.
 // Skills & stack (from the résumé).
 // `match` = words looked for in each project's stack / tag / title to power "View projects".
 // Leave `match` out to just use the skill name.
@@ -136,22 +156,23 @@ export function projectsForSkill(skill) {
   })
 }
 
-// My Journey (from the résumé) — newest first.
-// `points` = what I did (bullets), `stack` = tools I used there.
+// My Journey, newest first.
+// `summary` = the one-liner on the home page. Everything else shows on /journey/:id.
 export const experience = [
   {
     id: 'ac922d36-1d1c-41b1-99d7-c4a2f15f1fdb',
     role: 'Software Developer Intern',
     org: 'Right Advisors',
     location: 'Delhi, India',
-    period: 'Apr 2026 — Sept 2026',
+    period: 'Apr 2026 to Sep 2026',
+    summary: 'Built an AI voice agent, a SalesIQ chatbot, an HRMS and Zoho automations for recruiting.',
     desc: 'Built AI agents, chatbots, internal tools and Zoho automations for the recruitment and business teams.',
     points: [
-      'Built an AI voice-calling agent that automates recruiter outreach — capturing caller intent, qualifying leads, and syncing structured records into Zoho.',
-      'Built an AI chatbot using Zoho SalesIQ integration, qualifying website visitors and routing structured leads into Zoho CRM.',
+      'Built an AI voice-calling agent that automates recruiter outreach: it captures caller intent, qualifies leads and syncs structured records into Zoho.',
+      'Built an AI chatbot on Zoho SalesIQ that qualifies website visitors and routes structured leads into Zoho CRM.',
       'Designed and shipped responsive business websites and internal tools used across the organization.',
       'Automated multi-step workflows across the Zoho ecosystem (CRM, Recruit, Flow), cutting repetitive manual work for the recruitment and business teams.',
-      'Developed a role-based task-management application (assignment, deadline reminders, EOD reporting) and an in-house HRMS platform covering attendance, payroll, and analytics.',
+      'Developed a role-based task-management app (assignment, deadline reminders, EOD reporting) and an in-house HRMS covering attendance, payroll and analytics.',
     ],
     stack: ['Python', 'FastAPI', 'Next.js', 'TypeScript', 'Supabase', 'Zoho CRM', 'Zoho Recruit', 'Zoho Flow', 'Zoho SalesIQ', 'LLM APIs'],
   },
@@ -160,16 +181,17 @@ export const experience = [
     role: 'AI Solutions Specialist',
     org: 'Growing Digitally',
     location: 'Remote',
-    period: 'Mar 2025 — Apr 2026',
+    period: 'Mar 2025 to Apr 2026',
+    summary: 'Shipped client sites with admin dashboards, plus RAG chatbots for web and WhatsApp.',
     desc: 'Built and launched client websites with admin dashboards, plus AI agents and RAG chatbots for web and WhatsApp.',
     points: [
-      'Built and deployed a range of client websites — service-industry, e-commerce, blog, and business sites — from design through launch.',
-      'Built multi-page websites with admin dashboards featuring role-based access control, live content editing, and lead management.',
+      'Built and deployed client websites (service, e-commerce, blog and business sites) from design through launch.',
+      'Built multi-page websites with admin dashboards: role-based access control, live content editing and lead management.',
       'Implemented secure admin authentication, documented database schemas, and debugged login and dashboard issues in PHP/JS.',
       'Rolled out sitewide updates (contact details, WhatsApp links) across 30+ pages of live client sites.',
-      'Developed AI agents and automated workflows to streamline content, lead handling, and repetitive business operations.',
-      'Coded a website chatbot integrated with RAG and an LLM, using n8n workflows; extended to WhatsApp chatbot automation.',
-      'Worked hands-on with leading AI tools and platforms — ChatGPT, Gemini, Perplexity, Claude Code, and connectors — to prototype and ship AI-powered features.',
+      'Developed AI agents and automated workflows for content, lead handling and repetitive business operations.',
+      'Coded a website chatbot with RAG and an LLM using n8n workflows, then extended it to WhatsApp.',
+      'Prototyped and shipped AI features hands-on with ChatGPT, Gemini, Perplexity, Claude Code and connectors.',
     ],
     stack: ['PHP', 'MySQL', 'JavaScript', 'n8n', 'RAG', 'LLM APIs', 'WhatsApp', 'ChatGPT', 'Gemini', 'Claude Code'],
   },
@@ -178,20 +200,21 @@ export const experience = [
     role: 'Freelance Software Developer',
     org: 'Self-Employed',
     location: 'Remote',
-    period: 'Jan 2023 — Apr 2025',
-    desc: 'Delivered 15+ client projects end-to-end across healthcare, education, recruitment, SaaS, e-commerce and services.',
+    period: 'Jan 2023 to Apr 2025',
+    summary: '15+ client projects end to end: APIs, auth, dashboards and payments.',
+    desc: 'Delivered 15+ client projects end to end across healthcare, education, recruitment, SaaS, e-commerce and services.',
     points: [
-      'Delivered 15+ client projects across healthcare, education, recruitment, SaaS, e-commerce, and service businesses.',
-      'Built secure REST APIs, authentication systems, admin dashboards, payment integrations, and database-backed applications with Node.js, FastAPI, PostgreSQL, and MongoDB.',
-      'Integrated Stripe, Razorpay, and WhatsApp/email workflows while managing projects end-to-end from discovery through deployment.',
+      'Delivered 15+ client projects across healthcare, education, recruitment, SaaS, e-commerce and service businesses.',
+      'Built secure REST APIs, authentication systems, admin dashboards, payment integrations and database-backed apps with Node.js, FastAPI, PostgreSQL and MongoDB.',
+      'Integrated Stripe, Razorpay and WhatsApp/email workflows while running projects from discovery to deployment.',
     ],
     stack: ['Node.js', 'Express', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Stripe', 'Razorpay', 'REST APIs'],
   },
 ]
 
 // Projects live in src/data/projects.json (images in public/projects/).
-// Order: sort_order ascending. `featured: true` → "Things I've shipped";
-// `cooking: true` → "Currently cooking"; every project shows in "My Coding World".
+// Order: sort_order ascending. `featured: true` → "Stuff I've shipped";
+// `cooking: true` → "Currently cooking"; every project shows in the archive strip.
 export const projects = [...projectsData].sort(
   (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || String(a.created_at).localeCompare(String(b.created_at)),
 )
@@ -199,78 +222,35 @@ export const projects = [...projectsData].sort(
 export const getProjectById = (id) => projects.find((p) => String(p.id) === String(id)) || null
 export const getExperienceById = (id) => experience.find((e) => String(e.id) === String(id)) || null
 
-// freelance offer (shown near the bottom, before contact)
+// Hero receipts (see the note near the top for where each number comes from).
+export const stats = [
+  { value: `${Math.max(3, new Date().getFullYear() - startYear)}+`, label: 'Years shipping' },
+  { value: '15+', label: 'Client projects' },
+  { value: String(projectsData.length), label: 'Builds on GitHub' },
+  { value: '3', label: 'Roles, one lane' },
+]
+
+// What I can build for you
 export const offers = [
-  { title: 'Backend feature', desc: 'Build or extend a backend / API.' },
-  { title: 'API integration', desc: 'Connect your existing tools and services.' },
-  { title: 'Workflow automation', desc: 'Remove repetitive manual processes.' },
-  { title: 'Internal tool', desc: 'Build a small dashboard or operational system.' },
+  { title: 'Backend feature', desc: 'Build or extend a backend or API.' },
+  { title: 'API integration', desc: 'Get your tools talking to each other.' },
+  { title: 'Workflow automation', desc: 'Delete the repetitive manual stuff.' },
+  { title: 'Internal tool', desc: 'A dashboard or ops system your team will actually open.' },
 ]
 
-// how I work — 5-step process
+// How I work: 5 steps
 export const howIWork = [
-  { step: '01', title: 'Understand', desc: 'You explain the workflow / problem.' },
-  { step: '02', title: 'Map', desc: 'I identify what should be automated and which tools / APIs are required.' },
-  { step: '03', title: 'Build', desc: 'I implement the backend, integrations or automation.' },
-  { step: '04', title: 'Test', desc: 'We test the workflow against real scenarios.' },
-  { step: '05', title: 'Handover', desc: 'You receive the working system and documentation.' },
+  { step: '01', title: 'Understand', desc: 'You walk me through the workflow or problem.' },
+  { step: '02', title: 'Map', desc: 'I pick what gets automated and which tools or APIs it needs.' },
+  { step: '03', title: 'Build', desc: 'Backend, integrations, automation. The real thing.' },
+  { step: '04', title: 'Test', desc: 'We throw real scenarios at it until it holds.' },
+  { step: '05', title: 'Handover', desc: 'You get the working system plus the docs.' },
 ]
 
-// --------------------------- extra sections --------------------------------
-
-// "How I think about building" — principles (edit freely).
+// How I think
 export const principles = [
-  { title: 'Automate the boring parts', desc: 'If a task repeats, it shouldn’t need a human. I find the repetition and design it out.' },
-  { title: 'Build to hand over', desc: 'You get a working system plus the docs to run it yourself — no black boxes, no lock-in.' },
-  { title: 'Backend-first thinking', desc: 'Clean data models and reliable APIs come before anything shiny sits on top.' },
-  { title: 'Ship, then sharpen', desc: 'Get a real, working version in front of you fast — then refine it against actual use.' },
+  { title: 'Automate the boring parts', desc: 'If a task repeats, it shouldn’t need a human. I find the loop and delete it.' },
+  { title: 'Build to hand over', desc: 'You get the system and the docs. No black boxes, no lock-in, no ghosting.' },
+  { title: 'Backend first', desc: 'Clean data models and solid APIs before anything shiny goes on top.' },
+  { title: 'Ship, then sharpen', desc: 'A real working version fast, then we tune it on actual usage.' },
 ]
-
-// "Currently exploring" — what I'm going deep on right now (edit freely).
-export const nowExploring = [
-  'AI agents & multi-step workflows',
-  'RAG over private data',
-  'LLM tool-use / function calling',
-  'Self-hostable automation (n8n)',
-  'Vector databases',
-  'Prompt & eval pipelines',
-]
-
-// FAQ — expandable answers (edit freely).
-export const faqs = [
-  { q: 'What kind of work do you take on?', a: 'Backend features and APIs, AI-powered automations, CRM and tool integrations, and small internal dashboards or operational systems.' },
-  { q: 'Which tools and stacks do you use?', a: 'Mostly Node.js and Python on the backend, PostgreSQL/MongoDB/Supabase for data, and OpenAI/Claude/Gemini with n8n for AI workflows — but I pick what fits your problem, not the other way around.' },
-  { q: 'How do we start?', a: 'You describe the workflow or problem. I map what should be automated and which tools/APIs are needed, then scope it before any building begins.' },
-  { q: 'Do I get the source code?', a: 'Yes. You receive the working system and documentation so your team can run and extend it independently.' },
-  { q: 'Can you work with my existing systems?', a: 'Usually, yes — most of my work is integrating with tools you already use (CRMs, databases, email, third-party APIs) rather than replacing them.' },
-  { q: 'How do you scope and price a project?', a: 'It depends on scope, which I only estimate after understanding the workflow. Reach out with what you’re trying to do and I’ll come back with an approach.' },
-]
-
-// "If I joined your team…" — the actual sequence I'd run (edit freely).
-export const joinTeam = {
-  intro: 'Hand me a repetitive business process. Here’s exactly what I’d do with it.',
-  steps: [
-    { title: 'Map the process', desc: 'Document how the work actually flows today, end to end.' },
-    { title: 'Find the bottlenecks', desc: 'Spot where time, errors, and hand-offs pile up.' },
-    { title: 'Decide what to automate', desc: 'Separate what needs a human from what a system can own.' },
-    { title: 'Build the workflow', desc: 'Implement the logic, the backend, and the automation.' },
-    { title: 'Integrate the APIs', desc: 'Connect the tools you already use so data moves on its own.' },
-    { title: 'Deploy it', desc: 'Ship it into your real environment, not a demo.' },
-    { title: 'Measure the impact', desc: 'Check whether it actually improved anything — and tune it.' },
-  ],
-}
-
-// "What I don't use AI for" — where I still reason manually (edit freely).
-export const noAiFor = {
-  statement: 'AI is a tool, not a substitute for engineering.',
-  intro: 'I lean on AI to move faster — but these decisions I still reason through myself:',
-  items: [
-    { label: 'Architecture', desc: 'How the pieces fit and where responsibilities live.' },
-    { label: 'Database design', desc: 'Schemas, relationships, and how data will grow.' },
-    { label: 'Security', desc: 'Auth, access rules, and protecting sensitive data.' },
-    { label: 'API contracts', desc: 'The shape and guarantees other systems depend on.' },
-    { label: 'Debugging', desc: 'Understanding the real cause, not the first plausible one.' },
-    { label: 'Deployment', desc: 'What runs where, and what happens when it fails.' },
-    { label: 'Edge cases', desc: 'The unusual inputs that quietly break naïve solutions.' },
-  ],
-}

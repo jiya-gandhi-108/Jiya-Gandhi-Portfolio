@@ -1,53 +1,47 @@
-import { ArrowUpRight, Github, Linkedin, Mail, Phone, MapPin, Download } from 'lucide-react'
-import { Reveal } from './Reveal'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { ArrowUpRight, Github, Linkedin, Phone, MapPin, Download } from 'lucide-react'
 
-// Full contact section, shown inline at the bottom of the page (id="contact").
 export default function Contact({ profile }) {
+  const reduce = useReducedMotion()
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'start 0.25'] })
+  // the heading tightens up as you arrive
+  const spacing = useTransform(scrollYProgress, [0, 1], reduce ? ['-0.04em', '-0.04em'] : ['0.18em', '-0.04em'])
+  const [user, domain] = String(profile.email).split('@')
+
   return (
-    <section id="contact" className="relative overflow-hidden border-t border-line">
-      <div aria-hidden className="pointer-events-none absolute inset-0 tech-grid opacity-25" />
-      <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-10 sm:py-28">
-        <Reveal variant="up" delay={0.05}>
-          <h2 className="display text-[9vw] font-700 leading-[0.95] tracking-tight text-ink sm:text-6xl">
-            Let&apos;s build <span className="italic star">something</span>
-          </h2>
-        </Reveal>
+    <section id="contact" ref={ref} className="overflow-hidden border-t border-line">
+      <div className="wrap py-20 sm:py-28">
+        <motion.h2 style={{ letterSpacing: spacing }} className="whitespace-nowrap font-display text-[clamp(3.4rem,14vw,13rem)] font-900 uppercase leading-[0.82] text-ink">
+          Let&apos;s <span className="text-accent">build</span>
+        </motion.h2>
+        <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink/70">
+          Got a workflow you want gone, a backend to build or an automation idea? Slide into my inbox. I reply fast, and I&apos;ll tell you straight up how I&apos;d ship it.
+        </p>
 
-        <Reveal variant="up" delay={0.12}>
-          <p className="mt-6 max-w-xl font-sans text-lg leading-relaxed text-muted">
-            Have a workflow you want gone, a backend to build, or an automation idea? Tell me what you&apos;re trying to do — I&apos;ll tell you how I&apos;d ship it.
-          </p>
-        </Reveal>
+        <a href={`mailto:${profile.email}`} className="group mt-10 inline-block max-w-full">
+          <span className="font-display text-[clamp(1.3rem,6.2vw,4.5rem)] font-800 leading-[1.05] tracking-[-0.03em] text-ink transition-colors group-hover:text-accent">
+            <span className="whitespace-nowrap">{user}@</span><wbr /><span className="whitespace-nowrap">{domain}</span>
+          </span>
+          <ArrowUpRight className="ml-1 inline-block h-[0.9em] w-[0.9em] align-[-0.05em] text-accent transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 sm:h-12 sm:w-12" />
+        </a>
 
-        {/* big email */}
-        <Reveal variant="up" delay={0.15}>
-          <a href={`mailto:${profile.email}`} className="group mt-10 block break-all">
-            <span className="display text-[7vw] font-700 leading-none text-ink transition-colors group-hover:text-accent sm:text-5xl">
-              {profile.email}
-              <ArrowUpRight className="ml-2 inline-block transition-transform group-hover:translate-x-2 group-hover:-translate-y-1" size={36} />
-            </span>
-          </a>
-        </Reveal>
-
-        <div className="mt-14 border-t border-line pt-12">
-          <div className="space-y-4">
-            {profile.phone && <Reveal variant="left"><p className="flex items-center gap-3 font-sans text-lg text-ink"><Phone size={18} className="text-accent" /> {profile.phone}</p></Reveal>}
-            {profile.location && <Reveal variant="left" delay={0.05}><p className="flex items-center gap-3 font-sans text-lg text-ink"><MapPin size={18} className="text-accent" /> {profile.location}</p></Reveal>}
-            <Reveal variant="left" delay={0.1}>
-              <div className="flex flex-wrap gap-3 pt-3">
-                {profile.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer" className="btn-ghost"><Github size={16} /> GitHub</a>}
-                {profile.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="btn-ghost"><Linkedin size={16} /> LinkedIn</a>}
-                {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost"><Download size={16} /> Résumé</a>}
-              </div>
-            </Reveal>
+        <div className="mt-12 grid gap-6 border-t border-line pt-10 sm:grid-cols-2">
+          <div className="space-y-3">
+            {profile.phone && <p className="flex items-center gap-3 text-base text-ink"><Phone size={17} className="text-accent" /> <a href={`tel:${profile.phone.replace(/\s/g, '')}`} className="hover:text-accent">{profile.phone}</a></p>}
+            {profile.location && <p className="flex items-center gap-3 text-base text-ink"><MapPin size={17} className="text-accent" /> {profile.location}</p>}
+          </div>
+          <div className="flex flex-wrap gap-3 sm:justify-end">
+            {profile.github_url && <a href={profile.github_url} target="_blank" rel="noreferrer" className="btn-ghost"><Github size={16} /> GitHub</a>}
+            {profile.linkedin_url && <a href={profile.linkedin_url} target="_blank" rel="noreferrer" className="btn-ghost"><Linkedin size={16} /> LinkedIn</a>}
+            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost"><Download size={16} /> Résumé</a>}
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col justify-between gap-4 border-t border-line pt-8 sm:flex-row sm:items-center">
-          <p className="font-sans text-sm text-muted">© {new Date().getFullYear()} {profile.name}. Built from scratch.</p>
-          <div className="flex items-center gap-3">
-            <a href="#top" className="font-sans text-sm text-muted transition-colors hover:text-accent">Back to top ↑</a>
-          </div>
+        <div className="mt-14 flex flex-col justify-between gap-3 border-t border-line pt-7 sm:flex-row sm:items-center">
+          <p className="mono text-muted">© {new Date().getFullYear()} {profile.name} · Built from scratch, no templates</p>
+          <a href="#top" className="mono text-muted transition-colors hover:text-accent">Back to top ↑</a>
         </div>
       </div>
     </section>

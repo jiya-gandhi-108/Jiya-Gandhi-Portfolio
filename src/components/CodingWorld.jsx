@@ -1,37 +1,34 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
-import { Reveal } from './Reveal'
+import { MaskHeading } from './Motion'
+import { initials } from './Projects'
 
-// "My Coding World" — the rest of the projects as auto-scrolling cards.
+// Every project as an auto-scrolling strip. Hover to pause.
 export default function CodingWorld({ projects = [] }) {
   if (!projects.length) return null
   const row = projects.length < 4 ? [...projects, ...projects, ...projects] : [...projects, ...projects]
   return (
-    <section id="coding-world" className="overflow-hidden py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-5 sm:px-10">
-        <Reveal variant="up" delay={0.05}><h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">My Coding World</h2></Reveal>
-        <Reveal variant="up" delay={0.1}><p className="mt-4 max-w-lg font-sans text-sm text-muted">More builds, tools, and experiments — everything that didn&apos;t make the top of the list.</p></Reveal>
+    <section id="archive" className="overflow-hidden py-16 sm:py-24">
+      <div className="wrap">
+        <MaskHeading text="The full archive" accent={[2]} />
+        <p className="mt-5 max-w-lg text-base text-ink/65">{projects.length} builds, tools and experiments. Hover to pause, tap to open.</p>
       </div>
-
-      <div className="mt-12 flex w-max animate-marquee gap-5 pr-5 hover:[animation-play-state:paused]">
+      <div className="mt-10 flex w-max animate-marquee gap-4 pr-4 hover:[animation-play-state:paused]">
         {row.map((p, i) => (
-          <Link key={i} to={`/project/${p.id}`}
-            className="group w-[280px] shrink-0 rounded-lg border border-line bg-graphite p-5 transition-colors hover:border-accent/50">
-            <div className="mb-4 h-32 overflow-hidden rounded-md">
+          <Link key={i} to={`/project/${p.id}`} aria-hidden={i >= projects.length ? true : undefined} tabIndex={i >= projects.length ? -1 : undefined}
+            className="card group w-[280px] shrink-0 p-4 transition-colors hover:border-accent/60 sm:w-[300px]">
+            <div className="h-36 overflow-hidden rounded-xl bg-bg">
               {p.image_url ? (
-                <img src={p.image_url} alt={p.title} loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <img src={p.image_url} alt={p.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : (
-                <div className="grid h-full w-full place-items-center rounded-md tech-grid">
-                  <span className="display text-4xl font-700 text-line">{p.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}</span>
-                </div>
+                <div className="grid h-full place-items-center"><span className="font-display text-5xl font-900 text-line">{initials(p.title)}</span></div>
               )}
             </div>
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="display text-xl font-600 leading-tight text-ink transition-colors group-hover:text-accent">{p.title}</h3>
-              <ArrowUpRight size={18} className="mt-1 shrink-0 text-muted transition-colors group-hover:text-accent" />
+            <div className="mt-4 flex items-start justify-between gap-2">
+              <h3 className="h-card text-lg transition-colors group-hover:text-accent">{p.title}</h3>
+              <ArrowUpRight size={18} className="mt-0.5 shrink-0 text-muted transition-colors group-hover:text-accent" />
             </div>
-            <p className="mt-1 font-sans text-sm text-muted">{p.tag}</p>
+            {p.tag && <p className="mono mt-2 text-muted">{p.tag}</p>}
           </Link>
         ))}
       </div>

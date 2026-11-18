@@ -1,70 +1,90 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
-import { profile, getExperienceById } from '../lib/data'
+import { FadeUp } from '../components/Motion'
+import { profile, experience, getExperienceById } from '../lib/data'
 
+// The full story behind each role. Linked from "Know more about me" on the home page.
 export default function JourneyDetail() {
   const { id } = useParams()
   const entry = getExperienceById(id)
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
+  useEffect(() => { window.scrollTo(0, 0) }, [id])
+  const idx = experience.findIndex((e) => String(e.id) === String(id))
+  const others = experience.filter((e) => String(e.id) !== String(id))
 
   return (
-    <div className="grain">
+    <>
       <Nav profile={profile} />
-      <main className="mx-auto max-w-4xl px-5 pb-10 pt-28 sm:px-10 sm:pt-36">
-        <Link to="/#experience" className="inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-accent">
-          <ArrowLeft size={15} /> back to my journey
+      <main className="wrap max-w-5xl pb-10 pt-28 sm:pt-32">
+        <Link to="/#experience" className="mono inline-flex items-center gap-2 text-muted transition-colors hover:text-accent">
+          <ArrowLeft size={14} /> Back to the journey
         </Link>
 
-        {entry === null && (
-          <div className="mt-16 rounded-lg border border-dashed border-line p-10 text-center">
-            <p className="display text-3xl font-600 text-ink">Not found</p>
-            <p className="mt-2 font-sans text-sm text-muted">This journey entry doesn&apos;t exist.</p>
+        {!entry && (
+          <div className="card mt-14 p-10 text-center">
+            <p className="h-card text-3xl">Not found</p>
             <Link to="/#experience" className="btn-primary mt-6">See my journey</Link>
           </div>
         )}
 
         {entry && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="display mt-8 text-4xl font-600 leading-[1.05] tracking-tight text-ink sm:text-5xl">{entry.role}</h1>
-            {entry.org && <p className="display mt-2 text-xl font-500 italic text-muted sm:text-2xl">{entry.org}</p>}
-            <p className="mt-3 font-sans text-sm text-ink/70">{entry.period}{entry.location ? ` · ${entry.location}` : ''}</p>
+            <p className="mono mt-10 text-accent">{String(experience.length - idx).padStart(2, '0')} / {String(experience.length).padStart(2, '0')}</p>
+            <h1 className="mt-3 font-display text-[clamp(2.3rem,6.5vw,5rem)] font-900 uppercase leading-[0.92] tracking-[-0.04em] text-ink">{entry.role}</h1>
+            <p className="mt-3 font-display text-2xl font-700 uppercase tracking-[-0.02em] text-accent sm:text-3xl">@ {entry.org}</p>
+            <p className="mono mt-4 text-ink/70">{entry.period}{entry.location ? ` · ${entry.location}` : ''}</p>
 
-            {entry.desc && <p className="mt-8 max-w-2xl text-base leading-relaxed text-ink/90">{entry.desc}</p>}
+            {entry.desc && <p className="bar mt-10 max-w-2xl text-lg leading-relaxed text-ink/85">{entry.desc}</p>}
 
             {entry.points?.length > 0 && (
-              <div className="mt-10">
-                <Heading>What I did</Heading>
-                <ul className="mt-4 space-y-3">
-                  {entry.points.map((pt) => (
-                    <li key={pt} className="flex gap-3 font-sans text-base leading-relaxed text-ink/85">
-                      <span aria-hidden className="star mt-[2px] shrink-0">&#10022;</span><span>{pt}</span>
-                    </li>
+              <section className="mt-14">
+                <h2 className="h-card text-2xl sm:text-3xl">What I actually did</h2>
+                <ol className="mt-6 space-y-3">
+                  {entry.points.map((pt, i) => (
+                    <FadeUp key={pt} delay={i * 0.04} as="li">
+                      <div className="card flex gap-4 p-5">
+                        <span className="font-display text-2xl font-900 leading-none text-accent">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="text-base leading-relaxed text-ink/85">{pt}</span>
+                      </div>
+                    </FadeUp>
                   ))}
-                </ul>
-              </div>
+                </ol>
+              </section>
             )}
 
             {entry.stack?.length > 0 && (
-              <div className="mt-10">
-                <Heading>Tools &amp; stack</Heading>
-                <p className="mt-3 font-sans text-base leading-relaxed text-muted">{entry.stack.join(' · ')}</p>
-              </div>
+              <section className="mt-14">
+                <h2 className="h-card text-2xl sm:text-3xl">Tools I used there</h2>
+                <ul className="mt-5 flex flex-wrap gap-2">
+                  {entry.stack.map((s) => <li key={s} className="mono rounded-full border border-line px-3 py-1.5 text-ink/80">{s}</li>)}
+                </ul>
+              </section>
+            )}
+
+            {others.length > 0 && (
+              <section className="mt-16 border-t border-line pt-8">
+                <p className="mono text-muted">More of the journey</p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {others.map((o) => (
+                    <Link key={o.id} to={`/journey/${o.id}`} className="card group flex items-center justify-between gap-4 p-5 transition-colors hover:border-accent/60">
+                      <div className="min-w-0">
+                        <p className="mono text-accent">{o.period}</p>
+                        <p className="h-card mt-2 text-lg transition-colors group-hover:text-accent">{o.role}</p>
+                        <p className="text-sm text-ink/55">@ {o.org}</p>
+                      </div>
+                      <ArrowUpRight size={22} className="shrink-0 text-muted group-hover:text-accent" />
+                    </Link>
+                  ))}
+                </div>
+              </section>
             )}
           </motion.article>
         )}
       </main>
       <Footer profile={profile} />
-    </div>
+    </>
   )
-}
-
-function Heading({ children }) {
-  return <h2 className="display text-2xl font-600 text-ink sm:text-3xl">{children}</h2>
 }

@@ -2,50 +2,43 @@ import { useMemo, useState } from 'react'
 import NameReveal from '../components/NameReveal'
 import Nav from '../components/Nav'
 import Hero from '../components/Hero'
+import About from '../components/About'
 import Projects from '../components/Projects'
 import Cooking from '../components/Cooking'
-import Equation from '../components/Equation'
 import CodingWorld from '../components/CodingWorld'
 import Process from '../components/Process'
 import Principles from '../components/Principles'
-import JoinTeam from '../components/JoinTeam'
 import Experience from '../components/Experience'
 import Skills from '../components/Skills'
 import Freelance from '../components/Freelance'
 import Contact from '../components/Contact'
-import { profile, projects, experience } from '../lib/data'
+import { Band } from '../components/Motion'
+import { profile, projects, experience, pitch, band } from '../lib/data'
 
 export default function Portfolio() {
   const [revealDone, setRevealDone] = useState(false)
-
-  // "Things I've shipped" = only Featured projects. "My Coding World" = all.
-  const main = useMemo(() => projects.filter((p) => p.featured), [projects])
-  const rest = useMemo(() => projects, [projects])
-  // "Currently cooking" = the flagged project; if none flagged yet, fall back
-  // to the first featured project, then the first project, so it always shows.
-  const cooking = useMemo(
-    () => projects.find((p) => p.cooking) || main[0] || projects[0],
-    [projects, main],
-  )
+  const featured = useMemo(() => projects.filter((p) => p.featured), [])
+  // "Currently cooking" = the project flagged `cooking: true`, else the first featured one.
+  const cooking = useMemo(() => projects.find((p) => p.cooking) || featured[0] || projects[0], [featured])
 
   return (
-    <div className="grain">
+    <>
       <NameReveal first={profile.first} last={profile.last} onDone={() => setRevealDone(true)} />
       <Nav profile={profile} />
       <main>
         <Hero profile={profile} started={revealDone} />
-        <Projects projects={main} />
+        <About text={pitch} tldr={profile.tldr} />
+        <Band items={band} />
+        <Projects projects={featured} />
         <Cooking project={cooking} />
-        <Equation />
-        <CodingWorld projects={rest} />
+        <CodingWorld projects={projects} />
         <Process />
         <Principles />
-        <JoinTeam />
         <Experience items={experience} />
         <Skills />
         <Freelance profile={profile} />
         <Contact profile={profile} />
       </main>
-    </div>
+    </>
   )
 }

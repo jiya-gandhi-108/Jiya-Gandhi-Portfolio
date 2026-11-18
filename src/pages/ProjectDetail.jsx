@@ -1,9 +1,12 @@
 import { useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText, Calendar, Tag, Layers, Mail, Clock } from 'lucide-react'
+import { ArrowLeft, ArrowUpRight, Github, ExternalLink, FileText, Mail } from 'lucide-react'
 import Nav from '../components/Nav'
 import Footer from '../components/Footer'
+import RichText from '../components/RichText'
+import { ClipReveal, FadeUp } from '../components/Motion'
+import { initials } from '../components/Projects'
 import { profile, projects as all, getProjectById } from '../lib/data'
 
 const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
@@ -11,184 +14,147 @@ const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map(
 export default function ProjectDetail() {
   const { id } = useParams()
   const project = getProjectById(id)
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [id])
+  useEffect(() => { window.scrollTo(0, 0) }, [id])
 
   const stack = toList(project?.stack)
   const handled = toList(project?.handled)
   const idx = all.findIndex((p) => String(p.id) === String(id))
   const next = idx >= 0 && all.length > 1 ? all[(idx + 1) % all.length] : null
+  const updates = (Array.isArray(project?.updates) ? project.updates : [])
+    .filter((u) => u && (u.note || u.date))
+    .sort((a, b) => String(b.date).localeCompare(String(a.date)))
+  // only facts that actually have a value make it into the strip
+  const facts = project ? [
+    ['Year', project.year],
+    ['Category', project.tag],
+    ['Status', project.status],
+  ].filter(([, v]) => v) : []
 
   return (
-    <div className="grain">
+    <>
       <Nav profile={profile} />
-      <main className="mx-auto max-w-5xl px-5 pb-10 pt-28 sm:px-10 sm:pt-36">
-        <Link to="/#work" className="inline-flex items-center gap-2 font-sans text-sm text-muted transition-colors hover:text-accent">
-          <ArrowLeft size={15} /> back to work
+      <main className="wrap max-w-5xl pb-10 pt-28 sm:pt-32">
+        <Link to="/#work" className="mono inline-flex items-center gap-2 text-muted transition-colors hover:text-accent">
+          <ArrowLeft size={14} /> Back to work
         </Link>
 
-        {project === null && (
-          <div className="mt-16 rounded-lg border border-dashed border-line p-10 text-center">
-            <p className="display text-3xl font-600 text-ink">404</p>
-            <p className="mt-2 font-sans text-sm text-muted">This project doesn&apos;t exist.</p>
+        {!project && (
+          <div className="card mt-14 p-10 text-center">
+            <p className="h-card text-4xl">404</p>
+            <p className="mt-2 text-sm text-ink/65">This project doesn&apos;t exist. Plot twist.</p>
             <Link to="/#work" className="btn-primary mt-6">See all work</Link>
           </div>
         )}
 
         {project && (
           <motion.article initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <h1 className="display mt-8 text-4xl font-600 leading-[1.02] tracking-tight text-ink sm:text-6xl">{project.title}</h1>
-            <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-base text-ink/80">
-              <span>{[project.tag, project.year].filter(Boolean).join(' · ')}</span>
-              {project.status && (
-                <span className="inline-flex items-center gap-2 font-600 text-accent">
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent" /> {project.status}
-                </span>
-              )}
-            </p>
-            {project.subtitle && <p className="display mt-4 max-w-2xl text-xl font-500 italic text-muted sm:text-2xl">{project.subtitle}</p>}
+            <h1 className="mt-8 font-display text-[clamp(2.3rem,6.5vw,5.25rem)] font-900 uppercase leading-[0.92] tracking-[-0.04em] text-ink">{project.title}</h1>
+            {project.subtitle && <p className="mt-5 max-w-2xl text-lg text-ink/70 sm:text-xl">{project.subtitle}</p>}
 
             <div className="mt-7 flex flex-wrap gap-3">
               {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="btn-ghost"><Github size={16} /> Source</a>}
-              {project.demo_url && <a href={project.demo_url} target="_blank" rel="noreferrer" className="btn-ghost"><ExternalLink size={16} /> Live demo</a>}
+              {project.demo_url && <a href={project.demo_url} target="_blank" rel="noreferrer" className="btn-primary"><ExternalLink size={16} /> Live demo</a>}
               {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className="btn-ghost"><FileText size={16} /> Case study</a>}
             </div>
 
-            {/* project image — capped to a normal size, centered */}
-            <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-lg border border-line bg-graphite">
+            <ClipReveal className="mt-10 overflow-hidden rounded-2xl border border-line bg-graphite">
               {project.image_url ? (
                 <img src={project.image_url} alt={project.title} className="aspect-[16/10] w-full object-cover" />
               ) : (
-                <div className="grid aspect-[16/10] w-full place-items-center tech-grid">
-                  <span className="display text-6xl font-700 text-line">{project.title.split(' ').map((w) => w[0]).join('').slice(0, 3)}</span>
-                </div>
+                <div className="grid aspect-[16/10] place-items-center"><span className="font-display text-7xl font-900 text-line">{initials(project.title)}</span></div>
               )}
-            </div>
+            </ClipReveal>
 
-            {/* NEW — at-a-glance facts strip */}
-            <div className="mt-8 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4">
-              <Fact icon={<Calendar size={15} />} label="Year" value={project.year || '—'} />
-              <Fact icon={<Tag size={15} />} label="Category" value={project.tag || '—'} />
-              <Fact icon={<Layers size={15} />} label="Technologies" value={stack.length ? String(stack.length) : '—'} />
-              <Fact icon={<Github size={15} />} label="Links" value={[project.github_url && 'Code', project.demo_url && 'Demo', project.case_study_url && 'Study'].filter(Boolean).join(' · ') || '—'} />
-            </div>
+            {facts.length > 0 && (
+              <dl className={`mt-6 grid gap-px overflow-hidden rounded-2xl border border-line bg-line ${facts.length > 2 ? 'sm:grid-cols-3' : 'grid-cols-2'}`}>
+                {facts.map(([label, value]) => (
+                  <div key={label} className="bg-bg p-4">
+                    <dt className="mono text-muted">{label}</dt>
+                    <dd className="mt-1.5 font-display text-base font-700 uppercase text-ink">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
 
-            <div className="mt-12 grid gap-10 sm:grid-cols-2">
-              {project.problem && <Block label="The problem">{project.problem}</Block>}
-              {project.built && <Block label="What I built">{project.built}</Block>}
+            <div className="mt-14 grid gap-10 sm:grid-cols-2">
+              {project.problem && <Block title="The problem"><RichText text={project.problem} /></Block>}
+              {project.built && <Block title="What I built"><RichText text={project.built} /></Block>}
             </div>
 
             {project.long_desc && (
-              <div className="mt-10">
-                <Label>How it works</Label>
-                <p className="mt-3 max-w-3xl text-base leading-relaxed text-ink/90">{project.long_desc}</p>
-              </div>
+              <Block title="How it works" className="mt-12">
+                <RichText text={project.long_desc} className="max-w-3xl" />
+              </Block>
             )}
 
             {(stack.length > 0 || handled.length > 0) && (
-              <div className="mt-10 grid gap-10 sm:grid-cols-2">
+              <div className="mt-12 grid gap-10 sm:grid-cols-2">
                 {stack.length > 0 && (
-                  <div>
-                    <Label>Stack</Label>
-                    <p className="mt-3 font-sans text-base leading-relaxed text-muted">{stack.join(' · ')}</p>
-                  </div>
+                  <Block title="Stack">
+                    <ul className="flex flex-wrap gap-2">
+                      {stack.map((s) => <li key={s} className="mono rounded-full border border-line px-3 py-1.5 text-ink/80">{s}</li>)}
+                    </ul>
+                  </Block>
                 )}
                 {handled.length > 0 && (
-                  <div>
-                    <Label>What I handled</Label>
-                    <ul className="mt-3 space-y-1.5">
-                      {handled.map((h) => <li key={h} className="font-sans text-sm text-muted"><span className="star">&#10022;</span> {h}</li>)}
-                    </ul>
-                  </div>
+                  <Block title="What I handled">
+                    <RichText text={handled.map((h) => `- ${h}`).join('\n')} />
+                  </Block>
                 )}
               </div>
             )}
 
             {project.outcome && (
-              <div className="mt-12 rounded-lg bg-royal p-6 sm:p-8">
-                <Label className="!text-paper">Outcome</Label>
-                <p className="display mt-2 text-xl font-500 leading-snug text-paper sm:text-2xl">{project.outcome}</p>
-              </div>
+              <FadeUp className="mt-14 rounded-[22px] bg-accent p-7 text-black sm:p-10">
+                <h2 className="font-display text-2xl font-900 uppercase tracking-[-0.03em] sm:text-3xl">The outcome</h2>
+                <RichText text={project.outcome} className="mt-3 text-lg font-500 leading-snug text-black/85 [&_strong]:text-black" />
+              </FadeUp>
             )}
 
-            {/* NEW — project update history */}
-            {(() => {
-              const updates = Array.isArray(project.updates) ? project.updates : []
-              const sorted = [...updates]
-                .filter((u) => u && (u.note || u.date))
-                .sort((a, b) => String(b.date).localeCompare(String(a.date)))
-              if (!sorted.length) return null
-              return (
-                <div className="mt-12">
-                  <Label>History of this project</Label>
-                  <div className="relative mt-5 pl-7">
-                    <span aria-hidden className="absolute left-[5px] top-2 h-[calc(100%-1rem)] w-px bg-line" />
-                    <ul className="space-y-6">
-                      {sorted.map((u, i) => (
-                        <li key={i} className="relative">
-                          <span className="absolute -left-[26px] top-1 grid place-items-center">
-                            <span className="h-3 w-3 rounded-full border-2 border-accent bg-bg" />
-                          </span>
-                          <p className="flex items-center gap-2 font-sans text-sm font-600 text-accent">
-                            <Clock size={12} /> {u.date || 'update'}
-                          </p>
-                          <p className="mt-1 max-w-2xl font-sans text-sm leading-relaxed text-ink/90">{u.note}</p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )
-            })()}
+            {updates.length > 0 && (
+              <Block title="Build log" className="mt-14">
+                <ul className="space-y-5 border-l border-line pl-6">
+                  {updates.map((u, i) => (
+                    <li key={i} className="relative">
+                      <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full border-2 border-accent bg-bg" />
+                      {u.date && <p className="mono text-accent">{u.date}</p>}
+                      <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink/85">{u.note}</p>
+                    </li>
+                  ))}
+                </ul>
+              </Block>
+            )}
 
-            {/* NEW — CTA band */}
-            <div className="mt-12 flex flex-col items-start justify-between gap-5 rounded-lg border border-line bg-graphite p-6 sm:flex-row sm:items-center sm:p-8">
+            <div className="card mt-14 flex flex-col items-start justify-between gap-5 p-6 sm:flex-row sm:items-center sm:p-8">
               <div>
-                <p className="display text-xl font-600 text-ink sm:text-2xl">Want something like this built?</p>
-                <p className="mt-1 max-w-md font-sans text-sm text-muted">Tell me the workflow you want gone &mdash; I&apos;ll tell you how I&apos;d ship it.</p>
+                <p className="h-card text-2xl">Want one of these?</p>
+                <p className="mt-1 max-w-md text-sm text-ink/65">Tell me the workflow you want gone. I&apos;ll tell you how I&apos;d ship it.</p>
               </div>
-              {profile.email && (
-                <a href={`mailto:${profile.email}`} className="btn-primary shrink-0">
-                  <Mail size={16} /> Get in touch
-                </a>
-              )}
+              {profile.email && <a href={`mailto:${profile.email}`} className="btn-primary shrink-0"><Mail size={16} /> Get in touch</a>}
             </div>
 
             {next && (
-              <Link to={`/project/${next.id}`} className="group mt-16 flex items-center justify-between border-t border-line pt-8">
-                <div>
-                  <p className="font-sans text-sm text-muted">Next project</p>
-                  <p className="display mt-1 text-2xl font-600 text-ink transition-colors group-hover:text-accent sm:text-3xl">{next.title}</p>
+              <Link to={`/project/${next.id}`} className="group mt-14 flex items-center justify-between gap-4 border-t border-line pt-8">
+                <div className="min-w-0">
+                  <p className="mono text-muted">Next build</p>
+                  <p className="h-card mt-2 text-[clamp(1.4rem,3.5vw,2.4rem)] transition-colors group-hover:text-accent">{next.title}</p>
                 </div>
-                <ArrowUpRight size={36} className="text-muted transition-transform group-hover:translate-x-2 group-hover:-translate-y-1 group-hover:text-accent" />
+                <ArrowUpRight size={40} className="shrink-0 text-muted transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-accent" />
               </Link>
             )}
           </motion.article>
         )}
       </main>
       <Footer profile={profile} />
-    </div>
+    </>
   )
 }
 
-function Fact({ icon, label, value }) {
+function Block({ title, children, className = '' }) {
   return (
-    <div className="bg-bg p-4">
-      <p className="flex items-center gap-1.5 font-sans text-sm text-muted">{icon} {label}</p>
-      <p className="mt-1.5 font-sans text-sm font-600 text-ink">{value}</p>
-    </div>
-  )
-}
-function Label({ children, className = '' }) {
-  return <h2 className={`display text-2xl font-600 text-ink sm:text-3xl ${className}`}>{children}</h2>
-}
-function Block({ label, children }) {
-  return (
-    <div>
-      <Label>{label}</Label>
-      <p className="mt-3 text-base leading-relaxed text-ink/90">{children}</p>
-    </div>
+    <FadeUp className={className}>
+      <h2 className="h-card text-2xl sm:text-3xl">{title}</h2>
+      <div className="mt-4 text-base leading-relaxed text-ink/80">{children}</div>
+    </FadeUp>
   )
 }

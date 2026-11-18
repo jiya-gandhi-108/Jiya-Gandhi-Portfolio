@@ -1,56 +1,43 @@
-import { motion, useReducedMotion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { howIWork } from '../lib/data'
-import { Reveal } from './Reveal'
+import { MaskHeading } from './Motion'
 
-// "How I work" — the 5-step delivery process, now interactive.
+// A lime line draws through the five steps as you scroll; each step lights up when the line reaches it.
+function Step({ s, i, n, progress }) {
+  const at = i / (n - 1 || 1)
+  const on = useTransform(progress, [Math.max(0, at - 0.12), at], [0.25, 1])
+  const color = useTransform(progress, [Math.max(0, at - 0.06), at], ['rgb(40 40 40)', 'rgb(140 255 46)'])
+  return (
+    <motion.li style={{ opacity: on }} className="relative pl-10 md:pl-0 md:pt-12">
+      <motion.span style={{ backgroundColor: color }} className="absolute left-[7px] top-1.5 h-3.5 w-3.5 rounded-full md:left-0 md:top-[-5px]" />
+      <span className="font-display text-5xl font-900 leading-none tracking-[-0.04em] text-ink">{s.step}</span>
+      <h3 className="h-card mt-3 text-xl">{s.title}</h3>
+      <p className="mt-2 max-w-[16rem] text-sm leading-relaxed text-ink/65">{s.desc}</p>
+    </motion.li>
+  )
+}
+
 export default function Process() {
   const reduce = useReducedMotion()
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 0.8', 'end 0.55'] })
+  const fill = useTransform(scrollYProgress, [0, 1], reduce ? [1, 1] : [0, 1])
 
   return (
-    <section id="process" className="mx-auto max-w-7xl px-5 py-16 sm:px-10 sm:py-24">
-      <Reveal variant="up" delay={0.05}>
-        <h2 className="display text-4xl font-600 leading-[1.05] text-ink sm:text-5xl">How I <span className="italic star">work</span></h2>
-      </Reveal>
-      <Reveal variant="up" delay={0.1}>
-        <p className="mt-4 max-w-xl font-sans text-sm text-muted">From first conversation to a working system you can run yourself.</p>
-      </Reveal>
+    <section id="process" className="wrap py-16 sm:py-24">
+      <MaskHeading text="How I work" accent={[2]} />
+      <p className="mt-5 max-w-lg text-base text-ink/65">First call to a working system you can run yourself. Five steps, zero mystery.</p>
 
-      <motion.div
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.09 } } }}
-        className="mt-12 grid gap-4 md:grid-cols-5"
-      >
-        {howIWork.map((s, i) => (
-          <motion.div
-            key={s.step}
-            variants={{
-              hidden: { opacity: 0, y: reduce ? 0 : 24 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.21, 0.5, 0.2, 1] } },
-            }}
-            whileHover={reduce ? {} : { y: -6 }}
-            className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-line bg-graphite p-6
-                       transition-colors duration-300 hover:border-accent/60"
-          >
-            {/* animated top accent bar */}
-            <span className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-accent transition-transform duration-300 group-hover:scale-x-100" />
-            {/* connector arrow to the next step (desktop) */}
-            {i < howIWork.length - 1 && (
-              <span className="pointer-events-none absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 text-line transition-all duration-300 group-hover:translate-x-1 group-hover:text-accent md:block">
-                &rarr;
-              </span>
-            )}
-            <span className="display text-4xl font-700 text-accent transition-transform duration-300 group-hover:scale-110 sm:text-5xl">
-              {s.step}
-            </span>
-            <h3 className="display mt-4 text-lg font-600 text-ink">{s.title}</h3>
-            <p className="mt-2 font-sans text-sm leading-relaxed text-muted">{s.desc}</p>
-            {/* faint step glow on hover */}
-            <span className="pointer-events-none absolute -bottom-10 -right-10 h-24 w-24 rounded-full bg-accent/0 blur-2xl transition-all duration-500 group-hover:bg-accent/20" />
-          </motion.div>
-        ))}
-      </motion.div>
+      <div ref={ref} className="relative mt-14">
+        {/* rail: vertical on mobile, horizontal on md+ */}
+        <span aria-hidden className="absolute bottom-2 left-[13px] top-2 w-px bg-line md:inset-x-0 md:bottom-auto md:left-0 md:top-0 md:h-px md:w-full" />
+        <motion.span aria-hidden style={{ scaleY: fill }} className="absolute bottom-2 left-[13px] top-2 w-px origin-top bg-accent md:hidden" />
+        <motion.span aria-hidden style={{ scaleX: fill }} className="absolute inset-x-0 top-0 hidden h-px origin-left bg-accent md:block" />
+        <ol className="relative grid gap-10 md:grid-cols-5 md:gap-6">
+          {howIWork.map((s, i) => <Step key={s.step} s={s} i={i} n={howIWork.length} progress={fill} />)}
+        </ol>
+      </div>
     </section>
   )
 }

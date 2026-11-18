@@ -3,8 +3,8 @@
     "id": "1e75e24a-a587-46d2-84dc-1a1d47b9254d",
     "title": "AI Lead Qualification System",
     "image_url": "/projects/1e75e24a-a587-46d2-84dc-1a1d47b9254d-1789454627719-Untitled.png",
-    "problem": "Sales teams lose time manually reading inbound leads, guessing which ones are worth pursuing, documenting each one, and remembering to follow up — so good leads go cold and reps spend effort on poor-fit ones.",
-    "built": "An AI lead qualification and pipeline platform that captures leads from multiple sources, uses an LLM to extract requirements and buying signals, scores each lead out of 100, routes and assigns it, drafts personalized outreach, and automates follow-up tasks — all inside a real-time pipeline.",
+    "problem": "Sales teams lose time manually reading inbound leads, guessing which ones are worth pursuing, documenting each one, and remembering to follow up, so good leads go cold and reps spend effort on poor-fit ones.",
+    "built": "An AI lead qualification and pipeline platform that captures leads from multiple sources, uses an LLM to extract requirements and buying signals, scores each lead out of 100, routes and assigns it, drafts personalized outreach, and automates follow-up tasks, all inside a real-time pipeline.",
     "stack": [
       "React",
       "TypeScript",
@@ -39,17 +39,14 @@
     "subtitle": "AI lead qualification and pipeline management for sales teams",
     "year": "2025",
     "tag": "AI · Sales Automation",
-    "long_desc": "Leads arrive from a live demo form, manual entry, CSV import, or a public API endpoint. Each one is validated, checked for duplicates, then analyzed by Groq, which extracts the requirement, pain points, use cases, intent, budget, timeline, and decision-maker likelihood as structured JSON — with a deterministic local fallback and multiple API keys for resilience. A configurable six-factor engine scores the lead out of 100 and classifies it HOT, WARM, COLD, or UNQUALIFIED, generating a plain-language explanation and a personalized email draft. Leads are assigned to the signed-in user (or fallback-routed for anonymous submissions) and enter a pipeline that runs from New through Qualified, Contacted, Responded, Meeting Booked, Proposal, and Won/Lost. Follow-ups are scheduled automatically — priority tasks for HOT leads, nurture tasks for WARM — with overdue detection and a manual run option. Workflow events stream to the browser live over Server-Sent Events, and an analytics dashboard surfaces temperature distribution, average score, the conversion funnel, lead sources, and wins. Everything is multi-tenant with role-based access (Owner, Admin, Sales Manager, Sales Rep, Viewer).",
-    "outcome": "Turns raw inbound messages into scored, explained, owner-assigned pipeline records with outreach drafts and scheduled follow-ups — so reps focus on the hottest leads instead of triaging and documenting by hand.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "long_desc": "Leads arrive from a live demo form, manual entry, CSV import, or a public API endpoint. Each one is validated, checked for duplicates, then analyzed by Groq, which extracts the requirement, pain points, use cases, intent, budget, timeline, and decision-maker likelihood as structured JSON, with a deterministic local fallback and multiple API keys for resilience. A configurable six-factor engine scores the lead out of 100 and classifies it HOT, WARM, COLD, or UNQUALIFIED, generating a plain-language explanation and a personalized email draft. Leads are assigned to the signed-in user (or fallback-routed for anonymous submissions) and enter a pipeline that runs from New through Qualified, Contacted, Responded, Meeting Booked, Proposal, and Won/Lost. Follow-ups are scheduled automatically (priority tasks for HOT leads, nurture tasks for WARM) with overdue detection and a manual run option. Workflow events stream to the browser live over Server-Sent Events, and an analytics dashboard surfaces temperature distribution, average score, the conversion funnel, lead sources, and wins. Everything is multi-tenant with role-based access (Owner, Admin, Sales Manager, Sales Rep, Viewer).",
+    "outcome": "Turns raw inbound messages into scored, explained, owner-assigned pipeline records with outreach drafts and scheduled follow-ups, so reps focus on the hottest leads instead of triaging and documenting by hand."
   },
   {
     "id": "a67bb871-153d-4c0d-93cf-356193233e83",
     "title": "AI Voice Calling & Lead Qualification Agent",
     "image_url": "/projects/a67bb871-153d-4c0d-93cf-356193233e83-1789450539146-WhatsApp_Image_2026-08-12_at_5.41.49_PM.jpeg",
-    "problem": "Recruiters spent significant time manually screening candidates and logging calls by hand.",
+    "problem": "Recruiters spent hours dialing candidates for first-round screening and logging every call by hand.",
     "built": "An AI-assisted calling workflow that captures caller intent, qualifies leads, structures notes, and pushes follow-up-ready records into CRM pipelines.",
     "stack": [
       "Python",
@@ -78,20 +75,17 @@
     "sort_order": 1,
     "created_at": "2026-09-08T19:44:38.465603+00:00",
     "subtitle": "Voice-driven lead qualification",
-    "year": null,
+    "year": "2026",
     "tag": "AI Agent",
-    "long_desc": "### AI Voice Recruiter\n\nAn AI-powered voice recruitment system that automates the initial candidate screening and calling process.\n\nThe recruiter starts by selecting candidates from the recruitment system. The AI then initiates an outbound phone call and conducts a natural, conversational screening based on the job requirements. It can ask predefined or dynamically generated questions, understand the candidate’s responses, handle follow-up questions, and continue the conversation based on the context of the call.\n\nDuring the call, the system captures the conversation and analyzes the candidate’s responses. Once the call is completed, the AI generates a structured summary containing the candidate’s responses, overall assessment, call outcome, and relevant follow-up actions.\n\nThe system then automatically saves the call details and candidate information back into the recruitment platform, allowing recruiters to review screened candidates without manually listening to every call.\n\n**Workflow:**\n\n**Candidate → AI Outbound Call → Conversational Screening → Response Analysis → Call Summary & Rating → Recruitment System**\n\n### Key Capabilities\n\n* Automated outbound candidate calling\n* AI-powered conversational screening\n* Context-aware follow-up questions\n* Candidate response analysis\n* Call summary and candidate assessment\n* Call outcome/rating generation\n* Automatic candidate data synchronization with Zoho Recruit\n* Reduced manual screening workload for recruiters\n",
-    "outcome": "The system automates the initial candidate screening process, allowing recruiters to screen a larger number of candidates without manually making every screening call.\n\nEach completed call produces a structured candidate record containing the call outcome, candidate responses, AI-generated summary, assessment/rating, and recommended next action, which is automatically synced back to the recruitment system.\n\nThis gives recruiters a faster way to identify relevant, interested, and potentially qualified candidates while reducing repetitive calling and manual documentation.\n\nResult: Automated first-level screening → structured candidate insights → faster recruiter decision-making → less manual screening effort.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "long_desc": "The recruiter picks candidates in Zoho Recruit. The agent places an outbound call and runs a natural screening conversation based on the job requirements, asking predefined or generated questions and following up on what the candidate actually says.\n\nWhile the call runs, the conversation is transcribed and analyzed. When it ends, the LLM writes a structured summary: the candidate's answers, an overall assessment, the call outcome and the next action.\n\nEverything syncs back into Zoho Recruit automatically, so recruiters review screened candidates without listening to every call.\n\nFlow: Candidate → AI outbound call → Conversational screening → Response analysis → Summary and rating → Zoho Recruit\n\n- Automated outbound candidate calling\n- Context-aware follow-up questions\n- Candidate response analysis and rating\n- Call summary with recommended next step\n- Automatic sync with Zoho Recruit",
+    "outcome": "First-round screening runs without a recruiter on the phone. Every call lands in Zoho Recruit as a structured record (outcome, answers, AI summary, rating, next step), so recruiters jump straight to the candidates worth their time."
   },
   {
     "id": "8d1e13bd-14b5-4def-bfdd-bd77bb835c2b",
-    "title": "Growing Digitally - Marketing Agency Website",
+    "title": "Growing Digitally: Agency Website + CMS",
     "image_url": "/projects/8d1e13bd-14b5-4def-bfdd-bd77bb835c2b-1789468555318-Untitled.png",
-    "problem": "A digital agency needed a fast marketing website plus a custom admin panel to manage leads, content, and pricing — without a developer for every change.",
-    "built": "A full-stack PHP + MySQL agency website with a custom, role-based admin CMS — dynamic content editing, lead capture and management, services/pricing/blog/testimonials CRUD, and secure authentication.",
+    "problem": "A digital agency needed a fast marketing website plus a custom admin panel to manage leads, content, and pricing, without a developer for every change.",
+    "built": "A full-stack PHP + MySQL agency website with a custom, role-based admin CMS: dynamic content editing, lead capture and management, services/pricing/blog/testimonials CRUD, and secure authentication.",
     "stack": [
       "PHP 8",
       "MySQL",
@@ -106,11 +100,10 @@
       "Admin CMS & CRUD",
       "Lead capture & management",
       "Content/SEO settings",
-      "Security (CSRF",
-      "prepared statements)"
+      "Security (CSRF, prepared statements)"
     ],
     "github_url": "https://github.com/jiya-gandhi-108/growing_digitally",
-    "demo_url": "growingdigitally.com",
+    "demo_url": "https://growingdigitally.com",
     "case_study_url": "https://docs.google.com/document/d/1mgigcqmWINTrsiedka4uDAZyVkVp7EgT/edit?usp=drivesdk&ouid=101329015684160920738&rtpof=true&sd=true",
     "featured": false,
     "sort_order": 3,
@@ -118,18 +111,15 @@
     "subtitle": "Full-stack agency website with a custom admin CMS",
     "year": "2025",
     "tag": "Full-Stack · CMS",
-    "long_desc": "Growing Digitally is a full-stack marketing website and CMS for a Delhi NCR agency. The public site (home, about, services, process, pricing, blog, contact) renders from database-backed content, so the team edits everything from a custom admin dashboard instead of touching code. Auth is role-based — Admin, Team, and Client — with bcrypt hashing, CSRF protection, and session regeneration. Contact enquiries submit over AJAX, save to a leads table, alert the admin by email, and get tracked in the dashboard. Ten admin modules cover leads, banners, content, services, pricing, testimonials, blog, users, and SEO/tracking settings. Built in plain PHP 8 with no framework, it deploys on low-cost shared hosting from a single SQL schema.",
-    "outcome": "A marketing site and back office in one: leads are captured and tracked in a single place, content/pricing/blog can be changed on demand by non-technical staff, and the whole system runs on inexpensive shared hosting.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "long_desc": "Growing Digitally is a full-stack marketing website and CMS for a Delhi NCR agency. The public site (home, about, services, process, pricing, blog, contact) renders from database-backed content, so the team edits everything from a custom admin dashboard instead of touching code. Auth is role-based (Admin, Team, and Client) with bcrypt hashing, CSRF protection, and session regeneration. Contact enquiries submit over AJAX, save to a leads table, alert the admin by email, and get tracked in the dashboard. Ten admin modules cover leads, banners, content, services, pricing, testimonials, blog, users, and SEO/tracking settings. Built in plain PHP 8 with no framework, it deploys on low-cost shared hosting from a single SQL schema.",
+    "outcome": "A marketing site and back office in one: leads are captured and tracked in a single place, content/pricing/blog can be changed on demand by non-technical staff, and the whole system runs on inexpensive shared hosting."
   },
   {
     "id": "dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea",
     "title": "Task Management Application",
     "image_url": "/projects/dd36321d-2767-4aa7-bc7b-a7f9f5cac3ea-1789452801864-Untitled.png",
-    "problem": "Task assignment across owner, team leaders, and employees ran on WhatsApp and memory — no deadlines that stuck, no visibility into who was behind, and no reliable end-of-day accountability.",
-    "built": "A role-based task command console where the owner and leaders assign work with deadlines, employees update status and file mandatory end-of-day reports, and everyone is chased by automatic reminders — in-app, browser push, and email.",
+    "problem": "Task assignment across owner, team leaders, and employees ran on WhatsApp and memory: no deadlines that stuck, no visibility into who was behind, and no reliable end-of-day accountability.",
+    "built": "A role-based task command console where the owner and leaders assign work with deadlines, employees update status and file mandatory end-of-day reports, and everyone is chased by automatic reminders: in-app, browser push, and email.",
     "stack": [
       "Next.js 14",
       "React 18",
@@ -158,11 +148,8 @@
     "subtitle": "Role-based task ops with accountability built in",
     "year": "2026",
     "tag": "Web App · Full-Stack",
-    "long_desc": "Three roles sit in a hierarchy — owner assigns to leaders and employees, leaders assign within their own team. Every task carries a deadline, and a Postgres trigger fires a notification the moment one is assigned. Reminders escalate on their own: due-today tasks ping every few hours until closed, and a 6 PM alert nudges anyone who hasn't filed their daily report. When a task is completed the assigner is notified, and early completion triggers an appreciation note. In-app pop-ups arrive over Supabase Realtime while the app is open; a scheduled Supabase Edge Function delivers the same alerts as browser push and email when it's closed. The owner overview adds a live analytics layer — KPI cards with week-over-week deltas, on-time-vs-late and status donuts, daily-completion and report-submission bars, and a top-performers table — all computed from real data with dependency-free inline SVG.",
-    "outcome": "Replaced ad-hoc messaging with a single source of truth for who owns what and by when. Deadlines, reminders, and mandatory EOD reports are now enforced automatically, and the owner sees on-time rates, overdue tasks, and missing reports at a glance instead of chasing updates.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "long_desc": "Three roles sit in a hierarchy: owner assigns to leaders and employees, leaders assign within their own team. Every task carries a deadline, and a Postgres trigger fires a notification the moment one is assigned. Reminders escalate on their own: due-today tasks ping every few hours until closed, and a 6 PM alert nudges anyone who hasn't filed their daily report. When a task is completed the assigner is notified, and early completion triggers an appreciation note. In-app pop-ups arrive over Supabase Realtime while the app is open; a scheduled Supabase Edge Function delivers the same alerts as browser push and email when it's closed. The owner overview adds a live analytics layer: KPI cards with week-over-week deltas, on-time-vs-late and status donuts, daily-completion and report-submission bars, and a top-performers table, all computed from real data with dependency-free inline SVG.",
+    "outcome": "Replaced ad-hoc messaging with a single source of truth for who owns what and by when. Deadlines, reminders, and mandatory EOD reports are now enforced automatically, and the owner sees on-time rates, overdue tasks, and missing reports at a glance instead of chasing updates."
   },
   {
     "id": "99c8903d-8e87-4313-b9bd-f07e7d68f6eb",
@@ -189,7 +176,6 @@
       "Frontend & backend"
     ],
     "github_url": "https://github.com/jiya-gandhi-108/real-time-coding-collab-platform",
-    "demo_url": null,
     "case_study_url": "https://docs.google.com/document/d/1iRjliXI1HCGzu9r1058v0kzrUcHBKBam/edit?usp=drivesdk&ouid=101329015684160920738&rtpof=true&sd=true",
     "featured": true,
     "sort_order": 1,
@@ -198,14 +184,11 @@
     "year": "2025",
     "tag": "Full Stack · Real-Time",
     "long_desc": "Users sign up or log in and the backend issues a JWT that gates the collaboration routes. They then create or join a room by identifier, and the server registers that socket connection as a room member so all events stay scoped to that group. Editor changes are emitted over Socket.IO and broadcast to every other client in the room, keeping a single shared view of the code. Join, leave, and editing events are pushed to the room as they happen so participants can see who is present and active. A chat channel runs on the same socket connection alongside the editor. React Context API manages shared client state such as the authenticated user and active session, while MongoDB via Mongoose persists user accounts and room data.",
-    "outcome": "A working collaborative coding environment where a group joins a room and immediately starts editing together, with chat and live presence built in — no setup, screen sharing, or copying code between tools. It demonstrates authenticated WebSocket sessions, room-scoped event broadcasting, and synchronized client state across concurrent users.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "outcome": "A working collaborative coding environment where a group joins a room and immediately starts editing together, with chat and live presence built in. No setup, screen sharing, or copying code between tools. It demonstrates authenticated WebSocket sessions, room-scoped event broadcasting, and synchronized client state across concurrent users."
   },
   {
     "id": "4a63acaa-c08b-47fa-8d1e-073ad33b7143",
-    "title": "ContentCraft — AI Content Generator",
+    "title": "ContentCraft: AI Content Generator",
     "image_url": "/projects/4a63acaa-c08b-47fa-8d1e-073ad33b7143-1789459195377-ChatGPT_Image_Sep_15__2026__01_29_39_PM.png",
     "problem": "AI content tools produce generic, isolated drafts with no brand memory, no live research, and SEO handled as a separate manual step after writing.",
     "built": "A multi-agent content platform that runs every request through a Research → Outline → Draft → Edit → SEO pipeline, grounded in a RAG-based brand memory, with direct publishing to CMS platforms.",
@@ -230,7 +213,6 @@
       "Frontend & backend"
     ],
     "github_url": "https://github.com/jiya-gandhi-108/content-craft",
-    "demo_url": null,
     "case_study_url": "https://docs.google.com/document/d/18JQ3YrUBlbS3tCzLUvCJwsfcaYhY7Mnw/edit?usp=drivesdk&ouid=101329015684160920738&rtpof=true&sd=true",
     "featured": true,
     "sort_order": 2,
@@ -239,16 +221,13 @@
     "year": "2026",
     "tag": "AI · Multi-Agent",
     "long_desc": "A request first goes to the Research agent, which pulls live web data, trends, and competitor signals via the Serper API. The Outline agent then structures the piece around topic clusters and funnel stage. The Draft agent generates the content, retrieving relevant brand voice and past content from a pgvector-backed RAG memory so output stays consistent with what the brand has published before. The Editor agent reviews for fluff, clarity, and tone, and the SEO agent optimizes keyword density, headings, meta content, and readability using the DataForSEO API. A content calendar and collaboration workspace sits around the pipeline, with version history, comments, and a Notion-style editor, and finished content can publish directly to WordPress or Ghost or trigger Zapier/Make webhooks.",
-    "outcome": "A repeatable pipeline that produces research-backed, brand-consistent, SEO-optimized content instead of one-off generic drafts, with planning, generation, review, and publishing all handled in one platform.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "outcome": "A repeatable pipeline that produces research-backed, brand-consistent, SEO-optimized content instead of one-off generic drafts, with planning, generation, review, and publishing all handled in one platform."
   },
   {
     "id": "88a77dcb-2bfe-4d10-8d78-5caca3e120d5",
-    "title": "SN Jewel - Ecommerce Jewellery Platform",
+    "title": "SN Jewel: Jewellery E-Commerce",
     "image_url": "/projects/88a77dcb-2bfe-4d10-8d78-5caca3e120d5-1789461799373-ChatGPT_Image_Sep_15__2026__02_13_03_PM.png",
-    "problem": "An online jewelry storefront needed reliable commerce logic — accurate stock visibility, consistent cart state, and secure payments — rather than just a product listing page.",
+    "problem": "An online jewelry storefront needed reliable commerce logic (accurate stock visibility, consistent cart state, and secure payments) rather than just a product listing page.",
     "built": "A full-stack storefront with a React frontend, PHP API backend, and MySQL database, covering the full commerce loop: browsing, cart, checkout, and Razorpay payment processing.",
     "stack": [
       "React",
@@ -265,7 +244,7 @@
       "Production bug fixes"
     ],
     "github_url": "https://github.com/jiya-gandhi-108/SN-Jewel",
-    "demo_url": "snjewel.com",
+    "demo_url": "https://snjewel.com",
     "case_study_url": "https://docs.google.com/document/d/1XdnA7TfPeORctcINInT3EPmnm0IQtsnC/edit?usp=drivesdk&ouid=101329015684160920738&rtpof=true&sd=true",
     "featured": false,
     "sort_order": 2,
@@ -274,10 +253,7 @@
     "year": "2024",
     "tag": "Full Stack · E-Commerce",
     "long_desc": "Product data is served from a PHP API layer backed by a MySQL schema modeling products, categories, and stock levels. The React frontend manages cart state through a dedicated CartContext, keeping the cart consistent as customers add, update, or remove items. Out-of-stock logic runs across both the product listing and the cart, so unavailable items are blocked before checkout rather than only at payment. At checkout, Razorpay handles payment processing, with dedicated backend handling for verifying and debugging payment responses. Configuration is isolated under a dedicated config layer, with static assets and uploads served separately for product imagery.",
-    "outcome": "A working e-commerce platform where customers can browse, add to cart, and check out with real payment processing, with accurate stock enforcement throughout the shopping flow so out-of-stock items can't be purchased.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "outcome": "A working e-commerce platform where customers can browse, add to cart, and check out with real payment processing, with accurate stock enforcement throughout the shopping flow so out-of-stock items can't be purchased."
   },
   {
     "id": "b3f6050e-35ed-45c9-a2cd-c6f6681bc70c",
@@ -307,17 +283,14 @@
     "year": "2024",
     "tag": "Computer Vision · Python",
     "long_desc": "The system accesses the webcam feed and processes it frame by frame. MediaPipe detects facial landmarks in each frame, giving reference points for analysis. A dedicated gaze module analyzes eye position relative to those landmarks to determine where the user is looking and whether focus has shifted, while a separate blink detection module tracks blink rate and eye-closure duration as a fatigue signal. The core logic layer combines both signals into a single focused/distracted classification, and the moment distraction or prolonged eye closure is detected, an on-screen alert is raised in real time.",
-    "outcome": "A working real-time distraction detection tool that runs entirely off a standard webcam with no specialized hardware, flagging loss of focus and fatigue signs as they happen rather than through after-the-fact analytics.",
-    "cooking": false,
-    "status": null,
-    "updates": []
+    "outcome": "A working real-time distraction detection tool that runs entirely off a standard webcam with no specialized hardware, flagging loss of focus and fatigue signs as they happen rather than through after-the-fact analytics."
   },
   {
     "id": "1ec45006-c702-49fe-bec6-6da5aedc04d2",
-    "title": "AI Saas HRMS Platform",
+    "title": "AI SaaS HRMS Platform",
     "image_url": "/projects/1ec45006-c702-49fe-bec6-6da5aedc04d2-1789540068917-ChatGPT_Image_Sep_16__2026__11_57_32_AM.png",
-    "problem": "HR teams juggle attendance, payroll, recruitment, and performance across separate tools — and a SaaS serving many companies must keep each tenant's data fully isolated, which is hard to do safely at scale.",
-    "built": "A multi-tenant, enterprise-grade HR operations SaaS with 26 domain modules — attendance, payroll, recruitment, performance, onboarding and more — on a Next.js client, a modular NestJS/Fastify API, PostgreSQL with row-level security, Temporal workflows, and a FastAPI AI gateway.",
+    "problem": "HR teams juggle attendance, payroll, recruitment, and performance across separate tools, and a SaaS serving many companies must keep each tenant's data fully isolated, which is hard to do safely at scale.",
+    "built": "A multi-tenant, enterprise-grade HR operations SaaS with 26 domain modules (attendance, payroll, recruitment, performance, onboarding and more) on a Next.js client, a modular NestJS/Fastify API, PostgreSQL with row-level security, Temporal workflows, and a FastAPI AI gateway.",
     "stack": [
       "Next.js 15",
       "TypeScript",
@@ -338,18 +311,15 @@
       "e2e tenant-isolation tests"
     ],
     "github_url": "https://github.com/jiya-gandhi-108/Saas-HRMS-Platform",
-    "demo_url": null,
-    "case_study_url": null,
     "featured": false,
     "sort_order": 1,
     "created_at": "2026-09-16T08:56:14.276815+00:00",
     "subtitle": "Multi-tenant enterprise HR operations platform",
     "year": "2026",
     "tag": "AI · Full-Stack · SaaS",
-    "long_desc": "Atlas is a multi-tenant HR SaaS where tenancy is designed in from the data layer up. A Next.js 15 client talks to a modular NestJS/Fastify API backed by PostgreSQL with Prisma and row-level security, so every query is scoped to its tenant at the database itself — isolation is enforced across auth, request context, ORM, and DB, and proven by an end-to-end tenant-isolation test suite. The API is split into 26 domain modules covering the full employee lifecycle (employees, attendance + geofencing, leave/policy engine, shifts, payroll, recruitment/ATS, onboarding, offboarding, performance 9-box, and more). Temporal runs durable onboarding/offboarding workflows, a worker handles webhooks and document-expiry reminders, a FastAPI gateway isolates AI (resume parsing, HR assistant, attrition risk), and OpenSearch powers global search. It runs either as a full Docker stack or as a zero-dependency in-memory demo.",
-    "outcome": "A production-shaped HR SaaS for the full employee lifecycle, with each customer's data provably separated, long-running processes automated reliably, and AI contained behind a safe boundary — security enforced from the database up and continuously verified by tests.",
+    "long_desc": "Atlas is a multi-tenant HR SaaS where tenancy is designed in from the data layer up. A Next.js 15 client talks to a modular NestJS/Fastify API backed by PostgreSQL with Prisma and row-level security, so every query is scoped to its tenant at the database itself. Isolation is enforced across auth, request context, ORM, and DB, and proven by an end-to-end tenant-isolation test suite. The API is split into 26 domain modules covering the full employee lifecycle (employees, attendance + geofencing, leave/policy engine, shifts, payroll, recruitment/ATS, onboarding, offboarding, performance 9-box, and more). Temporal runs durable onboarding/offboarding workflows, a worker handles webhooks and document-expiry reminders, a FastAPI gateway isolates AI (resume parsing, HR assistant, attrition risk), and OpenSearch powers global search. It runs either as a full Docker stack or as a zero-dependency in-memory demo.",
+    "outcome": "A production-shaped HR SaaS for the full employee lifecycle, with each customer's data provably separated, long-running processes automated reliably, and AI contained behind a safe boundary, with security enforced from the database up and continuously verified by tests.",
     "cooking": true,
-    "status": "In Progress",
-    "updates": []
+    "status": "In Progress"
   }
 ]
