@@ -34,8 +34,8 @@ export default function ProjectDetail() {
     <>
       <Nav profile={profile} />
       <main className="wrap max-w-5xl pb-10 pt-28 sm:pt-32">
-        <Link to="/#work" className="mono inline-flex items-center gap-2 text-muted transition-colors hover:text-accent">
-          <ArrowLeft size={14} /> Back to work
+        <Link to="/#work" className="inline-flex items-center gap-2 font-display text-base font-800 uppercase tracking-[0.01em] text-ink transition-colors hover:text-accent sm:text-lg">
+          <ArrowLeft size={20} strokeWidth={2.5} className="text-accent" /> Back to work
         </Link>
 
         {!project && (

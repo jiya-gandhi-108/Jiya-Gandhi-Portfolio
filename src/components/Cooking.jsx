@@ -57,7 +57,7 @@ export default function Cooking({ project }) {
               </div>
             )}
             <div className="mt-7 flex flex-wrap gap-2 sm:gap-3">
-              <Link to={`/project/${project.id}`} className="btn-primary">Explore more about this project <ArrowUpRight size={16} /></Link>
+              <Link to={`/project/${project.id}`} className="btn-primary">View Details <ArrowUpRight size={16} /></Link>
               {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Source on GitHub"><Github size={16} /></a>}
             </div>
           </div>

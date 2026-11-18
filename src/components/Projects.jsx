@@ -31,7 +31,7 @@ function ProjectRow({ project, index }) {
           <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-ink/80">{project.summary || project.built || project.subtitle}</p>
           {stack.length > 0 && <StackTags items={stack.slice(0, 7)} className="mt-5" />}
           <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-3">
-            <Link to={`/project/${project.id}`} className="btn-primary">Explore more about this project <ArrowUpRight size={16} /></Link>
+            <Link to={`/project/${project.id}`} className="btn-primary">View Details <ArrowUpRight size={16} /></Link>
             {project.github_url && <a href={project.github_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Source on GitHub"><Github size={16} /></a>}
             {project.demo_url && <a href={project.demo_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Live demo"><ExternalLink size={16} /></a>}
             {project.case_study_url && <a href={project.case_study_url} target="_blank" rel="noreferrer" className="icon-btn" aria-label="Case study"><FileText size={16} /></a>}

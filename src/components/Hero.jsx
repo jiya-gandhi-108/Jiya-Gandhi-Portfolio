@@ -5,9 +5,10 @@ import { ArrowDownRight, Download, MapPin } from 'lucide-react'
 const EASE = [0.2, 0.7, 0.1, 1]
 
 // The hero is a pinned, two-stage scroll:
-//   stage 1  : photo in the centre, JIYA top-left, GANDHI bottom-right, two buttons
-//   scrolling: the name fades out, the photo slides from the centre to the left
-//   stage 2  : roles, headline, 15+ projects, location and the buttons fade in on the right
+//   stage 1  : photo in the centre, JIYA top-left, GANDHI bottom-right, and roles + headline + buttons
+//              sitting small in the empty space on the left
+//   scrolling: only the name fades. The photo slides centre -> left while the text column slides
+//              left -> right and grows; "15+ client projects" and the location open up inside it
 // Hover (desktop): a circle around the cursor shows the photo in colour and turns the lime name white.
 
 function useCursorOn(setting) {
@@ -30,24 +31,25 @@ export default function Hero({ profile, started }) {
   const { scrollYProgress: p } = useScroll({ target: runway, offset: ['start start', 'end end'] })
   const t = (input, output) => useTransform(p, input, output) // eslint-disable-line react-hooks/rules-of-hooks
 
-  // stage 1 out
+  // only the name fades out
   const nameOpacity = t([0, 0.28], [1, 0])
   const jiyaY = t([0, 0.32], [0, -90])
   const gandhiY = t([0, 0.32], [0, 90])
-  const stage1Opacity = t([0, 0.16], [1, 0])
-  const stage1Events = t([0, 0.1], ['auto', 'none'])
+  const hintOpacity = t([0, 0.1], [1, 0])
   // photo: centre -> left (desktop), centre -> top-left and smaller (mobile)
   const imgLeft = t([0.12, 0.58], ['50%', '25%'])
   const imgScale = t([0.12, 0.58], [1, 0.9])
   const mImgLeft = t([0.12, 0.55], ['50%', '27%'])
   const mImgTop = t([0.12, 0.55], ['17%', '2%'])
   const mImgScale = t([0.12, 0.55], [1, 0.58])
-  // stage 2 in, one item after another
-  const inA = { opacity: t([0.45, 0.6], [0, 1]), y: t([0.45, 0.6], [40, 0]) }
-  const inB = { opacity: t([0.53, 0.68], [0, 1]), y: t([0.53, 0.68], [40, 0]) }
-  const inC = { opacity: t([0.61, 0.76], [0, 1]), y: t([0.61, 0.76], [40, 0]) }
-  const inD = { opacity: t([0.69, 0.84], [0, 1]), y: t([0.69, 0.84], [40, 0]) }
-  const stage2Events = t([0.7, 0.8], ['none', 'auto'])
+  // the text column (roles, headline, buttons) slides from the left gap to the right side and grows
+  const colLeft = t([0.12, 0.6], ['3%', '52%'])
+  const colBottom = t([0.45, 0.66], ['5%', '15%'])
+  const colScale = t([0.12, 0.6], [0.72, 1])
+  // the 15+ / location block opens up inside the column once it has arrived
+  const statsH = t([0.5, 0.72], [0, 118])
+  const statsO = t([0.58, 0.74], [0, 1])
+  const mStatsH = t([0.45, 0.68], [0, 84])
 
   const intro = (delay = 0, y = 30) => ({
     initial: { opacity: 0, y: reduce ? 0 : y },
@@ -113,36 +115,33 @@ export default function Hero({ profile, started }) {
           <div className="pointer-events-none absolute inset-0 z-10"><Names /></div>
           {cursorOn && <div aria-hidden className="reveal-mask pointer-events-none absolute inset-0 z-10"><Names white /></div>}
 
-          {/* stage 1 buttons + scroll hint */}
-          <motion.div style={{ opacity: stage1Opacity, pointerEvents: stage1Events }} className="absolute bottom-[5%] left-[3%] z-20 flex gap-3">
-            <a href="#work" className="btn-primary">See my work <ArrowDownRight size={16} /></a>
-            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost bg-bg/70"><Download size={15} /> Resume</a>}
-          </motion.div>
-          <motion.div aria-hidden style={{ opacity: stage1Opacity }} className="mono absolute left-1/2 top-[4%] z-20 -translate-x-1/2 text-muted">
+          <motion.div aria-hidden style={{ opacity: hintOpacity }} className="mono absolute left-1/2 top-[4%] z-20 -translate-x-1/2 text-muted">
             scroll ↓
           </motion.div>
 
-          {/* stage 2 text, right side */}
-          <motion.div style={{ pointerEvents: stage2Events }} className="absolute right-[4%] top-1/2 z-20 w-[44%] max-w-[640px] -translate-y-1/2">
-            <motion.p style={inA} className="font-display text-[clamp(2.2rem,4.2vw,4.4rem)] font-900 uppercase leading-[0.9] tracking-[-0.035em]">
+          {/* text column: starts small in the left gap, slides right and grows. Nothing here fades out. */}
+          <motion.div style={{ left: colLeft, bottom: colBottom, scale: colScale }} className="absolute z-20 w-[44%] max-w-[640px] origin-bottom-left">
+            <p className="font-display text-[clamp(2.2rem,4.2vw,4.4rem)] font-900 uppercase leading-[0.9] tracking-[-0.035em]">
               <span className="block text-accent">{roles[0]}</span>
               <span className="block text-ink">&amp; {roles[1]}</span>
-            </motion.p>
-            <motion.p style={inB} className="bar mt-7 font-display text-[clamp(1.15rem,1.7vw,1.6rem)] font-800 uppercase leading-[1.05] tracking-[-0.015em]">
+            </p>
+            <p className="bar mt-7 font-display text-[clamp(1.15rem,1.7vw,1.6rem)] font-800 uppercase leading-[1.05] tracking-[-0.015em]">
               <span className="block text-accent">{head[0]}</span>
               <span className="block text-ink">{head[1]}</span>
               <span className="block text-accent">{head[2]}</span>
-            </motion.p>
-            <motion.div style={inC} className="mt-8">
-              <p className="font-display text-[clamp(1.6rem,2.4vw,2.4rem)] font-800 leading-none text-ink">
-                <span className="text-accent">15+</span> client projects delivered
-              </p>
-              <p className="mt-3 flex items-center gap-2 text-base text-ink/70"><MapPin size={16} className="text-accent" /> {profile.location}</p>
+            </p>
+            <motion.div style={{ height: statsH, opacity: statsO }} className="overflow-hidden">
+              <div className="pt-8">
+                <p className="font-display text-[clamp(1.6rem,2.4vw,2.4rem)] font-800 leading-none text-ink">
+                  <span className="text-accent">15+</span> client projects delivered
+                </p>
+                <p className="mt-3 flex items-center gap-2 text-base text-ink/70"><MapPin size={16} className="text-accent" /> {profile.location}</p>
+              </div>
             </motion.div>
-            <motion.div style={inD} className="mt-8 flex gap-3">
+            <div className="mt-8 flex gap-3">
               <a href="#work" className="btn-primary">See my work <ArrowDownRight size={16} /></a>
-              {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost"><Download size={15} /> Resume</a>}
-            </motion.div>
+              {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost bg-bg/70"><Download size={15} /> Resume</a>}
+            </div>
           </motion.div>
         </motion.div>
 
@@ -159,35 +158,33 @@ export default function Hero({ profile, started }) {
             className={`${nameCls} left-4 top-4 z-10 text-[27vw] text-accent sm:text-[22vw]`}>
             {profile.first}
           </motion.span>
-          <motion.span aria-hidden style={{ opacity: nameOpacity, y: gandhiY }}
-            className={`${nameCls} bottom-[92px] right-3 z-10 text-[21vw] text-accent sm:bottom-[100px] sm:text-[18vw]`}>
-            {profile.last}
-          </motion.span>
-          <motion.div style={{ opacity: stage1Opacity, pointerEvents: stage1Events }} className="absolute inset-x-4 bottom-5 z-20 flex gap-3">
-            <a href="#work" className="btn-primary flex-1 justify-center whitespace-nowrap px-3 text-[13px]">See my work <ArrowDownRight size={16} /></a>
-            {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost flex-1 justify-center whitespace-nowrap px-3 text-[13px]"><Download size={15} /> Resume</a>}
-          </motion.div>
 
-          {/* stage 2 */}
-          <motion.div style={{ pointerEvents: stage2Events }} className="absolute inset-x-5 bottom-5 z-20 sm:inset-x-8">
-            <motion.p style={inA} className="font-display text-[clamp(1.7rem,8.2vw,3rem)] font-900 uppercase leading-[0.92] tracking-[-0.035em]">
+          {/* bottom column: GANDHI (fades), roles, headline, 15+ (opens up), buttons */}
+          <div className="absolute inset-x-5 bottom-5 z-20 sm:inset-x-8">
+            <motion.p aria-hidden style={{ opacity: nameOpacity }}
+              className="mb-4 whitespace-nowrap text-right font-display text-[20vw] font-900 uppercase leading-[0.8] tracking-[-0.045em] text-accent sm:text-[17vw]">
+              {profile.last}
+            </motion.p>
+            <p className="font-display text-[clamp(1.6rem,7.6vw,3rem)] font-900 uppercase leading-[0.92] tracking-[-0.035em]">
               <span className="block text-accent">{roles[0]}</span>
               <span className="block text-ink">&amp; {roles[1]}</span>
-            </motion.p>
-            <motion.p style={inB} className="bar mt-4 font-display text-[clamp(0.95rem,4.3vw,1.4rem)] font-800 uppercase leading-[1.05]">
+            </p>
+            <p className="bar mt-3 font-display text-[clamp(0.9rem,4vw,1.4rem)] font-800 uppercase leading-[1.05]">
               <span className="block text-accent">{head[0]}</span>
               <span className="block text-ink">{head[1]}</span>
               <span className="block text-accent">{head[2]}</span>
-            </motion.p>
-            <motion.div style={inC} className="mt-5">
-              <p className="font-display text-[clamp(1.3rem,6vw,2rem)] font-800 leading-none text-ink"><span className="text-accent">15+</span> client projects delivered</p>
-              <p className="mt-2 flex items-center gap-2 text-sm text-ink/70"><MapPin size={15} className="text-accent" /> {profile.location}</p>
+            </p>
+            <motion.div style={{ height: mStatsH, opacity: statsO }} className="overflow-hidden">
+              <div className="pt-4">
+                <p className="font-display text-[clamp(1.2rem,5.6vw,2rem)] font-800 leading-none text-ink"><span className="text-accent">15+</span> client projects delivered</p>
+                <p className="mt-2 flex items-center gap-2 text-sm text-ink/70"><MapPin size={15} className="text-accent" /> {profile.location}</p>
+              </div>
             </motion.div>
-            <motion.div style={inD} className="mt-5 flex gap-3">
+            <div className="mt-4 flex gap-3">
               <a href="#work" className="btn-primary flex-1 justify-center whitespace-nowrap px-3 text-[13px]">See my work <ArrowDownRight size={16} /></a>
               {profile.resume_url && <a href={profile.resume_url} download className="btn-ghost flex-1 justify-center whitespace-nowrap px-3 text-[13px]"><Download size={15} /> Resume</a>}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>
