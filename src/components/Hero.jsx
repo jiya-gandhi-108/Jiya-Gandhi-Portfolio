@@ -6,6 +6,8 @@ const EASE = [0.2, 0.7, 0.1, 1]
 const STATS_H = 118 // height the '15+ / location' block opens up to (desktop)
 const clamp01 = (v) => Math.min(1, Math.max(0, v))
 const lerp = (a, b, k) => a + (b - a) * k
+// 'AI Automation Engineer' -> ['AI Automation', 'Engineer'] so the roles stack in four lines
+const splitLast = (str = '') => { const i = str.lastIndexOf(' '); return i > 0 ? [str.slice(0, i), str.slice(i + 1)] : [str] }
 
 // The hero is a pinned, two-stage scroll:
 //   stage 1  : photo in the centre, JIYA top-left, GANDHI bottom-right, and roles + headline + buttons
@@ -50,7 +52,7 @@ export default function Hero({ profile, started }) {
   // lower block (headline + buttons): bottom-left -> right side, grows a little
   const colLeft = t([0.12, 0.6], ['3%', '52%'])
   const colBottom = t([0.45, 0.66], ['5%', '13%'])
-  const colScale = t([0.12, 0.6], [0.8, 1])
+  const colScale = t([0.12, 0.6], [1.2, 1])
   // the 15+ / location block opens up inside the column once it has arrived
   const statsH = t([0.5, 0.72], [0, STATS_H])
   const statsO = t([0.58, 0.74], [0, 1])
@@ -60,13 +62,13 @@ export default function Hero({ profile, started }) {
   // so we measure the card and the blocks and keep them in a motion value.
   const dims = useMotionValue({ W: 0, H: 0, rw: 0, rh: 0, low: 0, jr: 0 })
   // start: scaled so the two lines fit between JIYA and the right edge. End: fits the right column.
-  const s1 = (d) => Math.min(1, (d.W * 0.97 - (d.jr + 28)) / (d.rw || 1))
+  const s1 = (d) => Math.min(1.15, (d.W * 0.97 - Math.max(d.W * 0.63, d.jr + 28)) / (d.rw || 1))
   const s2 = (d) => Math.min(1, (d.W * 0.45) / (d.rw || 1))
   const kR = (v) => clamp01((v - 0.12) / 0.48)
   const rolesScale = useTransform([p, dims], ([v, d]) => lerp(s1(d), s2(d), kR(v)))
   const rolesLeft = useTransform([p, dims], ([v, d]) => lerp(d.W * 0.97 - d.rw * s1(d), d.W * 0.52, kR(v)))
   const rolesTop = useTransform([p, dims], ([v, d]) =>
-    lerp(d.H * 0.05 + 40, d.H * 0.87 - d.low - 36 - d.rh * s2(d), clamp01((v - 0.12) / 0.54)),
+    lerp(d.H * 0.05 + 44, d.H * 0.87 - d.low - 36 - d.rh * s2(d), clamp01((v - 0.12) / 0.54)),
   )
   useLayoutEffect(() => {
     const measure = () => {
@@ -154,10 +156,10 @@ export default function Hero({ profile, started }) {
           <motion.p
             ref={rolesRef}
             style={{ left: rolesLeft, top: rolesTop, scale: rolesScale }}
-            className="absolute z-20 w-max origin-top-left font-display text-[clamp(2.4rem,4.4vw,4.8rem)] font-900 uppercase leading-[1.02] tracking-[-0.035em]"
+            className="absolute z-20 w-max origin-top-left font-display text-[clamp(2.4rem,4.4vw,4.8rem)] font-900 uppercase leading-[1.06] tracking-[-0.035em]"
           >
-            <span className="block text-accent">{roles[0]}</span>
-            <span className="block text-ink">&amp; {roles[1]}</span>
+            {splitLast(roles[0]).map((l) => <span key={l} className="block text-accent">{l}</span>)}
+            {splitLast(`& ${roles[1]}`).map((l) => <span key={l} className="block text-ink">{l}</span>)}
           </motion.p>
 
           {/* headline + buttons: bottom-left at first, then slides right and grows. Nothing here fades out. */}
