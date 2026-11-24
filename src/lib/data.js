@@ -193,7 +193,7 @@ export const experience = [
 
 // Projects live in src/data/projects.json (images in public/projects/).
 // Order: sort_order ascending. `featured: true` → "Stuff I've shipped";
-// `cooking: true` → "Currently cooking"; every project shows in the archive strip.
+// every project shows in the archive strip.
 export const projects = [...projectsData].sort(
   (a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0) || String(a.created_at).localeCompare(String(b.created_at)),
 )

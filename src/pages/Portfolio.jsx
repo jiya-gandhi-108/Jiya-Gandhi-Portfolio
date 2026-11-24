@@ -6,7 +6,6 @@ import Nav from '../components/Nav'
 import Hero from '../components/Hero'
 import About from '../components/About'
 import Projects from '../components/Projects'
-import Cooking from '../components/Cooking'
 import CodingWorld from '../components/CodingWorld'
 import Process from '../components/Process'
 import Principles from '../components/Principles'
@@ -49,8 +48,6 @@ export default function Portfolio() {
     return () => { cancelAnimationFrame(raf); cancelAnimationFrame(tick); window.removeEventListener('scroll', onScroll) }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
   const featured = useMemo(() => projects.filter((p) => p.featured), [])
-  // "Currently cooking" = the project flagged `cooking: true`, else the first featured one.
-  const cooking = useMemo(() => projects.find((p) => p.cooking) || featured[0] || projects[0], [featured])
 
   return (
     <>
@@ -62,7 +59,6 @@ export default function Portfolio() {
         <Hero profile={profile} started={revealDone} />
         <About text={pitch} tldr={profile.tldr} />
         <Projects projects={featured} />
-        <Cooking project={cooking} />
         <CodingWorld projects={projects} />
         <Process />
         <Principles />

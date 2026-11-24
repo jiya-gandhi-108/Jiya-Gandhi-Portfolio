@@ -14,7 +14,6 @@ const links = [
 const mobileLinks = [
   { href: '/#top', label: 'Home' },
   { href: '/#work', label: "Stuff I've shipped" },
-  { href: '/#cooking', label: 'Currently cooking' },
   { href: '/#archive', label: 'Full archive' },
   { href: '/#process', label: 'How I work' },
   { href: '/#principles', label: 'How I think' },
