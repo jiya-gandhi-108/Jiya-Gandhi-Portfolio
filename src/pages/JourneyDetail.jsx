@@ -6,19 +6,21 @@ import Nav from '../components/Nav'
 import Footer from '../components/Footer'
 import { FadeUp } from '../components/Motion'
 import { profile, experience, getExperienceById } from '../lib/data'
+import { useBackHome } from '../lib/backHome'
 
 // The full story behind each role. Linked from "Know more about me" on the home page.
 export default function JourneyDetail() {
   const { id } = useParams()
   const entry = getExperienceById(id)
-  useEffect(() => { window.scrollTo(0, 0) }, [id])
+  const backHome = useBackHome('experience')
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [id])
   const others = experience.filter((e) => String(e.id) !== String(id))
 
   return (
     <>
       <Nav profile={profile} />
       <main className="wrap max-w-5xl pb-10 pt-28 sm:pt-32">
-        <Link to="/#experience" className="inline-flex items-center gap-2 font-display text-base font-800 uppercase tracking-[0.01em] text-ink transition-colors hover:text-accent sm:text-lg">
+        <Link to="/" onClick={backHome} className="inline-flex items-center gap-2 font-display text-base font-800 uppercase tracking-[0.01em] text-ink transition-colors hover:text-accent sm:text-lg">
           <ArrowLeft size={20} strokeWidth={2.5} className="text-accent" /> Back to the journey
         </Link>
 

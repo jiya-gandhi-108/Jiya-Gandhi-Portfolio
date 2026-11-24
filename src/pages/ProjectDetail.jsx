@@ -8,13 +8,15 @@ import RichText from '../components/RichText'
 import { ClipReveal, FadeUp } from '../components/Motion'
 import { initials } from '../components/Projects'
 import { profile, projects as all, getProjectById } from '../lib/data'
+import { useBackHome } from '../lib/backHome'
 
 const toList = (v) => (Array.isArray(v) ? v : String(v || '').split(/[,|]/).map((s) => s.trim()).filter(Boolean))
 
 export default function ProjectDetail() {
   const { id } = useParams()
   const project = getProjectById(id)
-  useEffect(() => { window.scrollTo(0, 0) }, [id])
+  const backHome = useBackHome('work')
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }) }, [id])
 
   const stack = toList(project?.stack)
   const handled = toList(project?.handled)
@@ -34,7 +36,7 @@ export default function ProjectDetail() {
     <>
       <Nav profile={profile} />
       <main className="wrap max-w-5xl pb-10 pt-28 sm:pt-32">
-        <Link to="/#work" className="inline-flex items-center gap-2 font-display text-base font-800 uppercase tracking-[0.01em] text-ink transition-colors hover:text-accent sm:text-lg">
+        <Link to="/" onClick={backHome} className="inline-flex items-center gap-2 font-display text-base font-800 uppercase tracking-[0.01em] text-ink transition-colors hover:text-accent sm:text-lg">
           <ArrowLeft size={20} strokeWidth={2.5} className="text-accent" /> Back to work
         </Link>
 
