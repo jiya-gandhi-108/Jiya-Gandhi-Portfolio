@@ -77,7 +77,7 @@
     "sort_order": 1,
     "created_at": "2026-09-08T19:44:38.465603+00:00",
     "subtitle": "Voice-driven lead qualification",
-    "year": "2026",
+    "year": "2025",
     "tag": "AI Agent",
     "long_desc": "The recruiter picks candidates in Zoho Recruit. The agent places an outbound call and runs a natural screening conversation based on the job requirements, asking predefined or generated questions and following up on what the candidate actually says.\n\nWhile the call runs, the conversation is transcribed and analyzed. When it ends, the LLM writes a structured summary: the candidate's answers, an overall assessment, the call outcome and the next action.\n\nEverything syncs back into Zoho Recruit automatically, so recruiters review screened candidates without listening to every call.\n\nFlow: Candidate → AI outbound call → Conversational screening → Response analysis → Summary and rating → Zoho Recruit\n\n- Automated outbound candidate calling\n- Context-aware follow-up questions\n- Candidate response analysis and rating\n- Call summary with recommended next step\n- Automatic sync with Zoho Recruit",
     "outcome": "First-round screening runs without a recruiter on the phone. Every call lands in Zoho Recruit as a structured record (outcome, answers, AI summary, rating, next step), so recruiters jump straight to the candidates worth their time."

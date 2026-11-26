@@ -36,7 +36,7 @@ export const pitch =
   'Hand me a messy, repetitive process. I map it, build the backend, wire up the APIs and ship an automation your team actually uses. Three-plus years, fifteen-plus client builds, and a voice agent that screens candidates on its own. That’s the pitch, no cap.'
 
 // Skills grouped for the Stack section. Icon names are resolved in Skills.jsx.
-// Skills & stack (from the resume).
+// Skills & stack (matches the CV's Core Skills).
 // `match` = words looked for in each project's stack / tag / title to power "View projects".
 // Leave `match` out to just use the skill name.
 export const skillGroups = [
@@ -112,6 +112,7 @@ export const skillGroups = [
     label: 'Cloud & DevOps', icon: 'Cloud',
     items: [
       { name: 'AWS' },
+      { name: 'Azure' },
       { name: 'CI/CD Pipelines', match: ['ci/cd'] },
       { name: 'Git' },
       { name: 'Docker' },
@@ -135,15 +136,34 @@ export function projectsForSkill(skill) {
   })
 }
 
-// My Journey, newest first.
+// My Journey, newest first (matches the CV in public/Jiya_Gandhi_Resume.pdf).
 // `summary` = the one-liner on the home page. Everything else shows on /journey/:id.
 export const experience = [
+  {
+    id: 'growing-digitally',
+    role: 'AI Engineer & Backend Developer',
+    org: 'Growing Digitally',
+    location: 'Delhi, India',
+    period: 'Jul 2025 to Oct 2026',
+    summary: 'AI agents, n8n automations and RAG chatbots for web and WhatsApp, plus client sites with admin dashboards.',
+    desc: 'Built AI agents, RAG chatbots and lead and content automations that replaced repetitive manual work for client teams, plus client websites with admin dashboards.',
+    points: [
+      'Designed and deployed AI agents and multi-step n8n workflows that handle lead capture, qualification, follow-ups and content operations end to end, replacing repetitive manual work for client teams.',
+      'Built a website chatbot powered by RAG and an LLM, with a vector database for knowledge retrieval and n8n orchestration, then extended it into a WhatsApp chatbot on the same retrieval pipeline.',
+      'Developed lead-handling automations that capture enquiries from websites and WhatsApp, enrich and score them with LLM prompts, and push structured records into CRM and email workflows.',
+      'Created AI-assisted content pipelines for blogs and service pages, using prompt engineering and review steps to keep output consistent with each client’s brand and tone.',
+      'Integrated OpenAI, Gemini and Claude APIs into client products, and used MCP connectors and webhooks to let AI agents read from and act on external tools and data.',
+      'Built and deployed client websites (service, e-commerce, blog and business sites) with admin dashboards featuring role-based access control, live content editing and lead management.',
+      'Implemented secure admin authentication, documented database schemas, debugged login and dashboard issues in PHP/JS, and rolled out sitewide updates across 30+ pages of live client sites.',
+    ],
+    stack: ['n8n', 'RAG', 'Vector Databases', 'OpenAI API', 'Gemini API', 'Claude API', 'MCP', 'WhatsApp', 'Webhooks', 'PHP', 'MySQL', 'JavaScript'],
+  },
   {
     id: 'ac922d36-1d1c-41b1-99d7-c4a2f15f1fdb',
     role: 'Software Developer Intern',
     org: 'Right Advisors',
     location: 'Delhi, India',
-    period: 'Apr 2026 to Sep 2026',
+    period: 'Jan 2025 to Jun 2025',
     summary: 'Built an AI voice agent, a SalesIQ chatbot, an HRMS and Zoho automations for recruiting.',
     desc: 'Built AI agents, chatbots, internal tools and Zoho automations for the recruitment and business teams.',
     points: [
@@ -156,38 +176,23 @@ export const experience = [
     stack: ['Python', 'FastAPI', 'Next.js', 'TypeScript', 'Supabase', 'Zoho CRM', 'Zoho Recruit', 'Zoho Flow', 'Zoho SalesIQ', 'LLM APIs'],
   },
   {
-    id: 'growing-digitally',
-    role: 'AI Solutions Specialist',
-    org: 'Growing Digitally',
-    location: 'Remote',
-    period: 'Mar 2025 to Apr 2026',
-    summary: 'Shipped client sites with admin dashboards, plus RAG chatbots for web and WhatsApp.',
-    desc: 'Built and launched client websites with admin dashboards, plus AI agents and RAG chatbots for web and WhatsApp.',
-    points: [
-      'Built and deployed client websites (service, e-commerce, blog and business sites) from design through launch.',
-      'Built multi-page websites with admin dashboards: role-based access control, live content editing and lead management.',
-      'Implemented secure admin authentication, documented database schemas, and debugged login and dashboard issues in PHP/JS.',
-      'Rolled out sitewide updates (contact details, WhatsApp links) across 30+ pages of live client sites.',
-      'Developed AI agents and automated workflows for content, lead handling and repetitive business operations.',
-      'Coded a website chatbot with RAG and an LLM using n8n workflows, then extended it to WhatsApp.',
-      'Prototyped and shipped AI features hands-on with ChatGPT, Gemini, Perplexity, Claude Code and connectors.',
-    ],
-    stack: ['PHP', 'MySQL', 'JavaScript', 'n8n', 'RAG', 'LLM APIs', 'WhatsApp', 'ChatGPT', 'Gemini', 'Claude Code'],
-  },
-  {
     id: '6a2d2092-0d12-4350-87f4-c67b00be1889',
     role: 'Freelance Software Developer',
     org: 'Self-Employed',
     location: 'Remote',
-    period: 'Jan 2023 to Apr 2025',
-    summary: '15+ client projects end to end: APIs, auth, dashboards and payments.',
-    desc: 'Delivered 15+ client projects end to end across healthcare, education, recruitment, SaaS, e-commerce and services.',
+    period: 'Jan 2023 to Dec 2024',
+    summary: '15+ client projects end to end: APIs, auth, dashboards, payments and deployment.',
+    desc: 'Delivered 15+ client projects end to end across healthcare, education, recruitment, SaaS, e-commerce and services, from discovery through deployment and post-launch support.',
     points: [
-      'Delivered 15+ client projects across healthcare, education, recruitment, SaaS, e-commerce and service businesses.',
-      'Built secure REST APIs, authentication systems, admin dashboards, payment integrations and database-backed apps with Node.js, FastAPI, PostgreSQL and MongoDB.',
-      'Integrated Stripe, Razorpay and WhatsApp/email workflows while running projects from discovery to deployment.',
+      'Delivered 15+ client projects across healthcare, education, recruitment, SaaS, e-commerce and service businesses, managing each from requirements discovery through deployment and post-launch support.',
+      'Built secure REST APIs, authentication systems, admin dashboards and database-backed apps with Node.js, FastAPI, PostgreSQL and MongoDB, including JWT auth and role-based access control.',
+      'Designed relational and document database schemas, wrote optimized SQL queries, and structured backend code into maintainable service and route layers.',
+      'Integrated Stripe and Razorpay for payments, plus WhatsApp and email workflows for notifications, reminders and customer communication.',
+      'Built appointment-booking and patient-record backends for healthcare clients, and student, course and enrollment systems for education clients.',
+      'Developed recruitment portals with candidate profiles, job listings, application tracking and admin review dashboards.',
+      'Containerized apps with Docker and deployed them on Vercel, Render, Railway and AWS, with Git-based CI/CD pipelines for repeatable releases.',
     ],
-    stack: ['Node.js', 'Express', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Stripe', 'Razorpay', 'REST APIs'],
+    stack: ['Node.js', 'Express', 'FastAPI', 'PostgreSQL', 'MongoDB', 'JWT', 'Stripe', 'Razorpay', 'Docker', 'AWS', 'Vercel', 'Render', 'Railway', 'CI/CD'],
   },
 ]
 
